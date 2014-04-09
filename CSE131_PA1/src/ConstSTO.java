@@ -4,6 +4,19 @@
 
 class ConstSTO extends STO
 {
+	public int charArrayToInt(char []data, int start, int end) throws NumberFormatException
+	{
+	    int result = 0;
+	    for (int i = start; i < end; i++)
+	    {
+	        int digit = (int)data[i] - (int)'0';
+	        if ((digit < 0) || (digit > 9)) throw new NumberFormatException();
+	        result *= 10;
+	        result += digit;
+	    }
+	    return result;
+	}
+	
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
@@ -11,9 +24,35 @@ class ConstSTO extends STO
 	ConstSTO (String strName)
 	{
 		super (strName);
-		m_value = null; // fix this
+		char[] array = strName.toCharArray();
+		if(array[0] == '0' && array.length > 1)
+		{
+			if(array[1] == 'x' || array[1] == 'X')
+			{
+				array[1] = '0';
+				//add nothing
+				//boolean isHex = strName.matches("[0-9A-F]+");
+				//if(isHex)
+				//{
+					String s = new String(array);
+					m_value = (double) Long.parseLong(s, 16);
+				//}
+			}
+			else
+			{
+				String s = new String(array);
+				m_value = (double) Long.parseLong(s, 8);
+			}
+			
+		}
+		else
+		{
+			m_value = Double.parseDouble(strName);
+		}
+				// fix this
                 // You may want to change the isModifiable and isAddressable                      
                 // fields as necessary
+		System.out.println(strName + " " + m_value);
 	}
 
 	public 

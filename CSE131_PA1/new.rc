@@ -1,5 +1,7 @@
 function : int main() {
   int *x;
+  int y;
+  int z;
 
   new x;	// phase 0 will make this syntactically correct
 
@@ -8,6 +10,12 @@ function : int main() {
   delete x;	// phase 0 will make this syntactically correct
   
   -x;
+  
+  x = 1234;
+  
+  y = 0XFF;  //255
+  
+  z = 050; 	//40
 
   return 0;
 }
