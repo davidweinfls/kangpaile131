@@ -31,6 +31,7 @@ class ConstSTO extends STO
 			{
 				array[1] = '0';
 				//add nothing
+				//add nothing2
 				//boolean isHex = strName.matches("[0-9A-F]+");
 				//if(isHex)
 				//{
