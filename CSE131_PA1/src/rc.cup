@@ -610,7 +610,7 @@ Expr6 ::=           Expr6:_1 Relation Expr7
 
 Expr7 ::=           Expr7:_1 AddOp:_2 Expr8:_3
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).DoDesignator2_Add (_1, _3);
                     :}
     |               Expr8:_1
                     {:
@@ -780,7 +780,7 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
                     :}
     |               T_COLONCOLON T_ID:_1
                     {:
-                        RESULT = ((MyParser) parser).DoDesignator3_ID (_1);
+                        RESULT = ((MyParser) parser).DoDesignator3a_ID (_1);
                     :}
     |               T_ID:_1
                     {:

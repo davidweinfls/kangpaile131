@@ -372,6 +372,14 @@ class MyParser extends parser
 	}
 
 
+	STO
+	DoDesignator2_Add (STO sto, String strID)
+	{
+		// Good place to do the struct checks
+
+		return sto;
+	}
+	
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
@@ -413,7 +421,18 @@ class MyParser extends parser
 			m_nNumErrors++;
 		 	m_errors.print (Formatter.toString(ErrorMsg.undeclared_id, strID));	
 			sto = new ErrorSTO (strID);
-		}
+		}			
+		
+		return (sto);
+	}
+	
+	STO
+	DoDesignator3a_ID (String strID)
+	{
+		STO		sto;
+
+		//System.out.println("strID: " + strID + "  access: " + m_symtab.access (strID));
+		//System.out.println("strID: " + strID + "  accessGlobal: " + m_symtab.accessGlobal (strID));
 		
 		if((sto = m_symtab.accessGlobal(strID)) == null )
 		{

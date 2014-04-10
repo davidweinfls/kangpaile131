@@ -1,7 +1,7 @@
-int myX;
 function : void foo()
 {
 	int x;
-	int i = 5 + ::x; // Error, cannot find x in the global scope
+	int i = 5 + ::y; // Error, cannot find x in the global scope
+	int j = 5 + x;
 	
 }
