@@ -404,6 +404,12 @@ class MyParser extends parser
 	{
 		STO		sto;
 
+		if((sto = m_symtab.accessGlobal(strID)) == null){
+			m_nNumErrors++;
+		 	m_errors.print (Formatter.toString(ErrorMsg.error0g_Scope, strID));	
+			sto = new ErrorSTO (strID);
+		}
+		
 		if ((sto = m_symtab.access (strID)) == null)
 		{
 			m_nNumErrors++;
