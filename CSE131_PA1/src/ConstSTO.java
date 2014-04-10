@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
-
+//zhu
 class ConstSTO extends STO
 {
 	public int charArrayToInt(char []data, int start, int end) throws NumberFormatException
