@@ -410,7 +410,7 @@ class MyParser extends parser
 			sto = new ErrorSTO (strID);
 		}
 		
-		if ((sto = m_symtab.access (strID)) == null)
+		else if ((sto = m_symtab.access (strID)) == null)
 		{
 			m_nNumErrors++;
 		 	m_errors.print (Formatter.toString(ErrorMsg.undeclared_id, strID));	
