@@ -53,7 +53,7 @@ class ConstSTO extends STO
 				// fix this
                 // You may want to change the isModifiable and isAddressable                      
                 // fields as necessary
-		System.out.println(strName + " " + m_value);
+		//System.out.println(strName + " " + m_value);
 	}
 
 	public 
