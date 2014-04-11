@@ -66,7 +66,7 @@ class SymbolTable
 		//for (Enumeration<Scope> e = m_stkScopes.elements(); e.hasMoreElements(); )
 		for(int i = m_stkScopes.size()-1; i >= 0; i--)
 		{
-			scope = m_stkScopes.get(i);
+			scope = m_stkScopes.elementAt(i);
 			//scope = e.nextElement();
 			if ((stoReturn = scope.access (strName)) != null)
 				return	stoReturn;

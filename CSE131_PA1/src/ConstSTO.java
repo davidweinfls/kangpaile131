@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
-
+//zhu
 class ConstSTO extends STO
 {
 	public int charArrayToInt(char []data, int start, int end) throws NumberFormatException
@@ -31,6 +31,7 @@ class ConstSTO extends STO
 			{
 				array[1] = '0';
 				//add nothing
+				//add nothing2
 				//boolean isHex = strName.matches("[0-9A-F]+");
 				//if(isHex)
 				//{
@@ -52,7 +53,7 @@ class ConstSTO extends STO
 				// fix this
                 // You may want to change the isModifiable and isAddressable                      
                 // fields as necessary
-		System.out.println(strName + " " + m_value);
+		//System.out.println(strName + " " + m_value);
 	}
 
 	public 
