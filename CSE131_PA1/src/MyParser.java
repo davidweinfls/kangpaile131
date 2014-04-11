@@ -373,11 +373,11 @@ class MyParser extends parser
 
 
 	STO
-	DoDesignator2_Add (STO sto, String strID)
+	DoDesignator2_Op (STO sto1, STO sto2)
 	{
 		// Good place to do the struct checks
 
-		return sto;
+		return sto1;
 	}
 	
 	//----------------------------------------------------------------
