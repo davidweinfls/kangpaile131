@@ -3,7 +3,6 @@
 // create sub-classes (since this one is abstract) that handle specific
 // types, such as IntType, FloatType, ArrayType, etc.
 //---------------------------------------------------------------------
-//david
 
 abstract class Type
 {
@@ -58,7 +57,9 @@ abstract class Type
 	//	change this around.
 	//----------------------------------------------------------------
 	public boolean	isInt ()	{ return false; }
-
+	public boolean  isBool()	{ return false;	}
+	public boolean 	isNumeric()	{ return false;	}
+	
 
 	//----------------------------------------------------------------
 	//	Name of the Type (e.g., int, bool, or some typedef
