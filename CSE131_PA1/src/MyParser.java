@@ -4,6 +4,7 @@
 //---------------------------------------------------------------------
 
 import java_cup.runtime.*;
+
 import java.util.Vector;
 
 
@@ -321,6 +322,7 @@ class MyParser extends parser
 	}
 
 
+
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
@@ -346,14 +348,28 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	STO
-	DoAssignExpr (STO stoDes)
+	DoAssignExpr (STO stoDes, STO expr)
 	{
+		
 		if (!stoDes.isModLValue())
 		{
 			// Good place to do the assign checks
+			m_nNumErrors++;
+			m_errors.print(ErrorMsg.error3a_Assign);
+			return new ErrorSTO(stoDes.getName());
 		}
 		
-		return stoDes;
+		if (!expr.getType().isAssignable(stoDes.getType()))
+		{
+			m_nNumErrors++;
+			m_errors.print(Formatter.toString(ErrorMsg.error3b_Assign, 
+				expr.getType().getName(), stoDes.getType().getName()));
+			return new ErrorSTO(stoDes.getName());
+		}
+		//ExprSTO returnValue = new ExprSTO(stoDes.getName(), stoDes.getType());
+		ExprSTO returnValue = new ExprSTO(stoDes.getName(), stoDes.getType());
+		return returnValue;
+		//return stoDes;
 	}
 
 

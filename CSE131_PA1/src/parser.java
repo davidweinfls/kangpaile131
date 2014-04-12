@@ -2032,7 +2032,7 @@ class CUP$parser$actions {
 		int _1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		STO _1 = (STO)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
-                        ((MyParser) parser).DoAssignExpr (_1);
+                        ((MyParser) parser).DoAssignExpr (_1, RESULT);
                     
               CUP$parser$result = new java_cup.runtime.Symbol(48/*Expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
             }
