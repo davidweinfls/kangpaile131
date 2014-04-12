@@ -173,7 +173,7 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoVarDecl (Vector<String> lstIDs, Type t)
+	DoVarDecl (Vector<String> lstIDs)
 	{
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
@@ -186,8 +186,11 @@ class MyParser extends parser
 			}
 
 			VarSTO 		sto = new VarSTO (id);
+<<<<<<< zhu
 			//set sto type field
 			sto.setType(t);
+=======
+>>>>>>> 08ca20e 4/12 fix constSTO nullptrException
 			m_symtab.insert (sto);
 		}
 	}
