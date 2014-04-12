@@ -79,7 +79,8 @@ terminal
     T_VOID,
     T_AUTO,
 	T_NEW,
-    T_DELETE
+    T_DELETE,
+    T_DECLTYPE
     ;
 
 terminal String
@@ -171,7 +172,8 @@ non terminal Type
     SubType,
     Type,
     UndecoratedType,
-    ReturnType
+    ReturnType,
+    DeclType
     ;
     	
 non terminal Vector
@@ -306,8 +308,11 @@ UndecoratedType ::= SubType:_1 {: RESULT = _1; :}
 
 SubType ::=    		QualIdent
     |               BasicType:_1 {: RESULT = _1; :}
+    |				DeclType:_1 {: RESULT = _1; :}
     ;
 
+DeclType ::= 		T_DECLTYPE T_LPAREN  Expr:_1 {: RESULT = _1.getType(); :} T_RPAREN
+	;
 
 BasicType ::=       T_INT:_1 
 					{: 

@@ -852,6 +852,7 @@ class Lexer
 		
 		m_htKeywords.put("new", new Integer(sym.T_NEW));
 		m_htKeywords.put("delete", new Integer(sym.T_DELETE));
+		m_htKeywords.put("decltype", new Integer(sym.T_DECLTYPE));
 	}
 
 
