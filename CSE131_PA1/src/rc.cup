@@ -474,7 +474,9 @@ ArrElemsList ::=    Expr
     |               ArrElemsList T_COMMA Expr
     ;
 
-IfStmt ::=          T_IF Expr CodeBlock OptElse
+IfStmt ::=          T_IF 
+					Expr:_1 {: RESULT = ((MyParser) parser).DoIfWhileCheck (_1, true); :} 
+					CodeBlock OptElse
     ;
 
 
@@ -483,7 +485,9 @@ OptElse ::=         T_ELSE CodeBlock
     ;
 
 
-WhileStmt ::=       T_WHILE Expr CodeBlock
+WhileStmt ::=       T_WHILE 
+					Expr:_1 {: RESULT = ((MyParser) parser).DoIfWhileCheck (_1, false); :}  
+					CodeBlock
     ;
 
 

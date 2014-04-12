@@ -342,7 +342,21 @@ class MyParser extends parser
 	{
 		m_symtab.closeScope ();
 	}
-
+	
+	STO DoIfWhileCheck(STO a, boolean isIf)
+	{
+		if(a instanceof ErrorSTO) return a;
+		Type aType = a.getType();
+		
+		//if ExprSTO is not bool or int, return error
+		if( ! (aType.isBool() || aType.isInt()) )
+		{
+			m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.error4_Test,
+             a.getName()));
+		}
+		return a;
+	}
 
 	//----------------------------------------------------------------
 	//
