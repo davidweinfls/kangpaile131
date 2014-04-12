@@ -387,6 +387,20 @@ class MyParser extends parser
 		return result ;
 	}
 	
+	STO DoUnaryExpr(Operator o, STO a)
+	{
+		if(a instanceof ErrorSTO) return a;
+		
+		STO result = o.checkOperands(a, null);
+		
+		if (result instanceof ErrorSTO) {
+			m_nNumErrors++;
+			//m_errors.print (Formatter.toString(ErrorMsg.not_function, sto.getName()));
+			m_errors.print (result.getName());
+		}
+		return result ;	
+	}
+	
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------

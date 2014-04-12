@@ -757,7 +757,7 @@ Designator ::= T_STAR Designator:_1
                     :}
     |               T_NOT Designator:_1
                     {:
-			RESULT = _1;
+						RESULT = _1;
                     :}
     |               T_SIZEOF T_LPAREN Designator:_2 T_RPAREN
                     {:
@@ -773,7 +773,7 @@ Designator ::= T_STAR Designator:_1
                     :}
     |               IncDecOp Designator:_2
                     {:
-			RESULT = _2;
+						RESULT = _2;
                     :}
     |               Designator2:_1 
                     {:
