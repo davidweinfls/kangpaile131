@@ -3,7 +3,7 @@ float y;
 function : void main() 
 {
 	x = 5; // ok
-	y = x + 12.5; // ok
-	x = y; // error
+	//y = x + 12.5; // ok
+	//x = y; // error
 	
 }
