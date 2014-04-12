@@ -64,6 +64,12 @@ class ConstSTO extends STO
                 // You may want to change the isModifiable and isAddressable                      
                 // fields as necessary
 	}
+	
+	public
+    ConstSTO (String strName, Type typ, Double value) {
+        super (strName, typ, true, false);
+        m_value = value;
+    }
 
 	//----------------------------------------------------------------
 	//
