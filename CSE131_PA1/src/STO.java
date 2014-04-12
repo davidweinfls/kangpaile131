@@ -47,7 +47,7 @@ abstract class STO
 		return	m_type;
 	}
 
-	private void
+	void
 	setType (Type type)
 	{
 		m_type = type;
