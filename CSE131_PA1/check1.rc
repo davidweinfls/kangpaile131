@@ -1,20 +1,9 @@
-<<<<<<< HEAD
 int x;
 float y;
-bool q;
 function : void main() 
 {
-	x = 5 + q; // ok
+	x = 5; // ok
 	y = x + 12.5; // ok
 	x = y; // error
 	
-=======
-function : int foo()
-{
-	int x;
-	
-	x = 1.0 + 2.0;
-	
-	return 0;
->>>>>>> refs/remotes/origin/zhu
 }
