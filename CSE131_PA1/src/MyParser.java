@@ -351,9 +351,10 @@ class MyParser extends parser
 	DoAssignExpr (STO stoDes, STO expr)
 	{
 		//syntax error
-		if(stoDes.isError()) return stoDes;
-	    if(expr.isError())	return expr;
-	    //3a  
+		//if(stoDes.isError()) return stoDes;
+	    //if(expr.isError())	return expr;
+	    //3a 
+	    
 		if (!stoDes.isModLValue())
 		{
 			// Good place to do the assign checks

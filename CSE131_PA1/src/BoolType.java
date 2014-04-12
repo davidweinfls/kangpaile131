@@ -6,4 +6,10 @@ public class BoolType extends BasicType{
 		// TODO Auto-generated constructor stub
 	}
 	//Need more
+	public boolean isBoolType(){
+		return true;
+	}
+	
+	
+	
 }

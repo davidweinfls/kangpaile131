@@ -79,6 +79,10 @@ abstract class Type
 	public boolean  isNumericType()	{ return false; }
 	public boolean	isCompositeType ()	{ return false; }
 	public boolean	isVoidType ()	{ return false; }
+	public boolean	isFloatType()	{ return false; }
+	public boolean 	isIntType()		{ return false; }
+	public boolean 	isBoolType()	{ return false;}
+	//public boolean 	isVoidType()	{ return false;}
 
 	//----------------------------------------------------------------
 	//	Name of the Type (e.g., int, bool, or some typedef
@@ -86,3 +90,4 @@ abstract class Type
 	private String  	m_typeName;
 	private int		m_size;
 }
+
