@@ -382,7 +382,7 @@ class MyParser extends parser
 			// do stuff
 			m_nNumErrors++;
 			//m_errors.print (Formatter.toString(ErrorMsg.not_function, sto.getName()));
-			m_errors.print ("Mass");
+			m_errors.print (result.getName());
 		}
 		return result ;
 	}

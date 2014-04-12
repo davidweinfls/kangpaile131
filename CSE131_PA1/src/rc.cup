@@ -130,8 +130,6 @@ non terminal
     ConstExpr,
     ExprList,
     UnarySign,
-    Equality,
-    Relation,
     OptInit,
     ArrElemsList,
     OptModifiers,
@@ -146,6 +144,8 @@ non terminal String
     AddOp,
     MulOp,
     IncDecOp,
+    Relation,
+    Equality,
     ParamDecl
     ;
 
@@ -541,31 +541,43 @@ Expr ::=         Designator:_1 T_ASSIGN Expr
     ;
 
 
-Expr0 ::=        Expr0:_1 T_OR Expr1
+Expr0 ::=        Expr0:_1 T_OR:_2 Expr1:_3
                     {:
-			RESULT = _1;
+						Operator op = new BooleanOp("||");
+                        if ( (_1 instanceof ErrorSTO) || (_3 instanceof ErrorSTO) )
+                        	RESULT = new ErrorSTO ("error");
+                        else
+                        	RESULT = ((MyParser) parser).DoBinaryExpr (_1, op, _3);
                     :}
     |               Expr1:_1
                     {:
-			RESULT = _1;
+						RESULT = _1;
                     :}
     ;
 
 
-Expr1 ::=        Expr1:_1 T_AND Expr2
+Expr1 ::=        Expr1:_1 T_AND:_2 Expr2:_3
                     {:
-			RESULT = _1;
+						Operator op = new BooleanOp("&&");
+                        if ( (_1 instanceof ErrorSTO) || (_3 instanceof ErrorSTO) )
+                        	RESULT = new ErrorSTO ("error");
+                        else
+                        	RESULT = ((MyParser) parser).DoBinaryExpr (_1, op, _3);
                     :}
     |               Expr2:_1
                     {:
-			RESULT = _1;
+						RESULT = _1;
                     :}
     ;
 
 
-Expr2 ::=        Expr2:_1 T_BAR Expr3
+Expr2 ::=        Expr2:_1 T_BAR:_2 Expr3:_3
                     {:
-			RESULT = _1;
+						Operator op = new BitwiseOp("|");
+                        if ( (_1 instanceof ErrorSTO) || (_3 instanceof ErrorSTO) )
+                        	RESULT = new ErrorSTO ("error");
+                        else
+                        	RESULT = ((MyParser) parser).DoBinaryExpr (_1, op, _3);
                     :}
     |               Expr3:_1
                     {:
@@ -574,9 +586,13 @@ Expr2 ::=        Expr2:_1 T_BAR Expr3
     ;
 
 
-Expr3 ::=        Expr3:_1 T_CARET Expr4
+Expr3 ::=        Expr3:_1 T_CARET:_2 Expr4:_3
                     {:
-			RESULT = _1;
+						Operator op = new BitwiseOp("^");
+                        if ( (_1 instanceof ErrorSTO) || (_3 instanceof ErrorSTO) )
+                        	RESULT = new ErrorSTO ("error");
+                        else
+                        	RESULT = ((MyParser) parser).DoBinaryExpr (_1, op, _3);
                     :}
     |               Expr4:_1
                     {:
@@ -585,9 +601,13 @@ Expr3 ::=        Expr3:_1 T_CARET Expr4
     ;
 
 
-Expr4 ::=        Expr4:_1 T_AMPERSAND Expr5
+Expr4 ::=        Expr4:_1 T_AMPERSAND:_2 Expr5:_3
                     {:
-			RESULT = _1;
+						Operator op = new BitwiseOp("&");
+                        if ( (_1 instanceof ErrorSTO) || (_3 instanceof ErrorSTO) )
+                        	RESULT = new ErrorSTO ("error");
+                        else
+                        	RESULT = ((MyParser) parser).DoBinaryExpr (_1, op, _3);
                     :}
     |               Expr5:_1
                     {:
@@ -596,9 +616,13 @@ Expr4 ::=        Expr4:_1 T_AMPERSAND Expr5
     ;
 
 
-Expr5 ::=           Expr5:_1 Equality Expr6
+Expr5 ::=           Expr5:_1 Equality:_2 Expr6:_3
                     {:
-                        RESULT = _1;
+                        Operator op = new ComparisonOp(_2);
+                        if ( (_1 instanceof ErrorSTO) || (_3 instanceof ErrorSTO) )
+                        	RESULT = new ErrorSTO ("error");
+                        else
+                        	RESULT = ((MyParser) parser).DoBinaryExpr (_1, op, _3);
                     :}
     |               Expr6:_1
                     {:
@@ -607,9 +631,13 @@ Expr5 ::=           Expr5:_1 Equality Expr6
     ;
 
 
-Expr6 ::=           Expr6:_1 Relation Expr7
+Expr6 ::=           Expr6:_1 Relation:_2 Expr7:_3
                     {:
-                        RESULT = _1;
+                    	Operator op = new ComparisonOp(_2);
+                        if ( (_1 instanceof ErrorSTO) || (_3 instanceof ErrorSTO) )
+                        	RESULT = new ErrorSTO ("error");
+                        else
+                        	RESULT = ((MyParser) parser).DoBinaryExpr (_1, op, _3);
                     :}
     |               Expr7:_1
                     {:
@@ -635,7 +663,11 @@ Expr7 ::=           Expr7:_1 AddOp:_2 Expr8:_3
 
 Expr8 ::=        Expr8:_1 MulOp:_2 Designator:_3
                     {:
-                        RESULT = _1;
+                        Operator op = new ArithmeticOp(_2);
+                    	if ( (_1 instanceof ErrorSTO) || (_3 instanceof ErrorSTO) )
+                        	RESULT = new ErrorSTO ("error");
+                        else
+                        	RESULT = ((MyParser) parser).DoBinaryExpr (_1, op, _3);
                     :}
     |               Designator:_1
                     {:
@@ -644,17 +676,35 @@ Expr8 ::=        Expr8:_1 MulOp:_2 Designator:_3
     ;
 
 
-Equality ::=     T_EQU
+Equality ::=     	T_EQU
+					{:
+						RESULT = "==";
+					:}
     |               T_NEQ
+    				{:
+						RESULT = "!=";
+					:}
     ;
 
 
-Relation ::=     T_LT
+Relation ::=     	T_LT
+					{:
+						RESULT = "<";
+					:}
     |               T_GT
+    				{:
+						RESULT = "<";
+					:}
     |               T_LTE
+    				{:
+						RESULT = "<=";
+					:}
     |               T_GTE
+    				{:
+						RESULT = "<=";
+					:}
     ;
-
+    
 
 AddOp ::=       T_PLUS
                     {:
