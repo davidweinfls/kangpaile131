@@ -2041,6 +2041,7 @@ class CUP$parser$actions {
 		int _1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		STO _1 = (STO)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
+<<<<<<< HEAD
                         ((MyParser) parser).DoAssignExpr (_1);
                     
               CUP$parser$result = new java_cup.runtime.Symbol(48/*Expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
@@ -2276,6 +2277,243 @@ class CUP$parser$actions {
           case 88: // IdListWInit ::= IdListWInit T_COMMA OptModifiers T_ID T_ASSIGN ConstExpr 
             {
               Vector RESULT = null;
+=======
+                        ((MyParser) parser).DoAssignExpr (_1, RESULT);
+                    
+              CUP$parser$result = new java_cup.runtime.Symbol(48/*Expr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 113: // ExprList ::= ExprList T_COMMA Expr 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(32/*ExprList*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 112: // ExprList ::= Expr 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(32/*ExprList*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 111: // OptExprList ::= 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(19/*OptExprList*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 110: // OptExprList ::= ExprList 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(19/*OptExprList*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 109: // ConstExpr ::= Expr 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(31/*ConstExpr*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 108: // WritePair ::= T_ENDL 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(30/*WritePair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 107: // WritePair ::= Expr 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(30/*WritePair*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 106: // WritePairList ::= WritePairList T_OSTREAM WritePair 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(29/*WritePairList*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 105: // WritePairList ::= WritePair 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(29/*WritePairList*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 104: // WriteStmt ::= T_COUT T_OSTREAM WritePairList T_SEMI 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(28/*WriteStmt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 103: // ReadStmt ::= T_CIN T_ISTREAM Designator T_SEMI 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(27/*ReadStmt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 102: // ReturnStmt ::= T_RETURN Expr T_SEMI 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(26/*ReturnStmt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 101: // ReturnStmt ::= T_RETURN T_SEMI 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(26/*ReturnStmt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 100: // ExitStmt ::= T_EXIT T_LPAREN Expr T_RPAREN T_SEMI 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(25/*ExitStmt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 99: // ContinueStmt ::= T_CONTINUE T_SEMI 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(24/*ContinueStmt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 98: // BreakStmt ::= T_BREAK T_SEMI 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(23/*BreakStmt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 97: // WhileStmt ::= T_WHILE Expr CodeBlock 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(22/*WhileStmt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 96: // OptElse ::= 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(21/*OptElse*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 95: // OptElse ::= T_ELSE CodeBlock 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(21/*OptElse*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 94: // IfStmt ::= T_IF Expr CodeBlock OptElse 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(20/*IfStmt*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 93: // ArrElemsList ::= ArrElemsList T_COMMA Expr 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(35/*ArrElemsList*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 92: // ArrElemsList ::= Expr 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(35/*ArrElemsList*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 91: // OptInit ::= 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(34/*OptInit*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 90: // OptInit ::= T_ASSIGN T_LBRACE ArrElemsList T_RBRACE 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(34/*OptInit*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 89: // OptInit ::= T_ASSIGN Expr 
+            {
+              Object RESULT = null;
+
+              CUP$parser$result = new java_cup.runtime.Symbol(34/*OptInit*/, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right, RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 88: // IdListWInit ::= IdListWInit T_COMMA OptModifiers T_ID T_ASSIGN ConstExpr 
+            {
+              Vector RESULT = null;
+>>>>>>> refs/remotes/origin/zhu412
 		int _1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
 		int _1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).right;
 		Vector _1 = (Vector)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5)).value;
