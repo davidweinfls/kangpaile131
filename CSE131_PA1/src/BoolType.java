@@ -1,5 +1,5 @@
 
-public class BoolType extends BasicType{
+abstract class BoolType extends BasicType{
 
 	public BoolType(String strName, int size) {
 		super(strName, size);

@@ -3,7 +3,9 @@
 //
 //---------------------------------------------------------------------
 
+import java_cup.parser;
 import java_cup.runtime.*;
+
 import java.util.Vector;
 
 
@@ -184,6 +186,7 @@ class MyParser extends parser
 			}
 
 			VarSTO 		sto = new VarSTO (id);
+			//set sto type field
 			sto.setType(t);
 			m_symtab.insert (sto);
 		}
@@ -216,7 +219,7 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoConstDecl (Vector<String> lstIDs, Type t)
+	DoConstDecl (Vector<String> lstIDs)
 	{
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
@@ -228,8 +231,7 @@ class MyParser extends parser
 				m_errors.print (Formatter.toString (ErrorMsg.redeclared_id, id));
 			}
 		
-			ConstSTO 	sto = new ConstSTO (id,  t);
-			sto.setType(t);
+			ConstSTO 	sto = new ConstSTO (id);
 			m_symtab.insert (sto);
 		}
 	}
@@ -373,16 +375,23 @@ class MyParser extends parser
 		return (sto);
 	}
 
-
+	//Check 1
+	//Try1-> do stuff
 	STO
 	DoBinaryExpr(STO a, Operator o, STO b) 
 	{
+		if(a.isError() ) return a;
+		if(b.isError())  return b;
+		Type aType = a.getType();
+		Type bType = b.getType();
 		STO result = o.checkOperands(a, b);
 		if (result instanceof ErrorSTO) {
 		// do stuff
+			m_errors.print(Formatter.toString(ErrorMsg.error1n_Expr, result.getName(), o.getName(), "int"));
 		}
 		return result ;
 	}
+	
 	
 	//----------------------------------------------------------------
 	//

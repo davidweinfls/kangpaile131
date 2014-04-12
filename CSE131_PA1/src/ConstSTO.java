@@ -60,18 +60,10 @@ class ConstSTO extends STO
 	ConstSTO (String strName, Type typ)
 	{
 		super (strName, typ);
-		
-/* TODO ¼ÇµÃ¸Ä£¡£¡£¡ */
-		m_value = Double.parseDouble(strName); // fix this
+		m_value = null; // fix this
                 // You may want to change the isModifiable and isAddressable                      
                 // fields as necessary
 	}
-	
-	public
-    ConstSTO (String strName, Type typ, Double value) {
-        super (strName, typ, true, false);
-        m_value = value;
-    }
 
 	//----------------------------------------------------------------
 	//
