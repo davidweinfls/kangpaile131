@@ -1,8 +1,10 @@
-function : int foo()
+int x;
+float y;
+
+function : void main() 
 {
-	int x;
+	x = 5; // ok
+	y = x + 12.5; // ok
+	x = y; // error
 	
-	x = 1.0 + 2.0;
-	
-	return 0;
 }
