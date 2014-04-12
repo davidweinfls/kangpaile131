@@ -7,6 +7,39 @@ public class ArithmeticOp extends BinaryOp {
 		Type aType = a.getType();
 		Type bType = b.getType();
 		
+		// for op: T_MOD
+		if (this.getName() == "%") 
+		{
+			// if a not int, then return equivalent expected
+			if ( !(aType instanceof IntType) )
+			{
+                return new ErrorSTO (Formatter.toString(ErrorMsg.error1w_Expr,
+                 aType.getName(), this.getName(), "int"));
+			}
+			// if b not int, then return equivalent expected
+            else if (!(bType instanceof IntType))
+            {
+                return new ErrorSTO(Formatter.toString(ErrorMsg.error1w_Expr,
+                 bType.getName(), this.getName(), "int"));
+            }
+            else if ( b.isConst() && ((ConstSTO) b).getValue() == 0.0 )
+            {
+            	return new ErrorSTO(ErrorMsg.error8_Arithmetic);
+            }
+            else
+            {
+            	if ((a instanceof ConstSTO) && (b instanceof ConstSTO))
+            	{
+            		int result = 0;
+            		result = ((ConstSTO) a).getIntValue()
+							% ((ConstSTO) b).getIntValue();
+            		return new ConstSTO("result", new IntType("int", 4),
+    						(double) result);
+            	}
+            	return new ExprSTO("result", new IntType("int", 4));
+            }       	
+		}
+		
 		// for op: +, -, *, /
 		if (!(aType instanceof NumericType)) {
 			// if A is not Numeric, return error message, error1n, numeric
@@ -77,7 +110,6 @@ public class ArithmeticOp extends BinaryOp {
 			}
 			return new ExprSTO("result", new IntType("float", 4));
 		}	//end of checking +-*/
-		
 		
 		
 		

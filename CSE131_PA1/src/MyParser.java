@@ -379,7 +379,10 @@ class MyParser extends parser
 	{
 		STO result = o.checkOperands(a, b);
 		if (result instanceof ErrorSTO) {
-		// do stuff
+			// do stuff
+			m_nNumErrors++;
+			//m_errors.print (Formatter.toString(ErrorMsg.not_function, sto.getName()));
+			m_errors.print ("Mass");
 		}
 		return result ;
 	}
