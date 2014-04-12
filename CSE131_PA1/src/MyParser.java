@@ -350,7 +350,10 @@ class MyParser extends parser
 	STO
 	DoAssignExpr (STO stoDes, STO expr)
 	{
-		
+		//syntax error
+		if(stoDes.isError()) return stoDes;
+	    if(expr.isError())	return expr;
+	    //3a  
 		if (!stoDes.isModLValue())
 		{
 			// Good place to do the assign checks
@@ -359,6 +362,8 @@ class MyParser extends parser
 			return new ErrorSTO(stoDes.getName());
 		}
 		
+		
+		//3b
 		if (!expr.getType().isAssignable(stoDes.getType()))
 		{
 			m_nNumErrors++;
@@ -366,10 +371,14 @@ class MyParser extends parser
 				expr.getType().getName(), stoDes.getType().getName()));
 			return new ErrorSTO(stoDes.getName());
 		}
-		//ExprSTO returnValue = new ExprSTO(stoDes.getName(), stoDes.getType());
+		
+		//create returnval
 		ExprSTO returnValue = new ExprSTO(stoDes.getName(), stoDes.getType());
-		return returnValue;
-		//return stoDes;
+		//return R-value
+		//returnValue.setIsRValue(true);
+		
+		//return returnValue;
+		return stoDes;
 	}
 
 
