@@ -6,6 +6,8 @@ public class ArithmeticOp extends BinaryOp {
 	public STO checkOperands(STO a, STO b) {
 		Type aType = a.getType();
 		Type bType = b.getType();
+		
+		// for op: +, -, *, /
 		if (!(aType instanceof NumericType)) {
 			// if A is not Numeric, return error message, error1n, numeric
 			// expected
@@ -74,7 +76,13 @@ public class ArithmeticOp extends BinaryOp {
 						(double) result);
 			}
 			return new ExprSTO("result", new IntType("float", 4));
-		}
-	}
+		}	//end of checking +-*/
+		
+		
+		
+		
+	} // end of checkOperands
+	
+	
 
-}
+}//end of class
