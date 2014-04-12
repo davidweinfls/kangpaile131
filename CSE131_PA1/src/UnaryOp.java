@@ -32,7 +32,17 @@ class UnaryOp extends Operator
             else
                 return new ExprSTO("result", new BoolType("bool", 4));
         }
+        // for op: ++, --
+        if (!(aType instanceof NumericType) && !(aType instanceof PointerType)) 
+        {
+            return new ErrorSTO(Formatter.toString(ErrorMsg.error2_Type, aType.getName(), this.getName()));
+        } 
+        else if (!a.isModLValue()) 
+        {
+            return new ErrorSTO(Formatter.toString(ErrorMsg.error2_Lval, this.getName()));
+        }
         return a;
+        
     }
     
     private boolean m_preInc;
