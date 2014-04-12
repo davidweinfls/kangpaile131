@@ -394,8 +394,9 @@ class MyParser extends parser
 		}
 		STO result = o.checkOperands(a, b);
 		
-		if(result.isError()){
+		if(result instanceof ErrorSTO){
 			//need more
+			
 		}
 		
 		return result ;
