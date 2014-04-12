@@ -3,7 +3,9 @@
 //
 //---------------------------------------------------------------------
 
+import java_cup.parser;
 import java_cup.runtime.*;
+
 import java.util.Vector;
 
 
