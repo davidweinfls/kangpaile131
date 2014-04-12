@@ -185,7 +185,6 @@ class MyParser extends parser
 
 			VarSTO 		sto = new VarSTO (id);
 			//set sto type field
-			
 			sto.setType(t);
 			m_symtab.insert (sto);
 		}
