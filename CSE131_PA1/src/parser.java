@@ -2033,6 +2033,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
+          //
           case 114: // Expr ::= Designator T_ASSIGN Expr 
             {
               STO RESULT = null;
