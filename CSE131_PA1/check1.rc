@@ -2,7 +2,11 @@ function : int foo()
 {
 	int x;
 	
+	bool y;
+	
 	x = 1.0 + 2.0;
+	
+	int z = x + y;
 	
 	return 0;
 }
