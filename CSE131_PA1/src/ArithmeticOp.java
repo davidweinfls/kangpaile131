@@ -10,7 +10,7 @@ public class ArithmeticOp extends BinaryOp {
 			// if A is not Numeric, return error message, error1n, numeric
 			// expected
 			return new ErrorSTO(Formatter.toString(ErrorMsg.error1n_Expr,
-					bType.getName(), this.getName()));
+					aType.getName(), this.getName()));
 		} else if (!(bType instanceof NumericType)) {
 			// if B is not Numeric, return error message, error1n, numeric
 			// expected

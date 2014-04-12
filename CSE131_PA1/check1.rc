@@ -1,9 +1,9 @@
 int x;
 float y;
-
+bool q;
 function : void main() 
 {
-	x = 5; // ok
+	x = 5 + q; // ok
 	y = x + 12.5; // ok
 	x = y; // error
 	

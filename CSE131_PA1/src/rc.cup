@@ -221,15 +221,15 @@ ExternDecl ::= T_EXTERN UndecoratedType IdList:_3 T_SEMI
 
 VarDecl ::=     OptStatic UndecoratedType:_2 IdListWOptInit:_3 T_SEMI
                     {:
-                         ((MyParser) parser).DoVarDecl (_3);
+                         ((MyParser) parser).DoVarDecl (_3, _2);
                     :}
     |           OptStatic T_AUTO T_ID T_ASSIGN Expr T_SEMI
 
     ;
 
-ConstDecl ::=  OptStatic T_CONST UndecoratedType IdListWInit:_3 T_SEMI
+ConstDecl ::=  OptStatic T_CONST UndecoratedType:_2 IdListWInit:_3 T_SEMI
                     {:
-                        ((MyParser) parser).DoConstDecl (_3);
+                        ((MyParser) parser).DoConstDecl (_3, _2);
                     :}
     |          OptStatic T_CONST T_AUTO T_ID T_ASSIGN Expr T_SEMI
     ;
@@ -311,16 +311,16 @@ SubType ::=    		QualIdent
 
 BasicType ::=       T_INT:_1 
 					{: 
-						//RESULT = new IntType(); 
+						RESULT = new IntType("int", 4); 
 					:}
 	
     |               T_FLOAT:_1
     				{:
-    					//RESULT = new FloatType();
+    					RESULT = new FloatType("float", 4);
     				:}
     |               T_BOOL:_1
     				{:
-    					//RESULT = new BoolType();
+    					RESULT = new BoolType("bool", 4);
     				:}
     |               T_CHAR
     ;
@@ -766,11 +766,11 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
                     :}
     |               T_INT_LITERAL:_1
                     {:
-                        RESULT = new ConstSTO (_1);
+                        RESULT = new ConstSTO (_1, new IntType("int", 4));
                     :}
     |               T_FLOAT_LITERAL:_1
                     {:
-                        RESULT = new ConstSTO (_1);
+                        RESULT = new ConstSTO (_1, new FloatType("float", 4));
                     :}
     |               T_CHAR_LITERAL:_1
                     {:

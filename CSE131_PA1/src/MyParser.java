@@ -171,7 +171,7 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoVarDecl (Vector<String> lstIDs)
+	DoVarDecl (Vector<String> lstIDs, Type t)
 	{
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
@@ -184,6 +184,7 @@ class MyParser extends parser
 			}
 
 			VarSTO 		sto = new VarSTO (id);
+			sto.setType(t);
 			m_symtab.insert (sto);
 		}
 	}
@@ -215,7 +216,7 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoConstDecl (Vector<String> lstIDs)
+	DoConstDecl (Vector<String> lstIDs, Type t)
 	{
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
@@ -227,7 +228,8 @@ class MyParser extends parser
 				m_errors.print (Formatter.toString (ErrorMsg.redeclared_id, id));
 			}
 		
-			ConstSTO 	sto = new ConstSTO (id);
+			ConstSTO 	sto = new ConstSTO (id,  t);
+			sto.setType(t);
 			m_symtab.insert (sto);
 		}
 	}
