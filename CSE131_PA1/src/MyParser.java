@@ -376,11 +376,13 @@ class MyParser extends parser
 
 
 	STO
-	DoDesignator2_Op (STO sto1, STO sto2)
+	DoBinaryExpr(STO a, Operator o, STO b) 
 	{
-		// Good place to do the struct checks
-
-		return sto1;
+		STO result = o.checkOperands(a, b);
+		if (result instanceof ErrorSTO) {
+		// do stuff
+		}
+		return result ;
 	}
 	
 	//----------------------------------------------------------------
