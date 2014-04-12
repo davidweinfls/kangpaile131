@@ -78,7 +78,7 @@ abstract class Type
 	public boolean	isBasicType ()	{ return false; }
 	public boolean  isNumericType()	{ return false; }
 	public boolean	isCompositeType ()	{ return false; }
-	
+	public boolean	isVoidType ()	{ return false; }
 
 	//----------------------------------------------------------------
 	//	Name of the Type (e.g., int, bool, or some typedef

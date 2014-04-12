@@ -1,4 +1,4 @@
-class CompositeType extends Type {
+abstract class CompositeType extends Type {
 
 	public CompositeType(String name, int size) {
 		super(name, size);
