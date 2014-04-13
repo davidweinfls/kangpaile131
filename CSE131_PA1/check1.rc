@@ -6,4 +6,10 @@ function : void main()
 	//y = x + 12.5; // ok
 	//x = y; // error
 	
+	y = 0.5;
+	if(y) 
+	{
+		x = 3;
+	}
+	
 }
