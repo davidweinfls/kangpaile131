@@ -757,7 +757,8 @@ Designator ::= T_STAR Designator:_1
                     :}
     |               T_NOT Designator:_1
                     {:
-						RESULT = _1;
+            Operator op = new UnaryOp("!");
+			RESULT = ((MyParser) parser).DoUnaryExpr(op, _1); ;
                     :}
     |               T_SIZEOF T_LPAREN Designator:_2 T_RPAREN
                     {:
