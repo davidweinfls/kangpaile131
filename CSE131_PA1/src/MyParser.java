@@ -288,10 +288,10 @@ class MyParser extends parser
 		}
 	
 		FuncSTO sto = new FuncSTO (id);
-		m_symtab.insert (sto);
+		m_symtab.insert (sto);	//insert into current scope
 
-		m_symtab.openScope ();
-		m_symtab.setFunc (sto);
+		m_symtab.openScope ();	//open new scope
+		m_symtab.setFunc (sto);	//current function we're in is set
 	}
 
 
@@ -301,16 +301,16 @@ class MyParser extends parser
 	void
 	DoFuncDecl_2 ()
 	{
-		m_symtab.closeScope ();
-		m_symtab.setFunc (null);
+		m_symtab.closeScope ();	//close scope, pops top scope off
+		m_symtab.setFunc (null);	// we are back in outer scope
 	}
 
 
 	//----------------------------------------------------------------
-	//
+	// check5. check function parameters
 	//----------------------------------------------------------------
 	void
-	DoFormalParams (Vector<String> params)
+	DoFormalParams (Vector<VarSTO> params)
 	{
 		if (m_symtab.getFunc () == null)
 		{
@@ -319,6 +319,17 @@ class MyParser extends parser
 		}
 
 		// insert parameters here
+		if(params != null)
+		{
+			FuncSTO sto = m_symtab.getFunc ();
+			for(int i = 0; i < params.size(); i++)
+			{
+				VarSTO var = params.get(i);
+				m_symtab.insert(var);
+				
+			}
+		}
+		
 	}
 
 
@@ -359,7 +370,7 @@ class MyParser extends parser
 	}
 
 	//----------------------------------------------------------------
-	//
+	// check 3
 	//----------------------------------------------------------------
 	STO
 	DoAssignExpr (STO stoDes, STO expr)
