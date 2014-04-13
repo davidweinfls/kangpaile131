@@ -21,6 +21,7 @@ class IntType extends NumericType {
 		return false;
 	}
 
+
 	public boolean isIntType() {
 		return true;
 	}

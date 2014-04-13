@@ -13,6 +13,8 @@ class VarSTO extends STO
 		super (strName);
 		// You may want to change the isModifiable and isAddressable 
 		// fields as necessary
+		setIsAddressable(true);
+		setIsModifiable(true);
 	}
 
 	public 
@@ -21,6 +23,9 @@ class VarSTO extends STO
 		super (strName, typ);
 		// You may want to change the isModifiable and isAddressable 
 		// fields as necessary
+		setIsAddressable(true);
+		setIsModifiable(true);
+	
 	}
 
 	//----------------------------------------------------------------
@@ -31,4 +36,5 @@ class VarSTO extends STO
 	{
 		return true;
 	}
+
 }
