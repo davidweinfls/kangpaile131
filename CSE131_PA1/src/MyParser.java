@@ -279,7 +279,7 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoFuncDecl_1 (Type returnType, boolean byRef, String id)
+	DoFuncDecl_1 (Type returnType,String id)
 	{
 		if (m_symtab.accessLocal (id) != null)
 		{
@@ -293,7 +293,7 @@ class MyParser extends parser
 			{
 				FunctionPointerType type = new FunctionPointerType (id, 4);
                 type.setReturnType (returnType);
-                type.setByRef(byRef);
+                //type.setByRef(byRef);
                 ((FuncSTO) sto).setReturnType (returnType);
                 ((FuncSTO) sto).setFuncType (type);
                 m_symtab.openScope ();	//open new scope
@@ -305,8 +305,8 @@ class MyParser extends parser
 		m_funcName = id;
 		FuncSTO sto = new FuncSTO (id);
 		
-		if(byRef) sto.setRef(byRef);
-		sto.setReturnType(returnType);
+		/*if(byRef) sto.setRef(byRef);
+		sto.setReturnType(returnType);*/
 		
 		m_symtab.insert (sto);	//insert into current scope
 		m_symtab.openScope ();	//open new scope
@@ -539,7 +539,7 @@ class MyParser extends parser
 		Type aType = a.getType();
 		
 		//if ExprSTO is not bool or int, return error
-		if( ! (aType.isBool() || aType.isInt()) )
+		if( ! (aType instanceof BoolType || aType instanceof IntType) )
 		{
 			m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.error4_Test,

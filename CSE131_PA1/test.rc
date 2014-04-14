@@ -1,14 +1,10 @@
 bool z;
 int x;
 
-function : void main(){
+function : void main()
+{
 
-
-	if (69 > 65)
-	{ 
-		x = 3;
-	}
-
+	z = 1;
 
 
 }
