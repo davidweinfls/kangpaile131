@@ -353,9 +353,14 @@ Pointer ::=        T_STAR
 ReturnType ::=      SubType OptPointerList
                     {:
                         // You should determine the type and return it here
-                        RESULT = null;
+                        if (_2 != null) 
+                        {
+                            ( (PointerType)_2).setType(_1);
+                            RESULT = _2;
+                        } 
+                        else RESULT = _1;
                     :}
-    |               T_VOID
+    |               T_VOID {: RESULT = new VoidType("void", 0); :}
     ;
 
 
@@ -506,7 +511,9 @@ ExitStmt ::=        T_EXIT T_LPAREN Expr T_RPAREN T_SEMI
 
 
 ReturnStmt ::=   T_RETURN T_SEMI
-    |               T_RETURN Expr T_SEMI
+					 {: ((MyParser) parser).DoReturnStmtCheck(null); :}
+    |               T_RETURN Expr:_1 T_SEMI
+    				 {: ((MyParser) parser).DoReturnStmtCheck(_1); :}
     ;
 
 

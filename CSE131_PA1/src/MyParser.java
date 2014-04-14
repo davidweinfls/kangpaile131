@@ -315,13 +315,17 @@ class MyParser extends parser
 
 
 	//----------------------------------------------------------------
-	//
+	// check 6c
 	//----------------------------------------------------------------
 	void
 	DoFuncDecl_2 ()
 	{
 		FuncSTO func = m_symtab.getFunc();
-		
+		/*if (!(func.getReturnType() instanceof VoidType) && !m_symtab.curScope().getRet() && !ext) 
+		{
+            m_nNumErrors++;
+            m_errors.print (ErrorMsg.error6c_Return_missing);
+        }*/
 		m_symtab.closeScope ();	//close scope, pops top scope off
 		m_symtab.setFunc (null);	// we are back in outer scope
 	}
@@ -434,6 +438,63 @@ class MyParser extends parser
 		if (error) return new ErrorSTO (sto.getName());
 
 		return (sto);
+	}
+	
+	/*
+	 * Do check 6
+	 */
+	void DoReturnStmtCheck(STO returnExpr)
+	{
+		FuncSTO func = m_symtab.getFunc();
+		Type ret = func.getReturnType();
+		
+		
+		if(returnExpr instanceof ErrorSTO) return;
+		// check 6a
+		// Detect an illegal return statement where no Expr is specified
+		// and the return type is not void
+		else if (!(ret instanceof VoidType) && (returnExpr == null)) {
+            m_nNumErrors++;
+            m_errors.print (ErrorMsg.error6a_Return_expr);
+            return;
+        } 
+		// check 6b no.1
+		// For functions declared to return by value, an error should be 
+		// generated if the type of return expression is not assignable to
+		// the return type of the function
+		else if(!func.getRef())
+		{
+			if(!returnExpr.getType().isAssignable(ret))
+			{
+				m_nNumErrors++;
+	            m_errors.print (Formatter.toString(ErrorMsg.error6a_Return_type,
+	             (returnExpr.getType()).getName(), ret.getName()));
+	            return;
+			}
+		}
+		// check 6b no.2
+		// For functions declared to return by reference, an error should
+		// be generated if
+		// - the type of the return expression is not equivalent to the 
+		// return type of the function;
+		// - the return expression is not a modifiable L-value.
+		else if(func.getRef())
+		{
+			if(!returnExpr.getType().isEquivalent(ret))
+			{
+				m_nNumErrors++;
+				m_errors.print (Formatter.toString(ErrorMsg.error6b_Return_equiv,
+			             (returnExpr.getType()).getName(), ret.getName()));
+	            return;
+			}
+			else if(!returnExpr.isModLValue())
+			{
+				m_nNumErrors++;
+				m_errors.print (ErrorMsg.error6b_Return_modlval);
+	            return;
+			}
+		}
+		
 	}
 
 
