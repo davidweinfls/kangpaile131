@@ -62,7 +62,15 @@ class ConstSTO extends STO
 		super (strName, typ);
 		
 /* TODO ¼ÇµÃ¸Ä£¡£¡£¡ */
-		m_value = Double.parseDouble(strName); // fix this
+		if(typ.isBoolType())
+		{
+			if(strName == "true")
+				m_value = 1.0;
+			else if(strName == "false")
+				m_value = 0.0;
+		}
+		else 
+			m_value = Double.parseDouble(strName); // fix this
                 // You may want to change the isModifiable and isAddressable                      
                 // fields as necessary
 	}

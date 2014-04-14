@@ -864,11 +864,11 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
                     :}
     |               T_TRUE
                     {:
-                        RESULT = new ConstSTO ("true");
+                        RESULT = new ConstSTO ("true", new BoolType("bool", 4));
                     :}
     |               T_FALSE
                     {:
-                        RESULT = new ConstSTO ("false");
+                        RESULT = new ConstSTO ("false", new BoolType("bool", 4));
                     :}
     |               T_NULLPTR
                     {:
