@@ -2,25 +2,70 @@ float y; //VarSTO y gets created and Type set to float, insert into symtab
 
 function : void main(){
 
-//PASS 3a
 int x = 1+2;
+bool temp;
+temp = true;
+temp = false;
 
-bool temp = true;
+if(temp){}						//PASS
+if(4){}							//PASS
+if(4<5){}						//PASS
+if(5>2){}						//PASS
+if(!temp){}						//PASS
 
-if(temp){}
-if(4){}
-if(4<5){}
-if(5>2){}
-if(!temp){}
+int testcase1 = 5;
+int testcase1_1 = 6;
+if(testcase1 < testcase1_1){}	//PASS
+if(testcase1 > testcase1_1){} 	//PASS
+if(testcase1 >= testcase1_1){} 	//PASS
+if(testcase1 <= testcase1_1){}	//PASS
+if(testcase1){}					//PASS
+if(testcase1){}					//PASS
+
+bool test_differet_type = false;
+int test_differet_type_1 = 1;
+
+//Incompatible type bool to binary operator >, numeric expected.
+//if (test_differet_type_1 > test_differet_type ){} 					//PASS
+
+//Incompatible types to operator: int == bool;
+//both must be numeric, or both equivalent to bool.
+//test_differet_type = true;
+//if (test_differet_type_1 == test_differet_type ){}					//PASS
+
+if(testcase1 < testcase1_1 < 7){}
+
+//Incompatible type int to binary operator &&, equivalent to bool expected.
+if ((testcase1 < testcase1_1) && (testcase1_1 < 7)){} 				//UNKNOWN
 
 
-while(temp){}
-while(4){}
-while(4<5){}
-while(5>2){}
-while(!temp){}
+int w_test1 = 0;
+int w_test1_1 = 1;
+float w_test2 = 1.1;
+float w_test2_2 = 2.0;
+bool w_test3 = true;
+bool w_test4 = false;
 
-//y = 4%2;
-x = x++;
+while(w_test3){}						//PASS
+while(w_test1){}						//PASS
+while(w_test1 < w_test1_1){}			//PASS
+while(w_test1_1 > w_test1){}			//PASS
+while(w_test1_1 >= w_test1){}			//PASS
+while(w_test1_1 <= w_test1){}			//PASS
+while(!w_test3){}						//PASS
+while(w_test2 > w_test1){}				//PASS
+while(w_test3 == false){}				//PASS
+while(w_test3 = false){}				//PASS
+
+
+
+
+//bool or int required for conditional test, w_test2 found.
+//while(w_test2){}						//PASS
+//Incompatible type bool to binary operator >, numeric expected.
+//while(w_test3 > w_test1){}			//PASS
+//syntax error near ")".
+//while(){}								//PASS
+
 
 }

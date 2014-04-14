@@ -1,0 +1,3 @@
+function : bool foo(){ return false; }
+
+//function : void bar() {}

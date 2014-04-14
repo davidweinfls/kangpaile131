@@ -1,10 +1,10 @@
-bool z;
-int x;
-
 function : void main()
 {
 
-	int w = 0x10;
+int testcase1 = 5;
+int testcase1_1 = 6;
+
+	//if ((testcase1 < testcase1_1) && (testcase1_1 < 7)){} 	
 
 
 }
