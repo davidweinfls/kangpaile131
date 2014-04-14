@@ -279,17 +279,36 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoFuncDecl_1 (String id)
+	DoFuncDecl_1 (Type returnType, boolean byRef, String id)
 	{
 		if (m_symtab.accessLocal (id) != null)
 		{
-			m_nNumErrors++;
-			m_errors.print (Formatter.toString(ErrorMsg.redeclared_id, id));
+			STO sto = m_symtab.accessLocal(id);
+			if(!sto.isFunc())
+			{
+				m_nNumErrors++;
+				m_errors.print (Formatter.toString(ErrorMsg.redeclared_id, id));
+			}
+			else
+			{
+				FunctionPointerType type = new FunctionPointerType (id, 4);
+                type.setReturnType (returnType);
+                type.setByRef(byRef);
+                ((FuncSTO) sto).setReturnType (returnType);
+                ((FuncSTO) sto).setFuncType (type);
+                m_symtab.openScope ();	//open new scope
+                m_symtab.setFunc ((FuncSTO)sto);	//current function we're in is set
+                return;
+			}
 		}
 	
+		m_funcName = id;
 		FuncSTO sto = new FuncSTO (id);
+		
+		if(byRef) sto.setRef(byRef);
+		sto.setReturnType(returnType);
+		
 		m_symtab.insert (sto);	//insert into current scope
-
 		m_symtab.openScope ();	//open new scope
 		m_symtab.setFunc (sto);	//current function we're in is set
 	}
@@ -301,6 +320,8 @@ class MyParser extends parser
 	void
 	DoFuncDecl_2 ()
 	{
+		FuncSTO func = m_symtab.getFunc();
+		
 		m_symtab.closeScope ();	//close scope, pops top scope off
 		m_symtab.setFunc (null);	// we are back in outer scope
 	}
@@ -321,7 +342,7 @@ class MyParser extends parser
 		// insert parameters here
 		if(params != null)
 		{
-			FuncSTO sto = m_symtab.getFunc ();
+			//FuncSTO sto = m_symtab.getFunc ();
 			for(int i = 0; i < params.size(); i++)
 			{
 				VarSTO var = params.get(i);
@@ -331,7 +352,89 @@ class MyParser extends parser
 		}
 		
 	}
+	
+	// ----------------------------------------------------------------
+	//
+	// ----------------------------------------------------------------
+	STO DoFuncCall(STO sto, Vector args) 
+	{
+		if(sto instanceof ErrorSTO) return sto;
+		
+		STO stoDes;
+        Type returnT;
+        Vector<VarSTO> params;
+        boolean error = false;
+        boolean byRef = false;
+		
+		if (!sto.isFunc() && !sto.getType().isFuncPtr() ) 
+		{
+			m_nNumErrors++;
+			m_errors.print(Formatter.toString(ErrorMsg.not_function,
+					sto.getName()));
+			return (new ErrorSTO(sto.getName()));
+		}
+		
+		params = ((FunctionPointerType) sto.getType()).getParams();
+        returnT = ((FunctionPointerType) sto.getType()).getReturnType();
+        byRef = ((FunctionPointerType) sto.getType()).getByRef();
+		
+		//do check5 no.1
+		if (params.size() != args.size()) 
+		{
+            m_nNumErrors++;
+            m_errors.print (Formatter.toString(ErrorMsg.error5n_Call,
+                                                  args.size(), params.size()));
+            return (new ErrorSTO (sto.getName()));
+        }
+		
+		for(int i = 0; i < params.size(); i++)
+		{
+			STO arg = (STO) args.get(i);
+            if (arg.isError()) return arg;
+            VarSTO parameter = params.get(i);
+            Type aType = arg.getType();
+            Type bType = parameter.getType();
+            
+            /* Do check5 no.2
+             * A parameter is declared as pass-by-value (default) and the corresponding argument's
+             * type is not assignable to the parameter type
+             */
+            if ( !(parameter.isRef()) && !(aType.isAssignable(bType)) ) 
+            {
+                m_nNumErrors++;
+                m_errors.print (Formatter.toString(ErrorMsg.error5a_Call,
+                		aType.getName(), parameter.getName(), bType.getName()));
+                error = true;
+            }
+            /* Do check5 no.3, no.4
+             * no.3: A parameter is declared as pass-by-reference (using the &)
+             * 		 and the corresponding argument's type is not equivalent to
+             * 		 the parameter type;
+             * no.4: A parameter is declared as pass-by-reference and the 
+             * 		 corresponding argument is not a modifiable L-value.
+             */
+            else if (parameter.isRef()) 
+            {
+            	// no.3
+                if ( !(aType.isEquivalent(bType)) ) {
+                    m_nNumErrors++;
+                    m_errors.print (Formatter.toString(ErrorMsg.error5r_Call,
+                           aType.getName(), parameter.getName(), bType.getName()));
+                    error = true;
+                } 
+                // no.4
+                else if ( !arg.isModLValue() && !aType.isArray() ) {
+                    m_nNumErrors++;
+                    m_errors.print (Formatter.toString(ErrorMsg.error5c_Call,
+                               parameter.getName(), aType.getName()));
+                    error = true;
+                }
+            }            
+		}
+		if (error) return new ErrorSTO (sto.getName());
 
+		return (sto);
+	}
 
 
 	//----------------------------------------------------------------
@@ -405,23 +508,6 @@ class MyParser extends parser
 		
 		//return returnValue;
 		return stoDes;
-	}
-
-
-	//----------------------------------------------------------------
-	//
-	//----------------------------------------------------------------
-	STO
-	DoFuncCall (STO sto)
-	{
-		if (!sto.isFunc())
-		{
-			m_nNumErrors++;
-			m_errors.print (Formatter.toString(ErrorMsg.not_function, sto.getName()));
-			return (new ErrorSTO (sto.getName ()));
-		}
-
-		return (sto);
 	}
 
 
@@ -553,6 +639,7 @@ class MyParser extends parser
 	private String			m_strLastLexeme;
 	private boolean			m_bSyntaxError = true;
 	private int			m_nSavedLineNum;
+	private String		m_funcName;
 
 	private SymbolTable		m_symtab;
 }

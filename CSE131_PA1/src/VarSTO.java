@@ -51,6 +51,18 @@ class VarSTO extends STO
 		return true;
 	}
 	
+	public boolean
+    isRef () 
+	{
+        return ref;
+    }
+
+    public void
+    setRef () 
+    {
+        ref = true;
+    }
+	
 	private boolean ref;
 
 }
