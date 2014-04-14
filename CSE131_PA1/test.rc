@@ -4,7 +4,7 @@ int x;
 function : void main()
 {
 
-	z = 1;
+	int w = 0x10;
 
 
 }

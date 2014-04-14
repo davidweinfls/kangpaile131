@@ -17,13 +17,8 @@ class ConstSTO extends STO
 	    return result;
 	}
 	
-	//----------------------------------------------------------------
-	//
-	//----------------------------------------------------------------
-	public 
-	ConstSTO (String strName)
+	public void assignValue(String strName)
 	{
-		super (strName);
 		char[] array = strName.toCharArray();
 		if(array[0] == '0' && array.length > 1)
 		{
@@ -50,6 +45,16 @@ class ConstSTO extends STO
 		{
 			m_value = Double.parseDouble(strName);
 		}
+	}
+	
+	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
+	public 
+	ConstSTO (String strName)
+	{
+		super (strName);
+		this.assignValue(strName);
 				// fix this
                 // You may want to change the isModifiable and isAddressable                      
                 // fields as necessary
@@ -70,7 +75,7 @@ class ConstSTO extends STO
 				m_value = 0.0;
 		}
 		else 
-			m_value = Double.parseDouble(strName); // fix this
+			this.assignValue(strName);// fix this
                 // You may want to change the isModifiable and isAddressable                      
                 // fields as necessary
 	}
