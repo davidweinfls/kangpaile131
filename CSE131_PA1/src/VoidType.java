@@ -1,5 +1,5 @@
 
-abstract class VoidType extends Type {
+class VoidType extends Type {
 
 	public VoidType(String strName, int size) {
 		super(strName, size);

@@ -350,15 +350,16 @@ Pointer ::=        T_STAR
     ;
 
 
-ReturnType ::=      SubType OptPointerList
+ReturnType ::=      SubType:_1 OptPointerList:_2
                     {:
                         // You should determine the type and return it here
-                        if (_2 != null) 
-                        {
-                            ( (PointerType)_2).setType(_1);
-                            RESULT = _2;
-                        } 
-                        else RESULT = _1;
+                       // if (_2 != null) 
+                       // {
+                            //( (PointerType)_2).setType(_1);
+                            //RESULT = _2;
+                       // } 
+                        //else 
+                        	RESULT = _1;
                     :}
     |               T_VOID {: RESULT = new VoidType("void", 0); :}
     ;
@@ -506,7 +507,10 @@ ContinueStmt ::=    T_CONTINUE T_SEMI
     ;
 
 
-ExitStmt ::=        T_EXIT T_LPAREN Expr T_RPAREN T_SEMI
+ExitStmt ::=        T_EXIT T_LPAREN Expr:_1 T_RPAREN T_SEMI
+					{:
+                        RESULT = ((MyParser) parser).DoExitStmtCheck(_1);
+                    :}
     ;
 
 

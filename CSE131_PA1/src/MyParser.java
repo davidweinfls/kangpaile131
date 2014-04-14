@@ -496,6 +496,21 @@ class MyParser extends parser
 		}
 		
 	}
+	
+	/*
+	 * check 7. exit check
+	 */
+	STO DoExitStmtCheck(STO expr)
+	{
+		Type ExprType = expr.getType();
+        if(!(ExprType instanceof IntType)) {
+            m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.error7_Exit,
+            		ExprType.getName()));
+            return new ErrorSTO ("NaN for Exit");
+        }
+        return expr;
+	}
 
 
 	//----------------------------------------------------------------
