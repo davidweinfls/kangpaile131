@@ -1,0 +1,26 @@
+float y; //VarSTO y gets created and Type set to float, insert into symtab
+
+function : void main(){
+
+//PASS 3a
+int x = 1+2;
+
+bool temp = true;
+
+if(temp){}
+if(4){}
+if(4<5){}
+if(5>2){}
+if(!temp){}
+
+
+while(temp){}
+while(4){}
+while(4<5){}
+while(5>2){}
+while(!temp){}
+
+//y = 4%2;
+x = x++;
+
+}

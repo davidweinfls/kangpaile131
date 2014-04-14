@@ -1,0 +1,26 @@
+float y; //VarSTO y gets created and Type set to float, insert into symtab
+
+function : void main(){
+
+
+int x = 1;
+int y = 2;
+float w = 3;
+
+++x;
+w--;
+
+y = x;
+w = x++ + --y;
+
+
+//FAIL
+//3++;
+//++3;
+//2--;
+//--5;
+//bool z;
+//z++;
+//--z;
+
+}

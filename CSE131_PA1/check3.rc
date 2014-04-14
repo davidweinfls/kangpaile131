@@ -1,0 +1,49 @@
+/*float y; //VarSTO y gets created and Type set to float, insert into symtab
+
+function : void main(){
+
+//PASS 3a
+int x = 1+2;
+y = 4%2;
+x = x++;
+
+//PASS 3b
+y=x;
+y=x=2;
+*/
+
+//PASS 3c
+int x = 10;
+float y = 20;
+
+function : decltype(x+20.0) foo()
+{
+
+///Remove next two lines below return y to do check 2 of 3c
+//auto w = 0x10; // x is a variable of type int
+int w = 0x10;
+int z = 07;
+decltype(w++) y; // y is a variable of type int
+///
+
+return y;
+
+}
+
+
+//FAIL 3a
+//1 = 3 = 4 = 2;
+
+//FAIL 3b
+//x=y;
+////bool w=3; //add DoAssignExpr() to all T_Assign calls in rc.cup
+////bool w = x;
+//bool w;
+//w = 3;
+
+//FAIL 3c
+//and add more checks :D
+
+
+
+//}
