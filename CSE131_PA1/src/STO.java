@@ -114,6 +114,16 @@ abstract class STO
 		setIsModifiable(m);
 		setIsAddressable(m);
 	}
+	
+	public void setGlobal () 
+	{
+        m_global = true;
+    }
+
+    public boolean getGlobal () 
+    {
+        return m_global;
+    }
 
 
 	//----------------------------------------------------------------
@@ -137,4 +147,5 @@ abstract class STO
 	private Type		m_type;
 	private boolean		m_isAddressable;
 	private boolean		m_isModifiable;
+	private boolean 	m_global;
 }

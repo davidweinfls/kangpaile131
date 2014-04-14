@@ -238,7 +238,8 @@ ConstDecl ::=  OptStatic T_CONST UndecoratedType:_2 IdListWInit:_3 T_SEMI
 
 
 OptStatic ::=   T_STATIC
-    |               /* empty */
+				{: ((MyParser) parser).setStatic ();  :}
+    |               /* empty */ {: ((MyParser) parser).resetStatic ();  :}
     ;
 
 
@@ -447,12 +448,20 @@ IdListUpper ::=     T_ID_U:_1
                     :}
     ;
 
-IdListWOptInit ::=  OptModifiers T_ID:_1 OptInit
+IdListWOptInit ::=  OptModifiers T_ID:_1 OptInit:_2
                     {:
-                        RESULT = new Vector ();
-                        RESULT.addElement (_1);
+                    	STO check = ((MyParser) parser).DoInitCheck(_1, (STO) _2);
+                    	RESULT = new Vector ();
+                    	if(check.isError())
+                    	{
+                    		//RESULT.addElement(new ErrorSTO(_1));
+                    	}
+                    	else
+                    	{
+                        	RESULT.addElement (_1);
+                        }
                     :}
-    |               IdListWOptInit:_1 T_COMMA OptModifiers T_ID:_3 OptInit
+    |               IdListWOptInit:_1 T_COMMA OptModifiers T_ID:_3 OptInit:_2
                     {:
                         RESULT = _1;
                         RESULT.addElement (_3);

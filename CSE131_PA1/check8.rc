@@ -1,0 +1,17 @@
+//static int x = 5; //okay, 5 is constant
+//int x = 10; //okay 10 is cosnt
+//int y; //not okay, needs to be initilazed
+//int y = x; //not okay, not known at compile time
+
+//static int x; //okay?
+//int x; //not okay? 
+
+int x = Expr1;
+static int y = Expr2;
+
+function : void main() 
+{
+	static int z = Expr3;
+	static int z1; //not okay, z1 need to be initialized
+	int c = Expr3;
+}

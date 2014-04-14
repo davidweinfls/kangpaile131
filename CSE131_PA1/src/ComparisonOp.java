@@ -82,7 +82,7 @@ public class ComparisonOp extends BinaryOp{
 					"bool", 4));
 		}
 		else 
-			return new ExprSTO("result", new IntType("int", 4));
+			return new ExprSTO("result", new BoolType("bool", 4));
 		
 	
 	

@@ -512,6 +512,40 @@ class MyParser extends parser
         return expr;
 	}
 
+	/*
+	 * check8. Initialization check and variable arrign
+	 */
+	STO DoInitCheck(String id, STO sto)
+	{
+		if(sto == null) return new ErrorSTO("right side is null");
+		if(sto.isError()) return sto;	
+		
+		// not known at compile time
+		if(m_static && !sto.isConst() && !sto.isFunc()  )
+		{
+			m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.error8a_CompileTime, 
+            		id));
+            return new ErrorSTO("Expr is not known at compile time");
+		}
+		return sto;
+	}
+	
+	/*
+	 * set static, for check8
+	 */
+	void setStatic()
+	{
+		m_static = true;
+	}
+	
+	/*
+	 * reset static, for check8
+	 */
+	void resetStatic()
+	{
+		m_static = false;
+	}
 
 	//----------------------------------------------------------------
 	//
@@ -555,8 +589,8 @@ class MyParser extends parser
 	DoAssignExpr (STO stoDes, STO expr)
 	{
 		//syntax error
-		//if(stoDes.isError()) return stoDes;
-	    //if(expr.isError())	return expr;
+		if(stoDes.isError()) return stoDes;
+	    if(expr.isError())	return expr;
 	    //3a 
 	    
 		if (!stoDes.isModLValue())
@@ -716,6 +750,7 @@ class MyParser extends parser
 	private boolean			m_bSyntaxError = true;
 	private int			m_nSavedLineNum;
 	private String		m_funcName;
+	private boolean 	m_static;
 
 	private SymbolTable		m_symtab;
 }
