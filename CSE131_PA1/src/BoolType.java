@@ -10,6 +10,20 @@ public class BoolType extends BasicType{
 		return true;
 	}
 	
+	public boolean
+    isAssignableTo (Type t)
+    {
+        return isEquivalentTo(t);
+    }
+
+    public boolean
+    isEquivalentTo (Type t)
+    {
+        if (t instanceof BoolType)
+            return true;
+        return false;
+    }
+	
 	
 	
 }

@@ -293,7 +293,7 @@ class MyParser extends parser
 			{
 				FunctionPointerType type = new FunctionPointerType (id, 4);
                 type.setReturnType (returnType);
-                //type.setByRef(byRef);
+                //type.setByRef(type);
                 ((FuncSTO) sto).setReturnType (returnType);
                 ((FuncSTO) sto).setFuncType (type);
                 m_symtab.openScope ();	//open new scope
@@ -305,8 +305,8 @@ class MyParser extends parser
 		m_funcName = id;
 		FuncSTO sto = new FuncSTO (id);
 		
-		/*if(byRef) sto.setRef(byRef);
-		sto.setReturnType(returnType);*/
+		/*if(byRef) sto.setRef(byRef); */
+		sto.setReturnType(returnType);
 		
 		m_symtab.insert (sto);	//insert into current scope
 		m_symtab.openScope ();	//open new scope
