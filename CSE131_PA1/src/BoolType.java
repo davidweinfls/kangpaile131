@@ -11,13 +11,13 @@ public class BoolType extends BasicType{
 	}
 	
 	public boolean
-    isAssignableTo (Type t)
+    isAssignable (Type t)
     {
-        return isEquivalentTo(t);
+        return isEquivalent(t);
     }
 
     public boolean
-    isEquivalentTo (Type t)
+    isEquivalent (Type t)
     {
         if (t instanceof BoolType)
             return true;

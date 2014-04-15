@@ -452,9 +452,13 @@ IdListWOptInit ::=  OptModifiers T_ID:_1 OptInit:_2
                     {:
                     	STO check = ((MyParser) parser).DoInitCheck(_1, (STO) _2);
                     	RESULT = new Vector ();
-                    	if(check.isError())
+                    	if( check.isError() )
                     	{
-                    		//RESULT.addElement(new ErrorSTO(_1));
+                    		RESULT.addElement(check.getName());
+                    	}
+                    	else if(_2 instanceof ErrorSTO)
+                    	{
+                    		RESULT.addElement("error");
                     	}
                     	else
                     	{
@@ -482,7 +486,7 @@ IdListWInit ::=     OptModifiers T_ID:_1 T_ASSIGN ConstExpr
     ;
 
 
-OptInit ::=         T_ASSIGN Expr
+OptInit ::=         T_ASSIGN Expr:_1 {: RESULT = _1; :}
     |               T_ASSIGN T_LBRACE ArrElemsList T_RBRACE
     |               /* empty */
     ;

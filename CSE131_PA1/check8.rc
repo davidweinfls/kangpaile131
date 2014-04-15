@@ -6,12 +6,13 @@
 //static int x; //okay?
 //int x; //not okay? 
 
-int x = Expr1;
-static int y = Expr2;
+//static bool x = true;	//okay
+//static int y = Expr2; //error, uninit expr2
+int z;	//error, uninit
 
 function : void main() 
 {
-	static int z = Expr3;
+	//static int z = Expr3;
 	static int z1; //not okay, z1 need to be initialized
-	int c = Expr3;
+	//int c = Expr3;
 }

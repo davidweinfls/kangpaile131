@@ -1,3 +1,59 @@
-function : bool foo(){ return false; }
+function : bool foo(){ return false; } 			//PASS
+function : void bar() { /* do nothing */ } 		//PASS
 
-//function : void bar() {}
+function : void main() { 						//PASS					
+	int x; 
+	x = x + foo(); //error: Incompatible type foo to binary operator +, numeric expected.
+ 	x = bar(); //Value of type bar not assignable to variable of type int.
+}
+
+
+function : float f_func(){ return true;} 		//PASS
+function : int i_func(){						//PASS
+	float i_func_var1 = 1.1;
+	i_func_var1 = i_func_var1 + f_func();
+	//Type of return expression (float), not assignment compatible with function's return type (int).
+	return 0.0;
+}
+
+function : void foo (int i, float f, bool b, int & refInt){}
+
+function : void testNumberOfparam() {}
+
+function : bool foo(int i, float f, bool b, int & refInt, float & refFloat) {}
+
+function : void testPassByVal( int i , float f , bool b) {}
+
+function : void testPassByRef( int & refInt, float & refFloat, bool &refBool) {}
+
+function : bool fuu() { return true; }
+
+function : void main() {	
+
+
+	int i = 1;
+	float f = 1;
+	bool b = true;
+
+	testNumberOfparam (1 , 2);
+
+	foo ();  //different number of arguments.
+
+	foo ( 1 , 2 );  //different number of arguments.
+
+	testPassByVal ( 1.1 , 5 , 1);  // error at 1st and 3rd params.
+
+	testPassByRef (1 , 2.5, true);  // not modifiable params.
+
+	testPassByRef (f , i , f);  // not equivalent params.
+
+
+	i = fuu() + i; // error : foo returns bool.
+   
+	testNumberOfparam ();
+
+	testPassByVal ( 1 , 5 , true);
+
+	testPassByRef (i , f, b);
+
+}

@@ -450,6 +450,10 @@ class MyParser extends parser
 		
 		
 		if(returnExpr instanceof ErrorSTO) return;
+		else if(ret instanceof VoidType && returnExpr == null)
+		{
+			//Do nothing
+		}
 		// check 6a
 		// Detect an illegal return statement where no Expr is specified
 		// and the return type is not void
@@ -513,20 +517,23 @@ class MyParser extends parser
 	}
 
 	/*
-	 * check8. Initialization check and variable arrign
+	 * check8. Initialization check and variable assign
 	 */
 	STO DoInitCheck(String id, STO sto)
 	{
-		if(sto == null) return new ErrorSTO("right side is null");
-		if(sto.isError()) return sto;	
+		//if(sto == null) return new VarSTO ("dummy", null);
+		if(sto != null && sto.isError()) return sto;	
 		
 		// not known at compile time
-		if(m_static && !sto.isConst() && !sto.isFunc()  )
+		if((m_static || m_symtab.getLevel() == 1) )
 		{
-			m_nNumErrors++;
-            m_errors.print(Formatter.toString(ErrorMsg.error8a_CompileTime, 
+			if( sto == null || (!sto.isConst() && !sto.isFunc()) )
+			{
+				m_nNumErrors++;
+				m_errors.print(Formatter.toString(ErrorMsg.error8a_CompileTime, 
             		id));
-            return new ErrorSTO("Expr is not known at compile time");
+				return new ErrorSTO("Expr is not known at compile time");
+			}
 		}
 		return sto;
 	}
