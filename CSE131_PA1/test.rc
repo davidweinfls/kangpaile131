@@ -2,22 +2,14 @@
 function : void main()
 {
 
-int testcase1 = 5;
 
-int testcase1_1 = 6;
+int x = 10.5;	//wrong. no error ?????
 
-if ((testcase1 < testcase1_1) && (testcase1_1 < 7)){} 	
-
-
-//int x= false;
+int y;
+//y = 20.555; //good. report error. 
 
 //bool y = 1;
 
-
-
 //static int x;
-
-
-
 
 }

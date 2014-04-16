@@ -217,21 +217,27 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoConstDecl (Vector<String> lstIDs, Type t)
+	DoConstDecl (Vector<STO> lstIDs, Type t)
 	{
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
-			String id = lstIDs.elementAt (i);
+			STO sto = lstIDs.elementAt (i);
+			if(sto.isError()) return;
+			String id = sto.getName();
 
 			if (m_symtab.accessLocal (id) != null)
 			{
 				m_nNumErrors++;
 				m_errors.print (Formatter.toString (ErrorMsg.redeclared_id, id));
 			}
+			else if ((sto.getType() != null) && !(sto.getType().isAssignable(t))) {
+                m_nNumErrors++;
+                m_errors.print (Formatter.toString(ErrorMsg.error8_Assign,
+                		sto.getType().getName(), t.getName()));
+            }
 		
-			ConstSTO 	sto = new ConstSTO (id,  t);
-			sto.setType(t);
-			m_symtab.insert (sto);
+			ConstSTO 	c_sto = new ConstSTO (id, t, ((ConstSTO) sto).getValue());
+			m_symtab.insert (c_sto);
 		}
 	}
 
@@ -517,11 +523,11 @@ class MyParser extends parser
 	}
 
 	/*
-	 * check8. Initialization check and variable assign
+	 * check8a. Initialization check and variable assign
 	 */
 	STO DoInitCheck(String id, STO sto)
 	{
-		//if(sto == null) return new VarSTO ("dummy", null);
+		if(sto == null) return new VarSTO ("dummy", null);
 		if(sto != null && sto.isError()) return sto;	
 		
 		// not known at compile time
@@ -534,6 +540,29 @@ class MyParser extends parser
             		id));
 				return new ErrorSTO("Expr is not known at compile time");
 			}
+		}
+		return sto;
+	}
+	
+	/*
+	 * check8b. Initialization check for const
+	 */
+	STO DoConstInit(String id, STO sto)
+	{
+		if(sto != null && sto.isError()) return sto;
+		
+		// not known at compile time
+		if( sto == null || !sto.isConst() )
+		{
+			m_nNumErrors++;
+			m_errors.print(Formatter.toString(ErrorMsg.error8b_CompileTime, 
+		        		id));
+			return new ErrorSTO("Expr is not known at compile time");
+		}
+		else
+		{
+			sto = new ConstSTO (id, sto.getType(),
+		             ((ConstSTO) sto).getValue());
 		}
 		return sto;
 	}

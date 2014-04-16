@@ -15,4 +15,15 @@ function : void main()
 	//static int z = Expr3;
 	static int z1; //not okay, z1 need to be initialized
 	//int c = Expr3;
+	
+	const int testcase1 = 5; //okay
+
+	int testcase1_1 = 6;	//okay
+
+	//should return error: lalala is not defined
+	if ((testcase1 < testcase1_1) && (testcase1_1 < 7))
+	{
+		int x = lalala; 
+	} 	
+	
 }

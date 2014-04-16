@@ -105,10 +105,10 @@ public class ArithmeticOp extends BinaryOp {
 							/ ((ConstSTO) b).getFloatValue();
 					break;
 				}
-				return new ConstSTO("result", new IntType("float", 4),
+				return new ConstSTO("result", new FloatType("float", 4),
 						(double) result);
 			}
-			return new ExprSTO("result", new IntType("float", 4));
+			return new ExprSTO("result", new FloatType("float", 4));
 		}	//end of checking +-*/
 		
 		

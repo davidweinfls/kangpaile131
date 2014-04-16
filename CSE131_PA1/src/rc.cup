@@ -472,16 +472,18 @@ IdListWOptInit ::=  OptModifiers T_ID:_1 OptInit:_2
                     :}
     ;
 
-IdListWInit ::=     OptModifiers T_ID:_1 T_ASSIGN ConstExpr
+IdListWInit ::=     OptModifiers T_ID:_1 T_ASSIGN ConstExpr:_2
                     {:
-			RESULT = new Vector ();
-			RESULT.addElement (_1);
+                    	STO sto = ((MyParser) parser).DoConstInit(_1, (STO)_2);
+						RESULT = new Vector ();
+						RESULT.addElement (sto);
                     :}
   //|       Do not need an extra rule since we are not doing constant arrays
-    |               IdListWInit:_1 T_COMMA OptModifiers T_ID:_3 T_ASSIGN ConstExpr
+    |               IdListWInit:_1 T_COMMA OptModifiers T_ID:_3 T_ASSIGN ConstExpr:_2
                     {:
-			RESULT = _1;
-			RESULT.addElement (_3);
+                    	STO sto = ((MyParser) parser).DoConstInit(_3, (STO)_2);
+						RESULT = _1;
+						RESULT.addElement (sto);
 		    :}
     ;
 
@@ -552,7 +554,7 @@ WritePair ::=    Expr
     ;
 
 
-ConstExpr ::=    Expr
+ConstExpr ::=    Expr:_1 {: RESULT = _1; :}
     ;
 
 
