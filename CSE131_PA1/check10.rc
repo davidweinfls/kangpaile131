@@ -1,0 +1,15 @@
+
+int[false] a1; //report error
+
+int[10.5] b1;  //report error
+
+int[-1] c1;	//report error
+
+
+typedef float[10] ARR;
+
+float[10] a;
+
+ARR b;
+ARR[2] c; // array of array
+

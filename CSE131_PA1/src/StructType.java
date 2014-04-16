@@ -11,5 +11,18 @@ public class StructType extends CompositeType{
         return new StructType (this.m_typeName, this.m_size);
     }
 
+	public boolean
+    isAssignable (Type t)
+    {
+        return isEquivalent(t);
+    }
+
+    public boolean
+    isEquivalent (Type t)
+    {
+        if((t instanceof StructType) && (this.m_typeName.equals(t.m_typeName)))
+            return true;
+        return false;
+    }
 	//Need more
 }

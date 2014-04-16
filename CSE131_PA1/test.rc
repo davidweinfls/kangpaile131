@@ -5,7 +5,7 @@ function : void main()
 
 int x = 10.5;	//wrong. no error ?????
 
-int y;
+//int y;
 //y = 20.555; //good. report error. 
 
 //bool y = 1;

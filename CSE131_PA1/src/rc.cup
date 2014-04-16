@@ -334,7 +334,10 @@ BasicType ::=       T_INT:_1
 
 
 OptModifiers ::= 	PointerList
-	|				T_LBRACKET ConstExpr T_RBRACKET
+	|				T_LBRACKET ConstExpr:_1 T_RBRACKET
+					{: 
+						RESULT = ((MyParser) parser).DoArrayCheck(_1);
+					:}
     |               /* empty */
     ;
 	
@@ -834,9 +837,9 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
                     {:
                         RESULT = ((MyParser) parser).DoDesignator2_Dot (_1, _3);
                     :}
-    |               Designator2:_1 T_LBRACKET Expr T_RBRACKET
+    |               Designator2:_1 T_LBRACKET Expr:_2 T_RBRACKET
                     {:
-                        RESULT = ((MyParser) parser).DoDesignator2_Array (_1);
+                        RESULT = ((MyParser) parser).DoDesignator2_Array (_1, _2);
                     :}
     |               Designator2:_1 T_ARROW T_ID
                     {:

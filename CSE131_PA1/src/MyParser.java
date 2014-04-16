@@ -585,6 +585,49 @@ class MyParser extends parser
 	{
 		m_static = false;
 	}
+	
+	/*
+	 * check10. do array declarition check
+	 */
+		//----------------------------------------------------------------
+		// check10. 
+		// Given a type declaration such as -- Type[Index] List1;
+		// An error should be generated if
+		// ¡ñ the type of the index expression is not equal to int
+		// ¡ñ the value of the index expression is not known at compile time
+		//		(i.e., not a constant);
+		// ¡ñ the value of the index expression is not greater than 0.
+		//----------------------------------------------------------------
+	STO DoArrayChcek(STO sto)
+	{
+		if(sto.isError()) return sto;
+		// Good place to do the array checks
+		if (sto instanceof ErrorSTO)
+			return new ErrorSTO("illegal array decl");
+		// value of expr is not known at compile time
+		if (!sto.isConst()) 
+		{
+			m_nNumErrors++;
+            m_errors.print (ErrorMsg.error10c_Array);
+            return new ErrorSTO(sto.getName());
+		} 
+		else if (!sto.getType().isIntType()) 
+		{
+			m_nNumErrors++;
+            m_errors.print (Formatter.toString(ErrorMsg.error10i_Array,
+             sto.getType().getName()));
+            return new ErrorSTO(sto.getName());
+		} 
+		else if(  ((ConstSTO)sto).getIntValue() <= 0 )
+		{
+			m_nNumErrors++;
+            m_errors.print (Formatter.toString(ErrorMsg.error10z_Array,
+             ((ConstSTO) sto).getIntValue()));
+            return new ErrorSTO(sto.getName());
+		}
+		else return new ExprSTO (sto.getName(), new ArrayType("array",
+	             ((ConstSTO) sto).getIntValue()));
+	}
 
 	//----------------------------------------------------------------
 	//
@@ -699,14 +742,11 @@ class MyParser extends parser
 	}
 
 
-	//----------------------------------------------------------------
-	//
-	//----------------------------------------------------------------
+	
 	STO
-	DoDesignator2_Array (STO sto)
+	DoDesignator2_Array (STO sto, STO expr)
 	{
-		// Good place to do the array checks
-
+			
 		return sto;
 	}
 
