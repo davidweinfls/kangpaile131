@@ -74,6 +74,11 @@ class FunctionPointerType extends PointerGroupType{
     {
         return m_params;
     }
+    
+    public Type copy () 
+    {
+        return new FunctionPointerType (this.m_typeName, this.m_returnType, this.m_byRef, this.m_params);
+    }
 
     //fields
 	private String m_funcName;

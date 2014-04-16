@@ -18,5 +18,7 @@ abstract class CompositeType extends Type {
 		return false;		
 	}
 	public boolean	isCompositeType ()	{ return true; }
+	
+	public Type copy(){return null;}
 
 }

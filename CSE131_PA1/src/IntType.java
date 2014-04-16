@@ -25,4 +25,9 @@ class IntType extends NumericType {
 	public boolean isIntType() {
 		return true;
 	}
+	
+	public Type copy()
+	{
+		return new IntType(this.m_typeName, this.m_size);
+	}
 }

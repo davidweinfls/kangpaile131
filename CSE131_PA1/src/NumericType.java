@@ -16,4 +16,9 @@ abstract class NumericType extends BasicType{
 		return false;		
 	}
 	public boolean	isNumericType ()	{ return true; }
+	
+	public Type copy()
+	{
+		return null;
+	}
 }

@@ -9,4 +9,6 @@ class VoidType extends Type {
 	//need more
 	
 	public boolean	isVoidType ()	{ return true; }
+	
+	public Type copy(){return null;}
 }

@@ -24,6 +24,10 @@ public class BoolType extends BasicType{
         return false;
     }
 	
+    public Type copy()
+    {
+    	return new BoolType(this.m_typeName, this.m_size);
+    }
 	
 	
 }

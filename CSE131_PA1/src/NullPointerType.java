@@ -6,5 +6,9 @@ class NullPointerType extends PointerType {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Type copy () 
+	{
+        return new NullPointerType (this.m_typeName, this.m_size);
+    }
 	//Need more
 }

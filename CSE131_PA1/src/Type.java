@@ -48,6 +48,21 @@ abstract class Type
 		m_size = size;
 	}
 
+	public boolean isAlias()
+	{
+		return m_isAlias;
+	}
+	
+	public void setAlias(String name)
+	{
+		m_alias = name;
+		m_isAlias = true;
+	}
+	
+	public Type copy()
+	{
+		return null;
+	}
 
 	//----------------------------------------------------------------
 	//	It will be helpful to ask a Type what specific Type it is.
@@ -86,7 +101,9 @@ abstract class Type
 	//----------------------------------------------------------------
 	//	Name of the Type (e.g., int, bool, or some typedef
 	//----------------------------------------------------------------
-	private String  	m_typeName;
-	private int		m_size;
+	protected String  	m_typeName;
+	protected int		m_size;
+	protected String	m_alias;
+	protected boolean m_isAlias;
 }
 

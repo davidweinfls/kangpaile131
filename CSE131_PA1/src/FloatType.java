@@ -25,4 +25,9 @@ class FloatType extends NumericType {
 	public boolean isFloatType() {
 		return true;
 	}
+	
+	public Type copy()
+	{
+		return new FloatType(this.m_typeName, this.m_size);
+	}
 }

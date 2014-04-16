@@ -1,0 +1,13 @@
+typedef int INTEGER;
+
+INTEGER a;
+INTEGER b;
+
+//const int c = 2 + 3 * 0 - 1;
+
+function : int main() 
+{
+	a = a + b;
+	return a;
+	
+}

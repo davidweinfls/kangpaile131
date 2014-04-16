@@ -18,5 +18,10 @@ abstract class BasicType extends Type{
 		return false;		
 	}
 	public boolean	isBasicType ()	{ return true; }
+	
+	public Type copy()
+	{
+		return null;
+	}
 
 }

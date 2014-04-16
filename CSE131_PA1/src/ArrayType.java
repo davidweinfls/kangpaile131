@@ -17,4 +17,9 @@ class ArrayType extends CompositeType {
 		}
 		return false;
 	}
+	
+	public Type copy()
+    {
+    	return new ArrayType(this.m_typeName, this.m_size);
+    }
 }
