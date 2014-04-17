@@ -2,8 +2,9 @@
 function : void main()
 {
 
+int[-1] c1;	//bug. should report error
 
-int x = 10.5;	//wrong. no error ?????
+//int x = 10.5;	//wrong. no error ?????
 
 //int y;
 //y = 20.555; //good. report error. 

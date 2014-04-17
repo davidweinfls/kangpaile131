@@ -41,7 +41,18 @@ class UnaryOp extends Operator
         {
             return new ErrorSTO(Formatter.toString(ErrorMsg.error2_Lval, this.getName()));
         }
-        return a;
+        else if (aType instanceof IntType) 
+        {
+            return new ExprSTO("result", aType);
+        } 
+        else if (aType instanceof FloatType) 
+        {
+            return new ExprSTO("result", aType);
+        } 
+        else 
+        {
+            return new ExprSTO("result", aType);
+        }
         
     }
     

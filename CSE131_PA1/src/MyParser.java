@@ -598,7 +598,7 @@ class MyParser extends parser
 		//		(i.e., not a constant);
 		// ¡ñ the value of the index expression is not greater than 0.
 		//----------------------------------------------------------------
-	STO DoArrayChcek(STO sto)
+	STO DoArrayCheck(STO sto)
 	{
 		if(sto.isError()) return sto;
 		// Good place to do the array checks
@@ -716,7 +716,7 @@ class MyParser extends parser
 		return result ;
 	}
 	
-	STO DoUnaryExpr(Operator o, STO a)
+	STO DoUnaryOp(Operator o, STO a)
 	{
 		if(a instanceof ErrorSTO) return a;
 		
@@ -728,6 +728,23 @@ class MyParser extends parser
 			m_errors.print (result.getName());
 		}
 		return result ;	
+	}
+	
+	STO DoUnarySign(String sign, STO sto)
+	{
+		STO stoDes;
+        if (sto instanceof ConstSTO) {
+            if (sign == "-") {
+                stoDes = new ConstSTO (sto.getName(), sto.getType(),
+                 0 - ((ConstSTO) sto).getValue());
+            } else {
+                stoDes = new ConstSTO (sto.getName(), sto.getType(),
+                 ((ConstSTO) sto).getValue());
+            }
+        } else {
+            stoDes = new ExprSTO(sign + sto.getName(), sto.getType());
+        }
+		return stoDes;
 	}
 	
 	//----------------------------------------------------------------

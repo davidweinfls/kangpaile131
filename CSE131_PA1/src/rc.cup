@@ -336,7 +336,8 @@ BasicType ::=       T_INT:_1
 OptModifiers ::= 	PointerList
 	|				T_LBRACKET ConstExpr:_1 T_RBRACKET
 					{: 
-						RESULT = ((MyParser) parser).DoArrayCheck(_1);
+					System.out.println(((STO)_1).getType());
+						RESULT = ((MyParser) parser).DoArrayCheck((STO)_1);
 					:}
     |               /* empty */
     ;
@@ -800,14 +801,14 @@ Designator ::= T_STAR Designator:_1
                     {:
 			RESULT = _1;
                     :}
-    |               UnarySign Designator:_1
+    |               UnarySign:_2 Designator:_1
                     {:
-			RESULT = _1;
+						//RESULT = ((MyParser) parser).DoUnaryOp(_1, _2);
                     :}
     |               T_NOT Designator:_1
                     {:
-            Operator op = new UnaryOp("!");
-			RESULT = ((MyParser) parser).DoUnaryExpr(op, _1); 
+            			Operator op = new UnaryOp("!");
+						RESULT = ((MyParser) parser).DoUnaryOp(op, _1); 
                     :}
     |               T_SIZEOF T_LPAREN Designator:_2 T_RPAREN
                     {:
@@ -824,7 +825,7 @@ Designator ::= T_STAR Designator:_1
     |               IncDecOp:_1 Designator:_2
                     {:
                     	Operator op = new UnaryOp(_1, true);
-						RESULT = ((MyParser) parser).DoUnaryExpr(op, _2);
+						RESULT = ((MyParser) parser).DoUnaryOp(op, _2);
                     :}
     |               Designator2:_1 
                     {:
@@ -848,7 +849,7 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
     |               Designator2:_1 IncDecOp:_2
                     {:
                         Operator op = new UnaryOp(_2, false);
-						RESULT = ((MyParser) parser).DoUnaryExpr(op, _1);
+						RESULT = ((MyParser) parser).DoUnaryOp(op, _1);
                     :}
     |               Designator2:_1 T_LPAREN OptExprList:_2 T_RPAREN
                     {:
@@ -916,5 +917,12 @@ NewStmt ::=		T_NEW Designator T_SEMI
 DeleteStmt ::=	T_DELETE Designator T_SEMI
 	;
 	
-UnarySign ::=  T_MINUS | T_PLUS
+UnarySign ::=  	T_MINUS
+				{:
+					RESULT = "-";
+				:}
+	|			T_PLUS
+				{:
+					RESULT = "+";
+				:}
 	;

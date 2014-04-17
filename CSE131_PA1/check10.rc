@@ -1,15 +1,26 @@
 
-int[false] a1; //report error
+int x = -1;
 
-int[10.5] b1;  //report error
+function: void foo()
+{
+	if(x < 0)
+	{
+		lalala;
+	}
 
-int[-1] c1;	//report error
+}
+
+//int[false] a1; //report error
+
+//int[10.5] b1;  //report error
+
+//int[-1] c1;	//report error
 
 
-typedef float[10] ARR;
+//typedef float[10] ARR;
 
-float[10] a;
+//float[10] a;
 
-ARR b;
-ARR[2] c; // array of array
+//ARR b;
+//ARR[2] c; // array of array
 
