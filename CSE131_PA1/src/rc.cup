@@ -803,7 +803,7 @@ Designator ::= T_STAR Designator:_1
                     :}
     |               UnarySign:_2 Designator:_1
                     {:
-						//RESULT = ((MyParser) parser).DoUnaryOp(_1, _2);
+						RESULT = ((MyParser) parser).DoUnarySign((String)_2, _1);
                     :}
     |               T_NOT Designator:_1
                     {:

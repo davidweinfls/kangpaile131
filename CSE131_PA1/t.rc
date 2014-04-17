@@ -1,0 +1,11 @@
+int x = 1;  		
+static int y = 2;   
+static bool f = false;   
+
+
+int i = x; 	//error1
+
+static int yy = y;	//error2
+
+//int ii = ::x;	//error3
+

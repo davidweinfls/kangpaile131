@@ -171,6 +171,8 @@ class MyParser extends parser
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
+	//TODO: has erros on declare global var. if global and local are both declared, it reports
+	//redeclared. Which is wrong! 
 	void
 	DoVarDecl (Vector<String> lstIDs, Type t)
 	{
