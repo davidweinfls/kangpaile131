@@ -457,23 +457,19 @@ IdListWOptInit ::=  OptModifiers T_ID:_1 OptInit:_2
                     {:
                     	STO check = ((MyParser) parser).DoInitCheck(_1, (STO) _2);
                     	RESULT = new Vector ();
-                    	if( check.isError() )
+                    	if(_2 instanceof ErrorSTO)
                     	{
-                    		RESULT.addElement(check.getName());
-                    	}
-                    	else if(_2 instanceof ErrorSTO)
-                    	{
-                    		RESULT.addElement("error");
+                    		RESULT.addElement(new ErrorSTO("error"));
                     	}
                     	else
                     	{
-                        	RESULT.addElement (_1);
+                        	RESULT.addElement (check);
                         }
                     :}
     |               IdListWOptInit:_1 T_COMMA OptModifiers T_ID:_3 OptInit:_2
                     {:
                         RESULT = _1;
-                        RESULT.addElement (_3);
+                        RESULT.addElement (new VarSTO(_3));
                     :}
     ;
 

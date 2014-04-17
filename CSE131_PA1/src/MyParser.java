@@ -174,21 +174,31 @@ class MyParser extends parser
 	//TODO: has erros on declare global var. if global and local are both declared, it reports
 	//redeclared. Which is wrong! 
 	void
-	DoVarDecl (Vector<String> lstIDs, Type t)
+	DoVarDecl (Vector<STO> lstIDs, Type t)
 	{
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
-			String id = lstIDs.elementAt (i);
+			STO sto = lstIDs.elementAt(i);
+			String id = sto.getName();
+			Type type = sto.getType();
 		
 			if (m_symtab.accessLocal (id) != null)
 			{
 				m_nNumErrors++;
 				m_errors.print (Formatter.toString(ErrorMsg.redeclared_id, id));
 			}
-
-			VarSTO 		sto = new VarSTO (id);
-			sto.setType(t);
-			m_symtab.insert (sto);
+			if(type != null && type.isAssignable(t))
+			{
+				VarSTO 	var = new VarSTO (id);
+				var.setType(t);
+				m_symtab.insert (var);
+			}
+			else
+			{
+				m_nNumErrors++;
+                m_errors.print (Formatter.toString(ErrorMsg.error8_Assign,
+                 type.getName(), t.getName()));
+			}
 		}
 	}
 
@@ -532,7 +542,7 @@ class MyParser extends parser
 	 */
 	STO DoInitCheck(String id, STO sto)
 	{
-		if(sto == null) return new VarSTO ("dummy", null);
+		if(sto == null) return new VarSTO ("empty", null);
 		if(sto != null && sto.isError()) return sto;	
 		
 		// not known at compile time

@@ -1,0 +1,26 @@
+/* should have 12 errors in total */
+
+int i = 1.5;
+float f = false;
+bool  b = 1;
+
+
+static int   ii = 1.5;
+static float ff = false;
+static bool  bb = 1;
+
+
+
+
+function : void main (){
+
+	int i = 1.5;
+	float f = false;
+	bool  b = 1;
+
+
+	static int   ii = 1.5;
+	static float ff = false;
+	static bool  bb = 1;
+
+}
