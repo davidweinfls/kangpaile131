@@ -13,14 +13,14 @@ public class BitwiseOp extends BinaryOp{
 		{
 			// if A is not Numeric, return error message, error1n, numeric
 			// expected
-			return new ErrorSTO(Formatter.toString(ErrorMsg.error1n_Expr,
+			return new ErrorSTO(Formatter.toString(ErrorMsg.error1w_Expr,
 					aType.getName(), this.getName(), "int"));
 		} 
 		else if (!(bType instanceof IntType)) 
 		{
 			// if B is not Numeric, return error message, error1n, numeric
 			// expected
-			return new ErrorSTO(Formatter.toString(ErrorMsg.error1n_Expr,
+			return new ErrorSTO(Formatter.toString(ErrorMsg.error1w_Expr,
 					bType.getName(), this.getName(), "int"));
 		} 
 		else if ( (a instanceof ConstSTO) && (b instanceof ConstSTO) ) 
