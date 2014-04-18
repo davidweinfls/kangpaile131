@@ -187,17 +187,26 @@ class MyParser extends parser
 				m_nNumErrors++;
 				m_errors.print (Formatter.toString(ErrorMsg.redeclared_id, id));
 			}
-			if(type != null && type.isAssignable(t))
+			if(type != null)
+			{
+				if(type.isAssignable(t))
+				{
+					VarSTO 	var = new VarSTO (id);
+					var.setType(t);
+					m_symtab.insert (var);
+				}
+				else
+				{
+					m_nNumErrors++;
+	                m_errors.print (Formatter.toString(ErrorMsg.error8_Assign,
+	                 type.getName(), t.getName()));
+				}
+			}
+			else
 			{
 				VarSTO 	var = new VarSTO (id);
 				var.setType(t);
 				m_symtab.insert (var);
-			}
-			else
-			{
-				m_nNumErrors++;
-                m_errors.print (Formatter.toString(ErrorMsg.error8_Assign,
-                 type.getName(), t.getName()));
 			}
 		}
 	}
