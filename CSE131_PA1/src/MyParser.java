@@ -780,10 +780,62 @@ class MyParser extends parser
 	}
 
 
-	
+	/*
+	 * check11. Error if
+	 * ¡ñ a. The type of the desig preceding any [] operator is not an array
+	 *   or pointer type;
+	 * ¡ñ b. The type of the index expression (nIndex in this case) is not 
+	 * 	 equivalent to int;
+	 * ¡ñ c. If the index expression is a constant, an error should be generate
+	 *   if the index is outside the bounds of the array 
+	 *   (does not apply when the designator preceding the [] is of pointer
+	 *    type).
+	 */
 	STO
 	DoDesignator2_Array (STO sto, STO expr)
 	{
+		if(sto.isError()) return new ErrorSTO("error");
+		if(expr.isError()) return new ErrorSTO("error");
+		
+		Type aType = sto.getType();
+		Type bType = expr.getType();
+		
+		//check a
+		if(!aType.isArray() || !aType.isPointer())
+		{
+			m_nNumErrors++;
+            m_errors.print (Formatter.toString(ErrorMsg.error11t_ArrExp,
+             aType.getName()));
+            return new ErrorSTO ("Check11 error. Illegal Array Usage");
+		}
+		//check b
+		else if(!bType.isInt())
+		{
+			m_nNumErrors++;
+            m_errors.print (Formatter.toString(ErrorMsg.error11i_ArrExp, 
+            		bType.getName()));
+            return new ErrorSTO ("Check11 error. Inequivalent to int");
+		}
+		//check c
+		else if(expr.isConst())
+		{
+			int index = ((ConstSTO) expr).getIntValue();
+			//TODO: change this magic number!!!!!!
+			int upperBound = 100;
+			//check array index bounds. need >=0 and < size
+			if(index < 0)
+			{
+				m_nNumErrors++;
+                m_errors.print (Formatter.toString(ErrorMsg.error11b_ArrExp,
+                		index, upperBound));
+                return new ErrorSTO ("Array index out of bound");
+			}
+			//declare a new array
+			else
+			{
+				
+			}
+		}
 			
 		return sto;
 	}
@@ -804,6 +856,7 @@ class MyParser extends parser
 		{
 			
 			m_nNumErrors++;
+			System.out.println("here");
 		 	m_errors.print (Formatter.toString(ErrorMsg.undeclared_id, strID));	
 			sto = new ErrorSTO (strID);
 		}			

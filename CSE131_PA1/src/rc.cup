@@ -465,9 +465,13 @@ IdListWOptInit ::=  OptModifiers:_3 T_ID:_1 OptInit:_2
                     	{
                     		RESULT.addElement(new ErrorSTO("error"));
                     	}
-                    	else
+                    	else if(_2 != null)
                     	{
                         	RESULT.addElement (check);
+                        }
+                        else
+                        {
+                        	RESULT.addElement (new VarSTO(_1));
                         }
                     :}
     |               IdListWOptInit:_1 T_COMMA OptModifiers T_ID:_3 OptInit:_2
@@ -840,7 +844,14 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
                     :}
     |               Designator2:_1 T_LBRACKET Expr:_2 T_RBRACKET
                     {:
-                        RESULT = ((MyParser) parser).DoDesignator2_Array (_1, _2);
+                    	if(_2.isError())
+                    	{
+                    		RESULT = new ErrorSTO ("Error");
+                    	}
+                    	else
+                    	{
+                        	RESULT = ((MyParser) parser).DoDesignator2_Array (_1, _2);
+                        }
                     :}
     |               Designator2:_1 T_ARROW T_ID
                     {:

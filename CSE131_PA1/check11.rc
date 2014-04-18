@@ -1,0 +1,34 @@
+
+function : void main()
+{
+
+	//int [55] a;
+	//int y;
+	
+	//int temp;
+	//temp = y[10]; 	//good, throws an error
+	
+	//int c = 3;
+	//c[3] = 5;		//bug. report wrong error message
+
+	//int [0-99] b;	//pass. report error.
+	
+	//const int x = 20;
+	//int [x + 10] c;
+
+	//int c = 10;
+	//int a[c];
+
+	//int a[c+5];
+
+ 	//int a[-9];
+ 	
+	//int a[5][7];
+	
+	//int a[-9][0];
+	
+	//int a[x+4][c+2];
+	
+	//int a[-c][5+3];
+	
+}
