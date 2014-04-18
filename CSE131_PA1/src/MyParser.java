@@ -649,6 +649,30 @@ class MyParser extends parser
 		else return new ExprSTO (sto.getName(), new ArrayType("array",
 	             ((ConstSTO) sto).getIntValue()));
 	}
+	
+	/*
+	 * check12a. Continue statement check
+	 * Errors should be generated if either statement is not within the 
+	 * body of a while loop.
+	 */
+	void DoContinueCheck() {
+        if(m_while == 0) {
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error12_Continue);
+        }
+    }
+	
+	/*
+	 * check12b. Break statement check
+	 * Errors should be generated if either statement is not within the 
+	 * body of a while loop.
+	 */
+	void DoBreakCheck() {
+        if(m_while == 0) {
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error12_Break);
+        }
+    }
 
 	//----------------------------------------------------------------
 	//
@@ -684,6 +708,14 @@ class MyParser extends parser
 		}
 		return a;
 	}
+	
+	void InWhile() {
+        m_while = 1;
+    }
+
+    void OutWhile() {
+        m_while = 0;
+    }
 
 	//----------------------------------------------------------------
 	// check 3
@@ -921,6 +953,7 @@ class MyParser extends parser
 	private int			m_nSavedLineNum;
 	private String		m_funcName;
 	private boolean 	m_static;
+	private int			m_while;
 
 	private SymbolTable		m_symtab;
 }

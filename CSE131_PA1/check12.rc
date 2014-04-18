@@ -1,0 +1,15 @@
+function : void main()
+{
+	while(2<4)
+	{
+		break;
+	}
+
+	break;
+	
+	while(true)
+	{
+		continue;
+	}
+	continue;
+}
