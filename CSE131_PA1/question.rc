@@ -1,0 +1,14 @@
+//int y;
+//static int z;
+
+function : void main()
+{
+	//1. 
+	int x = 5;
+	int[x+10] a;
+	
+	//2. 
+	//int c = 3;
+	//c[5] = 6;
+
+}

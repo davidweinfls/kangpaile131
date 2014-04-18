@@ -174,12 +174,13 @@ class MyParser extends parser
 	//TODO: has erros on declare global var. if global and local are both declared, it reports
 	//redeclared. Which is wrong! 
 	void
-	DoVarDecl (Vector<STO> lstIDs, Type t)
+	DoVarDecl (Vector<VariableBox> lstIDs, Type t)
 	{
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
-			STO sto = lstIDs.elementAt(i);
-			String id = sto.getName();
+			VariableBox variable = lstIDs.elementAt(i);
+			String id = variable.getName();
+			STO sto = variable.getSTO();
 			Type type = sto.getType();
 		
 			if (m_symtab.accessLocal (id) != null)
@@ -547,7 +548,7 @@ class MyParser extends parser
 	}
 
 	/*
-	 * check8a. Initialization check and variable assign
+	 * check8a. Static and global Initialization check and variable assign
 	 */
 	STO DoInitCheck(String id, STO sto)
 	{
