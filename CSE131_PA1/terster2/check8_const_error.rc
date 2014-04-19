@@ -1,0 +1,17 @@
+function : int foo(int x) {return x;} 
+function : int main() {
+	const int c = foo(5);
+	const int c = 4.0 + 2;
+	bool x = foo(5);
+	return 0;
+}
+
+/*
+Error, " ": 
+  Initialization value of constant named c not known at compile time.
+Error, " ": 
+  Initialization value of type float not assignable to constant/variable of type int.
+Error, " ": 
+  Initialization value of type int not assignable to constant/variable of type bool.
+Compile: failure.
+*/

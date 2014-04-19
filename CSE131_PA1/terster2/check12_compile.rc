@@ -1,0 +1,24 @@
+int[2] b;
+function : void main() {
+	while(true) {break;}
+	while(false){continue;}
+}
+
+function : void legal_while() {
+    while (1) {
+        break;
+    }
+
+    while (true) {
+        continue;
+    }
+
+    while (2 == 3) {
+        if (true) {
+            continue;
+        }
+        else {
+            break;
+        }
+    }
+}

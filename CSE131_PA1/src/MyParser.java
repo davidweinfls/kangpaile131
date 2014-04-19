@@ -174,39 +174,75 @@ class MyParser extends parser
 	//TODO: has erros on declare global var. if global and local are both declared, it reports
 	//redeclared. Which is wrong! 
 	void
-	DoVarDecl (Vector<VariableBox> lstIDs, Type t)
+	DoVarDecl (Vector<VariableBox<STO, STO>> lstIDs, Type t)
 	{
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
-			VariableBox box = lstIDs.elementAt(i);
-			String id = box.getName();
-			STO sto = box.getSTO();
-			Type stoType = sto.getType();
+			VariableBox<STO, STO> box = lstIDs.elementAt(i);
+			//get first STO. stored variable and its name
+			STO variable = box.getVariable();
+			String id = variable.getName();
+			Type varType = variable.getType();
+			//get second STO. stored expr and its type
+			STO expr = box.getExpr();
+			Type exprType = null;
+			
+			if(variable.isError()) return;
+			if(expr != null)
+				exprType = expr.getType();
 		
 			if (m_symtab.accessLocal (id) != null)
 			{
 				m_nNumErrors++;
 				m_errors.print(Formatter.toString(ErrorMsg.redeclared_id,id));
 			}
-			if(stoType != null)
+			if(exprType != null)
 			{
-				if(stoType.isAssignable(t))
+				if(exprType.isAssignable(t))
 				{
-					VarSTO 	var = new VarSTO (id);
-					var.setType(t);
+					VarSTO var;
+					if(t instanceof ArrayType)
+						var = new VarSTO(id, t, true, false);
+					else
+						var = new VarSTO (id, t);
 					m_symtab.insert (var);
 				}
-				else
+				else	//right is not assignable to left
 				{
 					m_nNumErrors++;
 	                m_errors.print(Formatter.toString(ErrorMsg.error8_Assign,
-	                		stoType.getName(), t.getName()));
+	                		exprType.getName(), t.getName()));
 				}
+			}
+			else if(varType instanceof PointerType)
+			{
+				((PointerType) varType).setType(t);
+				//if(exprType == null)
+				//{
+					VarSTO var = new VarSTO(id, varType, true, true);
+					m_symtab.insert (var);
+				//}
+				//else
+				//{
+					//VarSTO var = new VarSTO(id, varType, true, true);
+					//m_symtab.insert (var);
+				//}
+			}
+			else if(varType instanceof ArrayType)
+			{
+				VarSTO var;
+				Type arrType = new ArrayType("Array", 1, 
+						((ArrayType) varType).getArraySize(), t);
+				var = new VarSTO(id, arrType, true, false);
+				m_symtab.insert (var);
 			}
 			else
 			{
-				VarSTO 	var = new VarSTO (id);
-				var.setType(t);
+				VarSTO var;
+				if(t instanceof ArrayType)
+					var = new VarSTO(id, t, true, false);
+				else
+					var = new VarSTO (id, t);
 				m_symtab.insert (var);
 			}
 		}
@@ -372,7 +408,7 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoFuncDecl_1 (Type returnType, String id, Boolean ref)
+	DoFuncDecl_1 (Type returnType, String id, boolean ref)
 	{
 		if (m_symtab.accessLocal (id) != null)
 		{
@@ -798,6 +834,53 @@ class MyParser extends parser
 	// for check12
     void OutWhile() {
         m_while = 0;
+    }
+    
+    /*
+     * check15a
+     * An error should be generated if
+     *	¡ñ 1. The type of ptr is not a pointer to a struct for the -> operator.
+     * 	¡ñ 2. The right side is a field within the struct. use errmsg from check14.
+     */
+    STO DoArrowCheck(STO sto, String id)
+    {
+    	if(sto.isError())	return sto;
+    	//check 15a.1
+    	if(!sto.getType().isPointer() || 
+    		!((PointerType)sto.getType()).getBaseType().isStruct() )
+    	{
+    		m_nNumErrors++;
+    		m_errors.print(Formatter.toString(ErrorMsg.error15_ReceiverArrow,
+    				sto.getType().getName()));
+    		return new ErrorSTO("ptr is not a ptr to a struct for -> op");
+    	}
+    	//check 15a.2
+    	else
+    	{
+    		boolean found = false;
+			STO strSTO = m_symtab.access(((PointerType) sto.getType())
+					.getBaseType().getName());
+			Vector<STO> fieldList = ((StructType)strSTO.getType()).getFieldList();
+			STO elt = null;
+			for(int i = 0; i < fieldList.size(); i++)
+			{
+				elt = fieldList.get(i);
+				if(elt.getName().equals(id))
+				{
+					found = true;
+					break;
+				}
+			}
+			//if not found, return errormsg14
+			if(found == false)
+			{
+				m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.error14f_StructExp,
+                		id, strSTO.getType().getName()));
+                return new ErrorSTO("right side is not a field in struct");
+			}
+			return elt;
+    	}
     }
 
     /*

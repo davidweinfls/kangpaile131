@@ -1,0 +1,54 @@
+const int cc = 1;
+typedef float[10] ARR;
+float[10] a;
+ARR b;
+float * d;
+int e;
+ARR[2] f;
+
+function : void main() {
+	int i = e[2];
+	b[b[2] - cc] = 2.5;
+
+	const int x = 3;
+	const int c = 12;
+	a[55] = 0;
+	a[0-99] = 0;
+	a[x+10] = 0;
+	a[c] = 0;
+	a[c+5] = 0;
+	a[-9] = 0;
+	f[5][7] = 0;
+	f[-9][0] = 0;
+	f[x+4][c+2] = 0;
+	f[-c][5+3] = 0;
+	
+}
+
+/*
+Error, "  ": 
+  Type of expression referenced by array subscript (int) is not of array or pointer type.
+Error, "  ": 
+  Type of index expression in array reference (float) not equivalent to int.
+Error, "  ": 
+  Index value of 55 is outside legal range [0,10).
+Error, "  ": 
+  Index value of -99 is outside legal range [0,10).
+Error, "  ": 
+  Index value of 13 is outside legal range [0,10).
+Error, "  ": 
+  Index value of 12 is outside legal range [0,10).
+Error, "  ": 
+  Index value of 17 is outside legal range [0,10).
+Error, "  ": 
+  Index value of -9 is outside legal range [0,10).
+Error, "  ": 
+  Index value of 5 is outside legal range [0,2).
+Error, "  ": 
+  Index value of -9 is outside legal range [0,2).
+Error, "  ": 
+  Index value of 7 is outside legal range [0,2).
+Error, "  ": 
+  Index value of -12 is outside legal range [0,2).
+Compile: failure.
+*/

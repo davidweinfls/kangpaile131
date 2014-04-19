@@ -1,0 +1,13 @@
+function : void main() {
+	exit(false);
+	return;
+}
+function : int main() {
+    // Exit expression (type bool) is not assignable to int.
+    exit(true);
+
+    // Exit expression (type float) is not assignable to int.
+    exit(2.0);
+
+    return 0xE0F;
+}

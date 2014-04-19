@@ -5,6 +5,11 @@ abstract class PointerGroupType extends CompositeType{
 		super(name, size);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public boolean isPointerGroupType()
+	{
+		return true;
+	}
 
 	//Need more
 }

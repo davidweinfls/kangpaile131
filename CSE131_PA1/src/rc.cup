@@ -132,9 +132,6 @@ non terminal
     OptInit,
     ArrElemsList,
     OptModifiers,
-    PointerList,
-    Pointer,
-	OptPointerList,
 	NewStmt,
 	DeleteStmt
     ;
@@ -171,7 +168,10 @@ non terminal Type
     Type,
     UndecoratedType,
     ReturnType,
-    DeclType
+    DeclType,
+  	OptPointerList,
+  	PointerList,
+  	Pointer
     ;
     	
 non terminal Vector
@@ -286,7 +286,7 @@ FieldList ::= 	UndecoratedType:_1 IdList:_2 T_SEMI
 FuncDef ::=    T_FUNCTION T_COLON ReturnType:_1 OptRef:_4 T_ID:_2
                     {:
                         ((MyParser) parser).SaveLineNum ();
-                        ((MyParser) parser).DoFuncDecl_1(_1,  _2, (boolean) _4);
+                        ((MyParser) parser).DoFuncDecl_1(_1,  _2, ((boolean)_4));
                     :}
                     T_LPAREN OptParamList:_3 T_RPAREN
                     {:
@@ -355,7 +355,7 @@ BasicType ::=       T_INT:_1
 
 OptModifiers ::= 	PointerList:_1
 					{:
-						RESULT = new ExprSTO ("PointerList", (PointerType) _1);
+						RESULT = new ExprSTO("PointerList", (PointerType) _1);
 					:}
 	|				T_LBRACKET ConstExpr:_1 T_RBRACKET
 					{: 
@@ -364,7 +364,7 @@ OptModifiers ::= 	PointerList:_1
     |               /* empty */
     ;
 	
-OptPointerList ::= 	PointerList
+OptPointerList ::= 	PointerList:_1 {: RESULT = _1; :}
     |               /* empty */
     ;
     
@@ -372,24 +372,27 @@ OptPointerList ::= 	PointerList
 PointerList ::=   	Pointer:_1 {: RESULT = _1; :}
     |               PointerList:_1 Pointer:_2
     				{:
-    					RESULT = new PointerType ("*", 1);
+    					RESULT = new PointerType ("*", 4, (PointerType)_1);
     				:}
     ;
 
 
-Pointer ::=        T_STAR:_1 {: RESULT = new PointerType ("*", 4); :}
+Pointer ::=  	T_STAR
+				{: 
+					RESULT = new PointerType ("*", 4); 
+				:}
     ;
 
 
 ReturnType ::=      SubType:_1 OptPointerList:_2
                     {:
                         // You should determine the type and return it here
-                       // if (_2 != null) 
-                       // {
-                            //( (PointerType)_2).setType(_1);
-                            //RESULT = _2;
-                       // } 
-                        //else 
+                        if(_2 != null) 
+                        {
+                            ((PointerType)_2).setType(_1);
+                            RESULT = _2;
+                        } 
+                        else 
                         	RESULT = _1;
                     :}
     |               T_VOID {: RESULT = new VoidType("void", 0); :}
@@ -493,14 +496,37 @@ IdListWOptInit ::=  OptModifiers:_3 T_ID:_1 OptInit:_2
                     {:
                     	STO check = ((MyParser) parser).DoInitCheck(_1, (STO) _2);
                     	RESULT = new Vector ();
-                    	if(_2 instanceof ErrorSTO)
+                    	if(_2 instanceof ErrorSTO || _2 instanceof ErrorSTO || check.isError() )
                     	{
-                    		ErrorSTO error = new ErrorSTO("error"); 
-                    		RESULT.addElement( new VariableBox(_1, error) );
+                    		VariableBox<STO,STO> vb = new VariableBox<STO, STO>
+                    		(new ErrorSTO(_1), null);
+                            RESULT.addElement (vb);
                     	}
-                        else
+                    	else if(_2 == null)
+                    	{
+                    		if(_3 == null)
+                    		{
+                    			VarSTO var = new VarSTO(_1, null);
+                    			RESULT.addElement( new VariableBox(var, null) );
+                    		}
+                    		else if (_3 != null)
+                    		{
+                    			VarSTO var = new VarSTO(_1, ((STO) _3).getType());
+                    			RESULT.addElement( new VariableBox(var, null) );
+                    		}
+                    	}
+                        else if(_2 != null)
                         {
-                        	RESULT.addElement ( new VariableBox(_1, check) );
+                        	if(_3 == null)
+                    		{
+                    			VarSTO var = new VarSTO(_1, null);
+                    			RESULT.addElement( new VariableBox(var, check) );
+                    		}
+                    		else if (_3 != null)
+                    		{
+                    			VarSTO var = new VarSTO(_1, ((STO) _3).getType());
+                    			RESULT.addElement( new VariableBox(var, check) );
+                    		}
                         }
                     :}
     |               IdListWOptInit:_1 T_COMMA OptModifiers T_ID:_3 OptInit:_2
@@ -901,9 +927,9 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
                         	RESULT = ((MyParser) parser).DoDesignator2_Array (_1, _2);
                         }
                     :}
-    |               Designator2:_1 T_ARROW T_ID
+    |               Designator2:_1 T_ARROW T_ID:_2
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).DoArrowCheck(_1, _2);
                     :}
     |               Designator2:_1 IncDecOp:_2
                     {:

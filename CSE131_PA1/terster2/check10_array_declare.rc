@@ -1,0 +1,8 @@
+typedef float[1.0] ARR;
+
+/*int c;
+typedef float[c] ARR1;
+
+float[0] a;
+float[-1] b;
+*/

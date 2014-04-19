@@ -6,30 +6,30 @@
  * @author David Wei
  *
  */
-public class VariableBox {
+public class VariableBox<Variable, Expr> {
 
 	public VariableBox()
 	{
-		name = null;
-		sto = null;
+		var = null;
+		expr = null;
 	}
 	
-	public VariableBox(String id, STO s)
+	public VariableBox(Variable a, Expr e)
 	{
-		name = id;
-		sto = s;
+		var = a;
+		expr = e;
 	}
 	
-	public String getName()
+	public Variable getVariable()
 	{
-		return name;
+		return var;
 	}
 	
-	public STO getSTO()
+	public Expr getExpr()
 	{
-		return sto;
+		return expr;
 	}
 	
-	private String name;
-	private STO sto;
+	private Variable var;
+	private Expr expr;
 }

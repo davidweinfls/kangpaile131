@@ -1,0 +1,33 @@
+
+int *x;
+int **y;
+
+function: void main(){
+
+structdef HAHA
+{
+	int x;
+};
+
+structdef SSS 
+{
+	int a;
+	int b;
+};
+
+SSS struct1;
+SSS *struct;
+
+int *haha;
+
+int aVal = struct->a;
+int aVal = struct1->a;		//should report error
+int bVal = haha->x;			//should report error
+int cVal = struct->c;		//should report error
+
+
+//y = (*ptr).x;
+//w = ptr->x; // The arrow operator is basically the same as above
+//z = *ptr2;
+
+}
