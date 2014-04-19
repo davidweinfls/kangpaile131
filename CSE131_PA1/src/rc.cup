@@ -353,7 +353,10 @@ BasicType ::=       T_INT:_1
     ;
 
 
-OptModifiers ::= 	PointerList
+OptModifiers ::= 	PointerList:_1
+					{:
+						RESULT = new ExprSTO ("PointerList", (PointerType) _1);
+					:}
 	|				T_LBRACKET ConstExpr:_1 T_RBRACKET
 					{: 
 						RESULT = ((MyParser) parser).DoArrayCheck((STO)_1);
@@ -366,12 +369,15 @@ OptPointerList ::= 	PointerList
     ;
     
 
-PointerList ::=    Pointer
-    |               PointerList Pointer
+PointerList ::=   	Pointer:_1 {: RESULT = _1; :}
+    |               PointerList:_1 Pointer:_2
+    				{:
+    					RESULT = new PointerType ("*", 1);
+    				:}
     ;
 
 
-Pointer ::=        T_STAR
+Pointer ::=        T_STAR:_1 {: RESULT = new PointerType ("*", 4); :}
     ;
 
 

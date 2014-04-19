@@ -14,6 +14,11 @@ public class StructType extends CompositeType{
         fieldList = list;
     }
 	
+	public boolean isStruct()
+	{
+		return true;
+	}
+	
 	public Type copy () 
 	{
         return new StructType (m_typeName, m_size, fieldList);

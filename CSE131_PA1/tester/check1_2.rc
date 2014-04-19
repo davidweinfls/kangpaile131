@@ -1,0 +1,76 @@
+function : void main (){
+	bool x = true;
+	int y = 1;
+	int i = 2;
+	float f = 1.0;
+	int res_i;
+	float res_f;
+
+	/* Print out 4 errors: */
+
+	x < y; // x is invalid
+
+	x > y; // x is invalid	
+
+	x <= y; // x is invalid	
+
+	y >= x; // x is invalid	
+
+
+
+	/* Correctness tests: */
+	i < f;
+	i > f;
+	i <= f;
+	i >= f;
+
+	i < y;
+	i > y;
+	i <= y;
+	i >= y;
+
+	/*Check incorrect result type. -Khoa*/
+	res_i = i < y;  // invalid, res_i is int.
+	res_i = i <= y; // invalid, res_i is int.
+	res_i = i > y;  // invalid, res_i is int.
+	res_i = i >= y; // invalid, res_i is int.
+
+	res_f = i < y;  // invalid, res_f is float.
+	res_f = i <= y; // invalid, res_f is float.
+	res_f = i > y;  // invalid, res_f is float.
+	res_f = i >= y; // invalid, res_f is float.
+
+
+	/* Check correct result type - Khoa */
+	x = i < y;
+	x = i <= y;
+	x = i > y;
+	x = i >= y;
+}
+/*
+Error, "phase1/check1/2.rc": 
+  Incompatible type bool to binary operator <, numeric expected.
+Error, "phase1/check1/2.rc": 
+  Incompatible type bool to binary operator >, numeric expected.
+Error, "phase1/check1/2.rc": 
+  Incompatible type bool to binary operator <=, numeric expected.
+Error, "phase1/check1/2.rc": 
+  Incompatible type bool to binary operator >=, numeric expected.
+Error, "phase1/check1/2.rc": 
+  Value of type bool not assignable to variable of type int.
+Error, "phase1/check1/2.rc": 
+  Value of type bool not assignable to variable of type int.
+Error, "phase1/check1/2.rc": 
+  Value of type bool not assignable to variable of type int.
+Error, "phase1/check1/2.rc": 
+  Value of type bool not assignable to variable of type int.
+Error, "phase1/check1/2.rc": 
+  Value of type bool not assignable to variable of type float.
+Error, "phase1/check1/2.rc": 
+  Value of type bool not assignable to variable of type float.
+Error, "phase1/check1/2.rc": 
+  Value of type bool not assignable to variable of type float.
+Error, "phase1/check1/2.rc": 
+  Value of type bool not assignable to variable of type float.
+Compile: failure.
+*/

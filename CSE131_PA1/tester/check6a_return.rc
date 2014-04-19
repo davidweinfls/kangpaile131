@@ -1,0 +1,5 @@
+function : int main() {
+	return;
+}
+
+// Return in function requires a result expression, none found.

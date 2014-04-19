@@ -1,0 +1,36 @@
+function : void no() {
+    int a;
+    int b;
+    float c;
+    bool d;
+    bool e;
+
+    // Value of type float not assignable to variable of type int.
+    a = 5.1;
+
+    // Value of type bool not assignable to variable of type int.
+    b = false;
+
+    // Value of type bool not assignable to variable of type float.
+    c = true;
+
+    // Value of type int not assignable to variable of type bool.
+    d = 0x5;
+
+    // Value of type float not assignable to variable of type bool.
+    e = 4.2;
+}
+
+/*
+Error, " ": 
+  Value of type float not assignable to variable of type int.
+Error, " ": 
+  Value of type bool not assignable to variable of type int.
+Error, " ": 
+  Value of type bool not assignable to variable of type float.
+Error, " ": 
+  Value of type int not assignable to variable of type bool.
+Error, " ": 
+  Value of type float not assignable to variable of type bool.
+Compile: failure.
+*/

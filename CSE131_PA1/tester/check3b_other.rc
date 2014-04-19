@@ -1,0 +1,19 @@
+function : int main() {
+	int x = 1;
+	float y = 2.2;
+	x = y; //type assignment error
+
+	bool z = true;
+    z = x; //type assignment error
+	x = z; //type assignment error
+	return 0;
+}	
+/*
+Error, " ": 
+  Value of type float not assignable to variable of type int.
+Error, " ": 
+  Value of type int not assignable to variable of type bool.
+Error, " ": 
+  Value of type bool not assignable to variable of type int.
+Compile: failure.
+*/

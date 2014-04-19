@@ -1,0 +1,50 @@
+function : void main (){
+	bool x = true;
+	bool b = false;
+
+	int y = 1;
+	int i = 2;
+
+	float f = 1.0;
+
+	int res_i;
+	bool res_b;
+
+
+	/* Print out 4 errors: */
+
+	x || y; // y is invalid
+
+	x && y; // y is invalid	
+
+	! y;    // y is invalid	
+
+
+
+	/* Correctness tests: */
+	x || b;
+	x && b;
+	! x ;
+
+
+	/* Check incorrect return type. - Khoa */
+	res_i = x || b; //print error 
+	res_i = x && b; //print error
+
+	/* Check correct return type. - Khoa */
+	res_b = x || b;
+	res_b = x && b;
+}
+/*
+Error, "phase1/check1/4.rc": 
+  Incompatible type int to binary operator ||, equivalent to bool expected.
+Error, "phase1/check1/4.rc": 
+  Incompatible type int to binary operator &&, equivalent to bool expected.
+Error, "phase1/check1/4.rc": 
+  Incompatible type int to unary operator !, equivalent to bool expected.
+Error, "phase1/check1/4.rc": 
+  Value of type bool not assignable to variable of type int.
+Error, "phase1/check1/4.rc": 
+  Value of type bool not assignable to variable of type int.
+Compile: failure.
+*/

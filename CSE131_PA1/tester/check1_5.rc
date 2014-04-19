@@ -1,0 +1,46 @@
+function : void main (){
+	bool x = true;
+	bool b = false;
+
+	int y = 1;
+	int i = 2;
+
+	float f = 1.0;
+
+	/* Print out 6 errors: */
+
+	x ^ y; // x is invalid
+
+	x & y; // x is invalid	
+
+	x | y; // x is invalid	
+
+	y | f; // f is invalid
+
+	y ^ f; // f is invalid
+
+	y & f; // f is invalid	
+
+
+	/* Correctness tests: */
+	i ^ y;
+
+	i & y;	
+
+	i | y;	
+}
+/*
+Error, "phase1/check1/5.rc": 
+  Incompatible type bool to binary operator ^, equivalent to int expected.
+Error, "phase1/check1/5.rc": 
+  Incompatible type bool to binary operator &, equivalent to int expected.
+Error, "phase1/check1/5.rc": 
+  Incompatible type bool to binary operator |, equivalent to int expected.
+Error, "phase1/check1/5.rc": 
+  Incompatible type float to binary operator |, equivalent to int expected.
+Error, "phase1/check1/5.rc": 
+  Incompatible type float to binary operator ^, equivalent to int expected.
+Error, "phase1/check1/5.rc": 
+  Incompatible type float to binary operator &, equivalent to int expected.
+Compile: failure.
+*/

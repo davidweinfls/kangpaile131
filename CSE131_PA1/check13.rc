@@ -17,8 +17,10 @@ function : void main()
 		MYSTRUCT myRecursiveStruct;			//error
 	};
 	
-	structdef MYSTRUCT {
-		MYSTRUCT* myRecursivePtr;			//no error should be reported
+	structdef MYSTRUCT1 {
+		MYSTRUCT1* myRecursivePtr;			//no error should be reported, 
+											//but wrong error message
+		
 	};
 
 }

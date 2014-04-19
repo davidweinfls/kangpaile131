@@ -181,16 +181,16 @@ class MyParser extends parser
 			VariableBox box = lstIDs.elementAt(i);
 			String id = box.getName();
 			STO sto = box.getSTO();
-			Type type = sto.getType();
+			Type stoType = sto.getType();
 		
 			if (m_symtab.accessLocal (id) != null)
 			{
 				m_nNumErrors++;
 				m_errors.print(Formatter.toString(ErrorMsg.redeclared_id,id));
 			}
-			if(type != null)
+			if(stoType != null)
 			{
-				if(type.isAssignable(t))
+				if(stoType.isAssignable(t))
 				{
 					VarSTO 	var = new VarSTO (id);
 					var.setType(t);
@@ -200,7 +200,7 @@ class MyParser extends parser
 				{
 					m_nNumErrors++;
 	                m_errors.print(Formatter.toString(ErrorMsg.error8_Assign,
-	                 type.getName(), t.getName()));
+	                		stoType.getName(), t.getName()));
 				}
 			}
 			else
@@ -868,14 +868,47 @@ class MyParser extends parser
 	}
 	
 	//----------------------------------------------------------------
-	//
+	//	check14. check struct usage
+	//	Given a designator such as
+	//			MyStruct.SomeField
+	//	an error should be generated if
+	// ¡ñ a. the type of MyStruct is not a struct type;
+	// ¡ñ b. the type of MyStruct has no field named SomeField
 	//----------------------------------------------------------------
 	STO
 	DoDesignator2_Dot (STO sto, String strID)
 	{
 		// Good place to do the struct checks
-
-		return sto;
+		Type type = sto.getType();
+		// check14a
+		if(!type.isStruct()) 
+		{
+			m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.error14t_StructExp, 
+            		type.getName()));
+            return new ErrorSTO("Illegal Struct Usage, not a struct");
+		}
+		// check14b
+		boolean found = false;
+        STO field = new ErrorSTO("Field not found");
+        Vector<STO> fieldList = ((StructType)type).getFieldList();
+        for(int i = 0; i < fieldList.size(); i++) 
+        {
+            field = fieldList.get(i);
+            //if there is a field 
+            if(strID.equals(field.getName())) 
+            {
+                found = true;
+                break;
+            }
+        }
+        if(found == false) {
+            m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.error14f_StructExp,
+            		strID, type.getName()));
+            return new ErrorSTO("Illegal Struct Usage - no such field");
+        }
+		return field;
 	}
 
 

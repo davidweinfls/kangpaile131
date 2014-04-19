@@ -1,0 +1,66 @@
+function : void main (){
+	bool x = true;
+	bool b = false;
+
+	int y = 1;
+	int i = 2;
+
+	float f = 1.0;
+
+	int res_i;
+	bool res_b;
+
+
+	/* Print out 4 errors: */
+
+	x == y; // x is invalid
+
+	x != y; // x is invalid	
+
+	f == x; // x is invalid	
+
+	f != x; // x is invalid	
+
+
+
+	/* Correctness tests: */
+	i == y;
+	i == f;
+	b == x;
+	b != x;
+
+	/* check incorrect return type. - Khoa */
+	res_i = i == y; // return is bool, not in, print error.
+	res_i = i == f; // return is bool, not in, print error.
+	res_i = b == x; // return is bool, not in, print error.
+	res_i = b != x;	// return is bool, not in, print error.
+
+	/*Check correct return type. - Khoa */
+	res_b = i == y;  
+	res_b = i == f;  
+	res_b = b == x;  
+	res_b = b != x;	 
+}
+/*
+Error, "phase1/check1/3.rc": 
+  Incompatible types to operator: bool == int;
+  both must be numeric, or both equivalent to bool.
+Error, "phase1/check1/3.rc": 
+  Incompatible types to operator: bool != int;
+  both must be numeric, or both equivalent to bool.
+Error, "phase1/check1/3.rc": 
+  Incompatible types to operator: float == bool;
+  both must be numeric, or both equivalent to bool.
+Error, "phase1/check1/3.rc": 
+  Incompatible types to operator: float != bool;
+  both must be numeric, or both equivalent to bool.
+Error, "phase1/check1/3.rc": 
+  Value of type bool not assignable to variable of type int.
+Error, "phase1/check1/3.rc": 
+  Value of type bool not assignable to variable of type int.
+Error, "phase1/check1/3.rc": 
+  Value of type bool not assignable to variable of type int.
+Error, "phase1/check1/3.rc": 
+  Value of type bool not assignable to variable of type int.
+Compile: failure.
+*/

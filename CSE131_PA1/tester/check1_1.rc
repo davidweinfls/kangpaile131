@@ -1,0 +1,87 @@
+function : void main (){
+	bool x = true;
+	int y = 1;
+	int i = 2;
+	float f = 1.0;
+	int res_int;
+	float res_float;
+
+
+	/* Print out 6 errors: */
+
+	x + y; // x is invalid
+
+	x - y; // x is invalid	
+
+	x / y; // x is invalid	
+
+	x * y; // x is invalid	
+
+	x % y; // x is invalid
+
+	f % y; // f is invalid
+
+	y % f; // f is invalid.
+
+
+	/* Correctness tests: */
+	i + f;
+	i - f;
+	i * f;
+	i / f;
+
+	i + y;
+	i - y;
+	i * y;
+	i / y;
+
+	i % y;
+
+
+	/* Check fail result type. - Khoa */
+	res_int = i + f; // print error, result is a float.
+	res_int = i - f; // print error, result is a float.
+	res_int = i * f; // print error, result is a float.
+	res_int = i / f; // print error, result is a float.
+
+
+
+	/* Check correct result type. - Khoa */
+	res_int = i + y; // correct.
+	res_int = i - y; // correct.
+	res_int = i * y; // correct.
+	res_int = i / y; // correct.
+
+	res_float = i + f; //correct, int can be assigned to float.
+	res_float = i - f; //correct, int can be assigned to float.
+	res_float = i * f; //correct, int can be assigned to float.
+	res_float = i / f; //correct, int can be assigned to float.
+
+	res_int = i % y; //correct.
+
+}
+/*
+Error, "phase1/check1/0.rc": 
+  Incompatible type bool to binary operator +, numeric expected.
+Error, "phase1/check1/0.rc": 
+  Incompatible type bool to binary operator -, numeric expected.
+Error, "phase1/check1/0.rc": 
+  Incompatible type bool to binary operator /, numeric expected.
+Error, "phase1/check1/0.rc": 
+  Incompatible type bool to binary operator *, numeric expected.
+Error, "phase1/check1/0.rc": 
+  Incompatible type bool to binary operator %, equivalent to int expected.
+Error, "phase1/check1/0.rc": 
+  Incompatible type float to binary operator %, equivalent to int expected.
+Error, "phase1/check1/0.rc": 
+  Incompatible type float to binary operator %, equivalent to int expected.
+Error, "phase1/check1/0.rc": 
+  Value of type float not assignable to variable of type int.
+Error, "phase1/check1/0.rc": 
+  Value of type float not assignable to variable of type int.
+Error, "phase1/check1/0.rc": 
+  Value of type float not assignable to variable of type int.
+Error, "phase1/check1/0.rc": 
+  Value of type float not assignable to variable of type int.
+Compile: failure.
+*/
