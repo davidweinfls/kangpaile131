@@ -1,0 +1,24 @@
+function : void main()
+{
+	structdef MYS 
+	{
+		//int x, y;
+		int x;
+		int y;
+		int x; 		// duplicate id x, error #1
+		int z, x; 	// duplicate id x, error #2
+		float y; 	// duplicate id y, error #3
+		int w;
+		int w; 		// duplicate id w, error #4
+	
+	};
+	
+	structdef MYSTRUCT {
+		MYSTRUCT myRecursiveStruct;			//error
+	};
+	
+	structdef MYSTRUCT {
+		MYSTRUCT* myRecursivePtr;			//no error should be reported
+	};
+
+}

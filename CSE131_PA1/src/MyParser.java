@@ -178,15 +178,15 @@ class MyParser extends parser
 	{
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
-			VariableBox variable = lstIDs.elementAt(i);
-			String id = variable.getName();
-			STO sto = variable.getSTO();
+			VariableBox box = lstIDs.elementAt(i);
+			String id = box.getName();
+			STO sto = box.getSTO();
 			Type type = sto.getType();
 		
 			if (m_symtab.accessLocal (id) != null)
 			{
 				m_nNumErrors++;
-				m_errors.print (Formatter.toString(ErrorMsg.redeclared_id, id));
+				m_errors.print(Formatter.toString(ErrorMsg.redeclared_id,id));
 			}
 			if(type != null)
 			{
@@ -199,7 +199,7 @@ class MyParser extends parser
 				else
 				{
 					m_nNumErrors++;
-	                m_errors.print (Formatter.toString(ErrorMsg.error8_Assign,
+	                m_errors.print(Formatter.toString(ErrorMsg.error8_Assign,
 	                 type.getName(), t.getName()));
 				}
 			}
@@ -287,13 +287,31 @@ class MyParser extends parser
 			m_symtab.insert (sto);
 		}
 	}
-
+	
+	/*
+     * check13a. initialize local struct name for declarition and 
+     * usage
+     */
+	void setStruct(String name)
+	{
+		m_structType = new StructType(name, -1, new Vector<STO>());
+        m_structName = name;
+	}
+	
+	/*
+     * check13a. reset local struct name for declarition and 
+     * usage
+     */
+	void resetStruct()
+	{
+		m_structName = null;
+	}
 
 	//----------------------------------------------------------------
-	//
+	//	insert struct into symbol table
 	//----------------------------------------------------------------
 	void
-	DoStructdefDecl (String id)
+	DoStructdefDecl (String id, Vector<STO> fieldList)
 	{
 		if (m_symtab.accessLocal (id) != null)
 		{
@@ -301,10 +319,53 @@ class MyParser extends parser
 			m_errors.print (Formatter.toString(ErrorMsg.redeclared_id, id));
 		}
 		
-		TypedefSTO 	sto = new TypedefSTO (id);
+		m_structType.setSize(m_structSize);
+        m_structType.setFieldList(fieldList);
+        m_structSize = 0;
+		TypedefSTO 	sto = new TypedefSTO (id, m_structType);
 		m_symtab.insert (sto);
 	}
 
+	/*
+	 * check13. 
+	 * - a. the same identifier twice in the same struct declaration.
+	 * - b. invalid recursive struct definition
+	 */
+	Vector<STO> DoFieldListCheck(Type t, Vector<STO> idList)
+	{
+		Vector<STO> stoList = new Vector<STO>();
+		VarSTO var;
+		for (int i = 0; i < idList.size (); i++)
+        {
+			STO sto = idList.get(i);
+			String id = sto.getName();
+			// check13a
+			if(m_symtab.accessLocal(id) != null)
+			{
+				m_nNumErrors++;
+                m_errors.print (Formatter.toString(ErrorMsg.error13a_Struct,
+                		id));
+			}
+			// check13b
+			else if( m_structName.equals(t.getName()) && !t.isPointer() )
+			{
+				m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.error13b_Struct,
+                 sto.getName()));	
+			}
+			else 
+			{
+                if (t.isArray()) 
+                	var = new VarSTO (id, t, true, false);
+                else 
+                	var = new VarSTO(id, t);
+                m_symtab.insert (var);
+                m_structSize += t.getSize();
+                stoList.addElement(var);
+            }
+        }
+		return stoList;
+	}
 
 	//----------------------------------------------------------------
 	//
@@ -710,14 +771,19 @@ class MyParser extends parser
 		return a;
 	}
 	
+	// for check12
 	void InWhile() {
         m_while = 1;
     }
 
+	// for check12
     void OutWhile() {
         m_while = 0;
     }
 
+    
+    
+    
 	//----------------------------------------------------------------
 	// check 3
 	//----------------------------------------------------------------
@@ -924,10 +990,16 @@ class MyParser extends parser
 	DoQualIdent (String strID)
 	{
 		STO		sto;
-
-		if ((sto = m_symtab.access (strID)) == null)
+		
+		if(strID.equals(m_structName)) 
+		{
+            return new VarSTO(strID, m_structType);
+        }
+		
+		if ((sto = m_symtab.access (strID)) == null && !strID.equals(m_structName))
 		{
 			m_nNumErrors++;
+			System.out.println("in doqualIdent");
 		 	m_errors.print (Formatter.toString(ErrorMsg.undeclared_id, strID));	
 			return (new ErrorSTO (strID));
 		}
@@ -955,6 +1027,9 @@ class MyParser extends parser
 	private String		m_funcName;
 	private boolean 	m_static;
 	private int			m_while;
+	private String      m_structName = null;
+    private int         m_structSize = 0;
+    private StructType  m_structType;
 
 	private SymbolTable		m_symtab;
 }

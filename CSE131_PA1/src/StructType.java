@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 
 public class StructType extends CompositeType{
 
@@ -6,9 +8,15 @@ public class StructType extends CompositeType{
 		// TODO Auto-generated constructor stub
 	}
 	
+	public StructType (String name, int size, Vector<STO> list)
+    {
+        super (name, size);
+        fieldList = list;
+    }
+	
 	public Type copy () 
 	{
-        return new StructType (this.m_typeName, this.m_size);
+        return new StructType (m_typeName, m_size, fieldList);
     }
 
 	public boolean
@@ -25,4 +33,21 @@ public class StructType extends CompositeType{
         return false;
     }
 	//Need more
+    
+    public Vector<STO> getFieldList()
+    {
+    	return fieldList;
+    }
+    
+    public void setFieldList(Vector<STO> list)
+    {
+    	fieldList = list;
+    }
+    
+    public void setSize(int size)
+    {
+    	m_size = size;
+    }
+    
+    private Vector<STO> fieldList;
 }
