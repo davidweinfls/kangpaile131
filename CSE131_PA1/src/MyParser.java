@@ -270,6 +270,7 @@ class MyParser extends parser
 	void
 	DoTypedefDecl (Vector<String> lstIDs, Type baseType)
 	{
+		if(baseType == null) return;
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
 			String id = lstIDs.elementAt (i);
@@ -283,8 +284,8 @@ class MyParser extends parser
 			Type newType = baseType.copy(); 
 			newType.setAlias(id);
 			
-			TypedefSTO 	sto = new TypedefSTO (id, newType);
-			m_symtab.insert (sto);
+			TypedefSTO sto = new TypedefSTO(id, newType);
+			m_symtab.insert(sto);
 		}
 	}
 	
@@ -799,8 +800,49 @@ class MyParser extends parser
         m_while = 0;
     }
 
+    /*
+     * check16a. check new statement --- new x;
+     *  an error should be generated if
+     *	¡ñ x is not a modifiable L-value;
+     *	¡ñ x is not of a valid pointer type.
+     */
+    void DoNewStmtCheck(STO sto)
+    {
+    	if(sto.isError()) return;
+    	if(!sto.isModLValue()) 
+    	{
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error16_New_var);
+        }
+    	else if (!(sto.getType().isPointer()))
+    	{
+            m_nNumErrors++;
+            m_errors.print(Formatter.toString (ErrorMsg.error16_New,
+             sto.getType().getName()));
+        }
+    }
     
-    
+    /*
+     * check16b. check delete statement --- delete x;
+     *  an error should be generated if
+     *	¡ñ x is not a modifiable L-value;
+     *	¡ñ x is not of a valid pointer type.
+     */
+    void DoDeleteStmtCheck(STO sto)
+    {
+    	if(sto.isError()) return;
+    	if(!sto.isModLValue()) 
+    	{
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error16_Delete_var);
+        }
+    	else if (!(sto.getType().isPointer()))
+    	{
+            m_nNumErrors++;
+            m_errors.print(Formatter.toString (ErrorMsg.error16_Delete,
+             sto.getType().getName()));
+        }
+    }   
     
 	//----------------------------------------------------------------
 	// check 3

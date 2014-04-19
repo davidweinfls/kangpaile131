@@ -970,10 +970,16 @@ QualIdent ::=       T_ID_U:_1
                     :}
     ;
     
-NewStmt ::=		T_NEW Designator T_SEMI
+NewStmt ::=		T_NEW Designator:_1 T_SEMI
+				{:
+					((MyParser) parser).DoNewStmtCheck(_1);
+				:}
 	;
 
-DeleteStmt ::=	T_DELETE Designator T_SEMI
+DeleteStmt ::=	T_DELETE Designator:_1 T_SEMI
+				{:
+					((MyParser) parser).DoDeleteStmtCheck(_1);
+				:}
 	;
 	
 UnarySign ::=  	T_MINUS

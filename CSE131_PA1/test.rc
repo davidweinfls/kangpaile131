@@ -1,8 +1,8 @@
-function : int &foo() {
-	bool b = false;
-	return b;
-}
+typedef int[5] ARR_TEST;
+typedef ARR_TEST[10] ARR2_TEST;
+typedef ARR2_TEST ARR3_TEST;
+typedef ARR3_TEST[10] ARR4_TEST;
+typedef ARR4_TEST[10] ARR5_TEST;
+ARR5_TEST[10] myarr;
 
-function : int &bar() {
-	return 5;
-}
+myarr [0][0] = 0.0;
