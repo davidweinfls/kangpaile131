@@ -1,0 +1,14 @@
+function : void main()
+{
+	structdef MYS 
+	{
+		int x;
+		int y;
+	};
+	
+	MYS obj;
+	
+	int a = obj.x;		//should pass
+	int d = obj.y;		//should pass
+	int b = obj.c;		//no error
+}

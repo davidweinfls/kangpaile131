@@ -20,5 +20,17 @@ abstract class CompositeType extends Type {
 	public boolean	isCompositeType ()	{ return true; }
 	
 	public Type copy(){return null;}
+	
+	public void setBaseType (Type t) 
+	{
+        m_baseType = t;
+    }
+
+    public Type getBaseType () 
+    {
+        return m_baseType;
+    }
+	
+	private Type m_baseType;
 
 }
