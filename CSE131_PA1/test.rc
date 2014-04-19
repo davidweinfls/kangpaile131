@@ -1,17 +1,13 @@
-float y = false;
 
-function : void main()
+
+function : float float_one_arg(float f) 
 {
+    return f;
+}
 
-int[-1] c1;	//bug. should report error ---fixed
+function : void main() {
 
-int x = 10.5;	//wrong. no error ?????		---fixed
-
-//int y;
-//y = 20.555; //good. report error. 
-
-//bool y = 1;
-
-//static int x;
-
+	float x;
+	x = float_one_arg(2.0);
+	
 }

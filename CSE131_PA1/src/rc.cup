@@ -144,8 +144,7 @@ non terminal String
     MulOp,
     IncDecOp,
     Relation,
-    Equality,
-    ParamDecl
+    Equality
     ;
 
 non terminal STO
@@ -162,7 +161,8 @@ non terminal STO
     Designator,
     Designator2,
     Designator3,
-    QualIdent
+    QualIdent,
+    ParamDecl
     ;
 
 non terminal Type
@@ -432,17 +432,28 @@ Stmt ::=        VarDecl
     ;
 
 
-OptParamList ::=    ParamList:_1
-    |               /* empty */
+OptParamList ::=    ParamList:_1 {: RESULT = _1; :}
+    |               /* empty */  {: RESULT = new Vector <VarSTO>(); :}
     ;
 
 
-ParamList ::=       ParamDecl
-    |               ParamList:_1 T_COMMA ParamDecl
+ParamList ::=       ParamDecl:_1
+					{:
+                        RESULT = new Vector <VarSTO>();
+                        RESULT.addElement (_1);
+                    :}
+    |               ParamList:_1 T_COMMA ParamDecl:_3
+    				{:
+                        RESULT = _1;
+                        RESULT.addElement (_3);
+                    :}
     ;
 
 
-ParamDecl ::=       Type OptRef T_ID
+ParamDecl ::=       Type:_1 OptRef:_2 T_ID:_3
+					{:
+                        RESULT = new VarSTO(_3, _1, (boolean)_2);
+                    :}
     ;
 
 

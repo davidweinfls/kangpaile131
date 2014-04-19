@@ -434,7 +434,7 @@ class MyParser extends parser
 			m_nNumErrors++;
 			m_errors.print ("internal: DoFormalParams says no proc!");
 		}
-
+		m_symtab.getFunc().setParams(params);
 		// insert parameters here
 		if(params != null)
 		{
@@ -457,7 +457,7 @@ class MyParser extends parser
 		if(sto instanceof ErrorSTO) return sto;
 		
 		STO stoDes;
-        Type returnT;
+        Type returnType;
         Vector<VarSTO> params;
         boolean error = false;
         boolean byRef = false;
@@ -470,9 +470,22 @@ class MyParser extends parser
 			return (new ErrorSTO(sto.getName()));
 		}
 		
-		params = ((FunctionPointerType) sto.getType()).getParams();
-        returnT = ((FunctionPointerType) sto.getType()).getReturnType();
-        byRef = ((FunctionPointerType) sto.getType()).getByRef();
+		//if(sto.isFunc() || sto.isVar())
+		//{
+			if(sto.isVar())
+			{
+				params = ((FunctionPointerType) sto.getType()).getParams();
+				returnType = ((FunctionPointerType) sto.getType())
+						.getReturnType();
+				byRef = ((FunctionPointerType) sto.getType()).getByRef();
+			}
+			else
+			{
+				params = ((FuncSTO) m_symtab.access(sto.getName())).getParams();
+				returnType = ((FuncSTO) m_symtab.access(sto.getName()))
+						.getReturnType();
+				byRef = ((FuncSTO)m_symtab.access(sto.getName())).getRef();
+			}
 		
 		//do check5 no.1
 		if (params.size() != args.size()) 
@@ -492,7 +505,8 @@ class MyParser extends parser
             Type bType = parameter.getType();
             
             /* Do check5 no.2
-             * A parameter is declared as pass-by-value (default) and the corresponding argument's
+             * A parameter is declared as pass-by-value (default) and the 
+             * corresponding argument's
              * type is not assignable to the parameter type
              */
             if ( !(parameter.isRef()) && !(aType.isAssignable(bType)) ) 
@@ -528,8 +542,14 @@ class MyParser extends parser
             }            
 		}
 		if (error) return new ErrorSTO (sto.getName());
-
-		return (sto);
+		
+		STO ret;
+		if (byRef) { 
+            ret = new VarSTO ("result", returnType);
+            ((VarSTO) ret).setRef();
+        } else ret = new ExprSTO ("result", returnType);
+		return ret;
+		//}
 	}
 	
 	/*
