@@ -947,6 +947,7 @@ class MyParser extends parser
 		if(sto.isError()) return new ErrorSTO("error");
 		if(expr.isError()) return new ErrorSTO("error");
 		
+		STO retSTO;
 		Type aType = sto.getType();
 		Type bType = expr.getType();
 		
@@ -970,10 +971,9 @@ class MyParser extends parser
 		else if(expr.isConst())
 		{
 			int index = ((ConstSTO) expr).getIntValue();
-			//TODO: change this magic number!!!!!!
-			int upperBound = 100;
+			int upperBound = ((ArrayType)aType).getArraySize();
 			//check array index bounds. need >=0 and < size
-			if(index < 0)
+			if(index < 0 || index >= upperBound)
 			{
 				m_nNumErrors++;
                 m_errors.print (Formatter.toString(ErrorMsg.error11b_ArrExp,
@@ -983,13 +983,30 @@ class MyParser extends parser
 			//declare a new array
 			else
 			{
-				
+				Type t = ((ArrayType) aType).getBaseType();
+                if (t.isArray()) 
+                	retSTO = new VarSTO (sto.getName(), t, true, false);
+                else 
+                	retSTO = new VarSTO (sto.getName(), t);
+                //retSTO.setIsArrayE();
+                VariableBox array = new VariableBox (sto.getName(), expr);
+                retSTO.setArray (array);
 			}
+		}
+		else
+		{
+			Type t = ((ArrayType) aType).getBaseType();
+            if (t.isArray()) 
+            	retSTO = new VarSTO (sto.getName(), t, true, false);
+            else 
+            	retSTO = new VarSTO (sto.getName(), t);
+            //retSTO.setIsArrayE();
+            VariableBox array = new VariableBox (sto.getName(), expr);
+            retSTO.setArray (array);		
 		}
 			
 		return sto;
 	}
-
 
 	//----------------------------------------------------------------
 	//

@@ -124,6 +124,11 @@ abstract class STO
     {
         return m_global;
     }
+    
+    public void setArray (VariableBox v) 
+    {
+        m_array = v;
+    }
 
 
 	//----------------------------------------------------------------
@@ -148,4 +153,5 @@ abstract class STO
 	private boolean		m_isAddressable;
 	private boolean		m_isModifiable;
 	private boolean 	m_global;
+	private VariableBox	m_array;
 }
