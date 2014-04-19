@@ -1,13 +1,8 @@
-
-
-function : float float_one_arg(float f) 
-{
-    return f;
+function : int &foo() {
+	bool b = false;
+	return b;
 }
 
-function : void main() {
-
-	float x;
-	x = float_one_arg(2.0);
-	
+function : int &bar() {
+	return 5;
 }

@@ -371,7 +371,7 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoFuncDecl_1 (Type returnType,String id)
+	DoFuncDecl_1 (Type returnType, String id, Boolean ref)
 	{
 		if (m_symtab.accessLocal (id) != null)
 		{
@@ -385,7 +385,7 @@ class MyParser extends parser
 			{
 				FunctionPointerType type = new FunctionPointerType (id, 4);
                 type.setReturnType (returnType);
-                //type.setByRef(type);
+                type.setByRef(ref);
                 ((FuncSTO) sto).setReturnType (returnType);
                 ((FuncSTO) sto).setFuncType (type);
                 m_symtab.openScope ();	//open new scope
@@ -397,7 +397,7 @@ class MyParser extends parser
 		m_funcName = id;
 		FuncSTO sto = new FuncSTO (id);
 		
-		/*if(byRef) sto.setRef(byRef); */
+		if(ref) sto.setRef(ref); 
 		sto.setReturnType(returnType);
 		
 		m_symtab.insert (sto);	//insert into current scope
@@ -560,7 +560,6 @@ class MyParser extends parser
 		FuncSTO func = m_symtab.getFunc();
 		Type ret = func.getReturnType();
 		
-		
 		if(returnExpr instanceof ErrorSTO) return;
 		else if(ret instanceof VoidType && returnExpr == null)
 		{
@@ -571,7 +570,7 @@ class MyParser extends parser
 		// and the return type is not void
 		else if (!(ret instanceof VoidType) && (returnExpr == null)) {
             m_nNumErrors++;
-            m_errors.print (ErrorMsg.error6a_Return_expr);
+            m_errors.print(ErrorMsg.error6a_Return_expr);
             return;
         } 
 		// check 6b no.1
@@ -583,7 +582,7 @@ class MyParser extends parser
 			if(!returnExpr.getType().isAssignable(ret))
 			{
 				m_nNumErrors++;
-	            m_errors.print (Formatter.toString(ErrorMsg.error6a_Return_type,
+	            m_errors.print(Formatter.toString(ErrorMsg.error6a_Return_type,
 	             (returnExpr.getType()).getName(), ret.getName()));
 	            return;
 			}
@@ -599,7 +598,7 @@ class MyParser extends parser
 			if(!returnExpr.getType().isEquivalent(ret))
 			{
 				m_nNumErrors++;
-				m_errors.print (Formatter.toString(ErrorMsg.error6b_Return_equiv,
+			m_errors.print(Formatter.toString(ErrorMsg.error6b_Return_equiv,
 			             (returnExpr.getType()).getName(), ret.getName()));
 	            return;
 			}
@@ -609,8 +608,7 @@ class MyParser extends parser
 				m_errors.print (ErrorMsg.error6b_Return_modlval);
 	            return;
 			}
-		}
-		
+		}	
 	}
 	
 	/*

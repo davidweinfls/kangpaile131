@@ -2,4 +2,13 @@ function : int main() {
 	return;
 }
 
+structdef S
+{
+	int x;
+};
+
+function : S foo(){
+	return;
+}
+
 // Return in function requires a result expression, none found.
