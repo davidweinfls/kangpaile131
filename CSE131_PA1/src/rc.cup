@@ -522,17 +522,49 @@ IdListWOptInit ::=  OptModifiers:_3 T_ID:_1 OptInit:_2
                     			VarSTO var = new VarSTO(_1, null);
                     			RESULT.addElement( new VariableBox(var, check) );
                     		}
-                    		else if (_3 != null)
+                    		else if (_3 != null && !(_3 instanceof ErrorSTO))
                     		{
                     			VarSTO var = new VarSTO(_1, ((STO) _3).getType());
                     			RESULT.addElement( new VariableBox(var, check) );
                     		}
                         }
                     :}
-    |               IdListWOptInit:_1 T_COMMA OptModifiers T_ID:_3 OptInit:_2
+    |               IdListWOptInit:_4 T_COMMA OptModifiers:_3 T_ID:_1 OptInit:_2
                     {:
-                        RESULT = _1;
-                        RESULT.addElement (new VarSTO(_3));
+                        STO check = ((MyParser) parser).DoInitCheck(_1, (STO) _2);
+                    	RESULT = _4;
+                    	if(_2 instanceof ErrorSTO || _2 instanceof ErrorSTO || check.isError() )
+                    	{
+                    		VariableBox<STO,STO> vb = new VariableBox<STO, STO>
+                    		(new ErrorSTO(_1), null);
+                            RESULT.addElement (vb);
+                    	}
+                    	else if(_2 == null)
+                    	{
+                    		if(_3 == null)
+                    		{
+                    			VarSTO var = new VarSTO(_1, null);
+                    			RESULT.addElement( new VariableBox(var, null) );
+                    		}
+                    		else if (_3 != null)
+                    		{
+                    			VarSTO var = new VarSTO(_1, ((STO) _3).getType());
+                    			RESULT.addElement( new VariableBox(var, null) );
+                    		}
+                    	}
+                        else if(_2 != null)
+                        {
+                        	if(_3 == null)
+                    		{
+                    			VarSTO var = new VarSTO(_1, null);
+                    			RESULT.addElement( new VariableBox(var, check) );
+                    		}
+                    		else if (_3 != null && !(_3 instanceof ErrorSTO))
+                    		{
+                    			VarSTO var = new VarSTO(_1, ((STO) _3).getType());
+                    			RESULT.addElement( new VariableBox(var, check) );
+                    		}
+                        }
                     :}
     ;
 

@@ -1,8 +1,16 @@
-typedef int[5] ARR_TEST;
-typedef ARR_TEST[10] ARR2_TEST;
-typedef ARR2_TEST ARR3_TEST;
-typedef ARR3_TEST[10] ARR4_TEST;
-typedef ARR4_TEST[10] ARR5_TEST;
-ARR5_TEST[10] myarr;
+function : void main() 
+{
+    typedef bool BOOL;
+    typedef BOOL BOOL2;
 
-myarr [0][0] = 0.0;
+    const int ten = 10;
+
+    bool[ten] a, b;
+    
+    BOOL[1] c;
+
+    BOOL2[ten + ten] d;
+
+    float[2 + 2] e;
+
+}

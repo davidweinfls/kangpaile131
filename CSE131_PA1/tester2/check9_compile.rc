@@ -1,4 +1,4 @@
-unction : void main() {
+function : void main() {
     typedef int INT;
     typedef float FLOAT;
     typedef bool BOOL;

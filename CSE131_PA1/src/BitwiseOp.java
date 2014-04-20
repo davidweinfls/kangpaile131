@@ -42,7 +42,7 @@ public class BitwiseOp extends BinaryOp{
 				((ConstSTO) b).getIntValue();
 				break;
 			}
-			return new ConstSTO("result", new BoolType("int", 4), (double)result);
+			return new ConstSTO("result", new IntType("int", 4), (double)result);
 		}
 		else 
 			return new ExprSTO("result", new IntType("int", 4));
