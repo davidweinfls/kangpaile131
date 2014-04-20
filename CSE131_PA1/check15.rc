@@ -25,7 +25,6 @@ int aVal = struct1->a;		//should report error
 int bVal = haha->x;			//should report error
 int cVal = struct->c;		//should report error
 
-
 //y = (*ptr).x;
 //w = ptr->x; // The arrow operator is basically the same as above
 //z = *ptr2;

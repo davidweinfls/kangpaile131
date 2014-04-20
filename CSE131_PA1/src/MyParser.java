@@ -827,17 +827,45 @@ class MyParser extends parser
 	}
 	
 	// for check12
-	void InWhile() {
+	void InWhile()
+	{
         m_while = 1;
     }
 
 	// for check12
-    void OutWhile() {
+    void OutWhile()
+    {
         m_while = 0;
     }
     
     /*
-     * check15a
+     * check15a-1
+     * An error should be generated if
+     * ¡ñ The type of ptr is not a pointer type for the * operator
+     */
+    STO DoDereferenceCheck(STO sto)
+    {
+    	if(sto.isError()) return sto;
+    	
+    	if(!sto.getType().isPointer())
+    	{
+    		m_nNumErrors++;
+    		m_errors.print (Formatter.toString(ErrorMsg.error15_Receiver,
+            sto.getType().getName()));
+    		return new ErrorSTO ("Not A Pointer");
+    	}
+    	//TODO: what should be returned?
+    	else
+    	{
+    		
+    	}
+    	
+    	
+    	return sto;
+    }
+    
+    /*
+     * check15a-2
      * An error should be generated if
      *	¡ñ 1. The type of ptr is not a pointer to a struct for the -> operator.
      * 	¡ñ 2. The right side is a field within the struct. use errmsg from check14.
