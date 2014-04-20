@@ -12,3 +12,15 @@ function : void main()
 	int d = obj.y;		//should pass
 	int b = obj.c;		//no error
 }
+
+function : void legal_access() {
+
+    structdef ONE_ARRAY {
+        int[5] int5;
+    };
+
+    ONE_ARRAY one_int5;
+
+    int d = one_int5.int5[1];
+
+}

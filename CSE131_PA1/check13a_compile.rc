@@ -1,0 +1,5 @@
+function : void main() {
+    structdef MYSTRUCT {
+        int x, [2]y, *z;
+    };
+}

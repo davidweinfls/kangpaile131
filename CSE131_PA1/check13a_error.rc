@@ -1,0 +1,16 @@
+function : void main() {
+    structdef TESTSTRUCT 
+    {
+        // syntax error near "=".
+        int x;
+    };
+}
+
+structdef MYS { 
+	 int x, y; 
+	 int x; 	// duplicate id x, error #1 
+	 int z, x;  // duplicate id x, error #2 
+	 float y;
+	 int *y;
+	 
+ }; 

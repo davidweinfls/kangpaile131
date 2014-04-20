@@ -738,6 +738,7 @@ class MyParser extends parser
 		//----------------------------------------------------------------
 	STO DoArrayCheck(STO sto)
 	{
+		STO ret;
 		if(sto.isError()) return sto;
 		// Good place to do the array checks
 		if (sto instanceof ErrorSTO)
@@ -763,8 +764,10 @@ class MyParser extends parser
              ((ConstSTO) sto).getIntValue()));
             return new ErrorSTO(sto.getName());
 		}
-		else return new ExprSTO (sto.getName(), new ArrayType("array",
-	             ((ConstSTO) sto).getIntValue()));
+		else 
+			ret = new ExprSTO (sto.getName(), 
+				new ArrayType( "array", sto.getType().getSize(), ((ConstSTO) sto).getIntValue(), sto.getType() )   );
+		return ret;
 	}
 	
 	/*
@@ -953,7 +956,39 @@ class MyParser extends parser
             m_errors.print(Formatter.toString (ErrorMsg.error16_Delete,
              sto.getType().getName()));
         }
-    }   
+    }
+    
+    /*
+     * check19. 
+     * An error should be generated 
+     * - a. if the operand is not a type
+     * - b. if the operand is not addressable.
+     */
+    STO DoSizeof(Object obj)
+    {
+    	STO sto;
+    	//a.
+    	if(obj instanceof Type)
+    	{
+    		sto =  new ConstSTO("result", new IntType("int", 4),
+    	             (double)((Type) obj).getSize());
+    	}
+    	//b.
+    	else if( !((STO)obj).getIsAddressable() )
+    	{
+    		sto =  new ConstSTO("result", new IntType("int", 4),
+    	             (double)((STO) obj).getType().getSize());
+    	}
+    	else
+    	{
+    		m_nNumErrors++;
+            m_errors.print(ErrorMsg.error19_Sizeof);
+            sto =  new ErrorSTO ("Not a type or is not Addressable");
+    	}
+    	
+    	return sto;
+    }
+    
     
 	//----------------------------------------------------------------
 	// check 3
@@ -1105,7 +1140,7 @@ class MyParser extends parser
 		Type bType = expr.getType();
 		
 		//check a
-		if(!aType.isArray() || !aType.isPointer())
+		if(!aType.isArray() && !aType.isPointer())
 		{
 			m_nNumErrors++;
             m_errors.print (Formatter.toString(ErrorMsg.error11t_ArrExp,
@@ -1142,7 +1177,8 @@ class MyParser extends parser
                 else 
                 	retSTO = new VarSTO (sto.getName(), t);
                 //retSTO.setIsArrayE();
-                VariableBox array = new VariableBox (sto.getName(), expr);
+                VariableBox<STO, STO> array = new VariableBox<STO, STO>
+                (sto, expr);
                 retSTO.setArray (array);
 			}
 		}
@@ -1154,11 +1190,12 @@ class MyParser extends parser
             else 
             	retSTO = new VarSTO (sto.getName(), t);
             //retSTO.setIsArrayE();
-            VariableBox array = new VariableBox (sto.getName(), expr);
+            VariableBox<STO, STO> array = new VariableBox<STO, STO>
+            (sto, expr);
             retSTO.setArray (array);		
 		}
 			
-		return sto;
+		return retSTO;
 	}
 
 	//----------------------------------------------------------------

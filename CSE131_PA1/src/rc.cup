@@ -276,7 +276,7 @@ FieldsList ::=	FieldList:_1
     ;
 
 
-FieldList ::= 	UndecoratedType:_1 IdList:_2 T_SEMI
+FieldList ::= 	Type:_1 IdList:_2 T_SEMI
 				{:
 					RESULT = ((MyParser) parser).DoFieldListCheck(_1, _2);
 				:}
@@ -316,10 +316,24 @@ FuncDecl ::=   T_EXTERN T_FUNCTION T_COLON ReturnType:_4 T_ID:_2
 
 Type ::=         SubType:_1 OptModifiers:_2
 				 {: 
-				 	if (_2 instanceof ErrorSTO)
-                        RESULT = null;
+				 	if(_2 != null && !(_2 instanceof ErrorSTO))
+                    {
+                    	Type typ = ((STO)_2).getType();
+                    	if(typ instanceof ArrayType)
+                    	{
+                            RESULT = new ArrayType ("array", 1,
+                                    ((ArrayType) typ).getArraySize(), _1);
+                        }
+                        else if(typ instanceof PointerType)
+                        {
+                            ((PointerType) typ).setType (_1);
+                           	RESULT = typ;
+                        }
+                    }
+                    else if(_2 instanceof ErrorSTO) 
+                    	RESULT = null;
                     else
-				 		RESULT = _1; 
+                        RESULT = _1;
 				 :}
     |               T_FUNCPTR T_COLON ReturnType OptRef T_LPAREN OptParamList:_3 T_RPAREN
     ;
@@ -467,15 +481,15 @@ OptRef ::=          T_AMPERSAND
     ;
 
 
-IdList ::=          OptModifiers T_ID:_1
+IdList ::=          T_ID:_1
                     {:
-                        RESULT = new Vector ();
-                        RESULT.addElement (new VarSTO(_1));
+                    	RESULT = new Vector();
+                    	RESULT.addElement(new VarSTO(_1));
                     :}
     |               IdList:_1 T_COMMA OptModifiers T_ID:_3
                     {:
                         RESULT = _1;
-                        RESULT.addElement (new VarSTO(_3));
+                        RESULT.addElement(new VarSTO(_3));
                     :}
     ;
 
@@ -922,11 +936,11 @@ Designator ::= T_STAR Designator:_1
                     :}
     |               T_SIZEOF T_LPAREN Designator:_2 T_RPAREN
                     {:
-			RESULT = new ConstSTO("sizeof variable - fix me");
+						RESULT = ((MyParser) parser).DoSizeof(_2);
                     :}
     |               T_SIZEOF T_LPAREN Type:_2 T_RPAREN
                     {:
-			RESULT = new ConstSTO("sizeof type - fix me");
+						RESULT = ((MyParser) parser).DoSizeof(_2);
                     :}
     |               T_LPAREN Type T_RPAREN Designator:_2
                     {:
