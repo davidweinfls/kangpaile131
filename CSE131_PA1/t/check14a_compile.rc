@@ -1,0 +1,62 @@
+function : void legal_access() {
+    structdef TWO_INT_FIELDS {
+        int x, y;
+    };
+
+    structdef TWO_FUNCTIONS {
+        function : int fn1() {
+            return 0;
+        }
+
+        function : bool fn2() {
+            return true;
+        }
+    };
+
+    structdef ONE_ARRAY {
+        int[5] int5;
+    };
+
+    TWO_INT_FIELDS two_ints;
+    TWO_FUNCTIONS two_functions;
+    ONE_ARRAY one_int5;
+
+    int a = two_ints.x;
+
+    int b = two_ints.y + a;
+
+    int c = two_functions.fn1();
+
+    int d = one_int5.int5[1] + b;
+
+    bool e = two_functions.fn2() && true;
+}
+
+function : void legal_calls() {
+    structdef S {
+        function : int v_if_true(bool b, int v) {
+            if (b) {
+                return v;
+            }
+
+            return 0;
+        }
+
+        function : bool flip_b(bool b) {
+            return !b;
+        }
+
+        function : float& echo_f(float& f) {
+            return f;
+        }
+    };
+
+    S struct_instance;
+    float f = 2.0;
+
+    bool a = struct_instance.flip_b(false);
+
+    int b = struct_instance.v_if_true(a, 2);
+
+    float c = struct_instance.echo_f(f);
+}

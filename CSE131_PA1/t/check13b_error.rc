@@ -1,0 +1,40 @@
+structdef MYSTRUCT {
+	MYSTRUCT myRecursiveStruct;
+};
+
+structdef MYSTRUCT1 {
+	MYSTRUCT1* myRecursivePtr; //valid, no error
+};
+
+structdef MYSTRUCT2 {
+	MYSTRUCT myRecursiveStruct;
+};
+
+structdef MYSTRUCT3 {
+	MYSTRUCT1* myRecursivePtr; //valid, no error
+};
+
+function : void illegal() {
+    structdef MYSTRUCT {
+        // Size of field myRecursiveStruct cannot be determined at compile time.
+        MYSTRUCT myRecursiveStruct;
+    };
+}
+
+function : void legal() {
+    structdef MYSTRUCT {
+        MYSTRUCT* myRecursivePtr;
+    };
+}
+//=======================>>BUG<<=====================
+function : void illegal_access() {
+    structdef TWO_INT_FIELDS {
+        int x;
+        int y;
+    };
+    
+    structdef ONE_FUNCTION {
+	
+	};
+	
+}

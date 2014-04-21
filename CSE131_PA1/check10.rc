@@ -10,17 +10,23 @@ function: void foo()
 
 }
 
-//int[false] a1; //report error
+int[false] a1; //report error
 
-//int[10.5] b1;  //report error
+int[10.5] b1;  //report error
 
-//int[-1] c1;	//report error
+int[-1] c1;	//report error
+
+int x;
+float[x] d1;
+
+const int y = 2;
+float[y] d2;
 
 
-//typedef float[10] ARR;
+typedef float[10] ARR;
 
-//float[10] a;
+float[10] a;
 
-//ARR b;
-//ARR[2] c; // array of array
+ARR b;
+ARR[2] c; // array of array
 

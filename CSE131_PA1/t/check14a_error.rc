@@ -1,0 +1,15 @@
+function : void illegal_access() {
+    structdef TWO_INT_FIELDS {
+        int x, y;
+    };
+    
+    TWO_INT_FIELDS two_ints;
+    // Referenced field mising_field not found in type TWO_INT_FIELDS.
+    int a = two_ints.missing_field;
+
+    // Referenced field missing_field_2 not found in type TWO_INT_FIELDS.
+    int b = two_ints.missing_field_2;
+    
+	int c = x.y;
+}
+

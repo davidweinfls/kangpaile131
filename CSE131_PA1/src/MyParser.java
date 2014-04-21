@@ -744,17 +744,17 @@ class MyParser extends parser
 		if (sto instanceof ErrorSTO)
 			return new ErrorSTO("illegal array decl");
 		// value of expr is not known at compile time
-		if (!sto.isConst()) 
-		{
-			m_nNumErrors++;
-            m_errors.print (ErrorMsg.error10c_Array);
-            return new ErrorSTO(sto.getName());
-		} 
-		else if (!sto.getType().isIntType()) 
+		if (!sto.getType().isIntType()) 
 		{
 			m_nNumErrors++;
             m_errors.print (Formatter.toString(ErrorMsg.error10i_Array,
              sto.getType().getName()));
+            return new ErrorSTO(sto.getName());
+		} 
+		else if (!sto.isConst()) 
+		{
+			m_nNumErrors++;
+            m_errors.print (ErrorMsg.error10c_Array);
             return new ErrorSTO(sto.getName());
 		} 
 		else if(  ((ConstSTO)sto).getIntValue() <= 0 )
@@ -1084,10 +1084,11 @@ class MyParser extends parser
 	STO
 	DoDesignator2_Dot (STO sto, String strID)
 	{
+		if(sto.isError()) return new ErrorSTO("error");
 		// Good place to do the struct checks
 		Type type = sto.getType();
 		// check14a
-		if(!type.isStruct()) 
+		if(!(type instanceof StructType)) 
 		{
 			m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.error14t_StructExp, 
@@ -1213,7 +1214,7 @@ class MyParser extends parser
 		{
 			
 			m_nNumErrors++;
-			System.out.println("here");
+			System.out.println("In DoDesignator3_ID. ");
 		 	m_errors.print (Formatter.toString(ErrorMsg.undeclared_id, strID));	
 			sto = new ErrorSTO (strID);
 		}			

@@ -1,7 +1,21 @@
-function: void main()
-{
-	int[3] int3;
+function : void legal_access() {
+    structdef TWO_INT_FIELDS {
+        int x, y;
+    };
 
-	int x = int3[1];
+    structdef ONE_ARRAY {
+        int[5] int5;
+    };
+
+    TWO_INT_FIELDS two_ints;
+    ONE_ARRAY one_int5;
+
+    int a = two_ints.x;
+
+    int b = two_ints.y + a;
+
+    int d = one_int5.int5[1] + b;
+
 
 }
+
