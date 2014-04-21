@@ -1,21 +1,20 @@
-function : void legal_access() {
-    structdef TWO_INT_FIELDS {
-        int x, y;
-    };
-
-    structdef ONE_ARRAY {
-        int[5] int5;
-    };
-
-    TWO_INT_FIELDS two_ints;
-    ONE_ARRAY one_int5;
-
-    int a = two_ints.x;
-
-    int b = two_ints.y + a;
-
-    int d = one_int5.int5[1] + b;
+function : void main() {
+    typedef int[10] INT10;
+    typedef INT10 INT10_2;
+    typedef int* INTP;
+    typedef INTP INTP_2;
 
 
+    int var_not_in_bounds = 0xE0F;
+    INTP_2 intp;
+    int[10] int10;
+    INT10_2 int10_aliased;
+
+    int a = int10[var_not_in_bounds];
+
+    a = int10[int10[1]];
+
+    int10[1] = 4;
+    int10_aliased[2] = var_not_in_bounds;
+    int10_aliased[9] = int10[0] + intp[0];
 }
-

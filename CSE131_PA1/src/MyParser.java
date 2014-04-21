@@ -1141,15 +1141,20 @@ class MyParser extends parser
 		Type bType = expr.getType();
 		
 		//check a
-		if(!aType.isArray() && !aType.isPointer())
+		if(!(aType instanceof ArrayType) && !(aType instanceof PointerType))
 		{
 			m_nNumErrors++;
             m_errors.print (Formatter.toString(ErrorMsg.error11t_ArrExp,
              aType.getName()));
             return new ErrorSTO ("Check11 error. Illegal Array Usage");
 		}
+		else if(aType instanceof PointerType)
+		{
+			Type t = ((PointerType) aType).getBaseType();
+			retSTO = new VarSTO(aType.getName(), t);
+		}
 		//check b
-		else if(!bType.isInt())
+		else if(!(bType instanceof IntType))
 		{
 			m_nNumErrors++;
             m_errors.print (Formatter.toString(ErrorMsg.error11i_ArrExp, 
@@ -1157,7 +1162,7 @@ class MyParser extends parser
             return new ErrorSTO ("Check11 error. Inequivalent to int");
 		}
 		//check c
-		else if(expr.isConst())
+		else if(expr instanceof ConstSTO)
 		{
 			int index = ((ConstSTO) expr).getIntValue();
 			int upperBound = ((ArrayType)aType).getArraySize();
