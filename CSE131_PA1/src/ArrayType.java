@@ -47,7 +47,7 @@ class ArrayType extends CompositeType {
 	
 	public Type copy()
     {
-    	return new ArrayType(this.m_typeName, this.m_size);
+    	return new ArrayType(m_typeName, m_size, m_arraySize, getBaseType());
     }
 	
 	public int getArraySize()

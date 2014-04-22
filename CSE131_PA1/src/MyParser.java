@@ -744,14 +744,14 @@ class MyParser extends parser
 		if (sto instanceof ErrorSTO)
 			return new ErrorSTO("illegal array decl");
 		// value of expr is not known at compile time
-		if (!sto.getType().isIntType()) 
+		if (!(sto.getType() instanceof IntType)) 
 		{
 			m_nNumErrors++;
             m_errors.print (Formatter.toString(ErrorMsg.error10i_Array,
              sto.getType().getName()));
             return new ErrorSTO(sto.getName());
 		} 
-		else if (!sto.isConst()) 
+		else if (!(sto instanceof ConstSTO)) 
 		{
 			m_nNumErrors++;
             m_errors.print (ErrorMsg.error10c_Array);
@@ -766,7 +766,7 @@ class MyParser extends parser
 		}
 		else 
 			ret = new ExprSTO (sto.getName(), 
-				new ArrayType( "array", sto.getType().getSize(), ((ConstSTO) sto).getIntValue(), sto.getType() )   );
+				new ArrayType( "array", sto.getType().getSize(), ((ConstSTO) sto).getIntValue() )   );
 		return ret;
 	}
 	
@@ -849,22 +849,24 @@ class MyParser extends parser
     STO DoDereferenceCheck(STO sto)
     {
     	if(sto.isError()) return sto;
+    
+    	STO retSTO;
     	
     	if(!sto.getType().isPointer())
     	{
     		m_nNumErrors++;
     		m_errors.print (Formatter.toString(ErrorMsg.error15_Receiver,
             sto.getType().getName()));
-    		return new ErrorSTO ("Not A Pointer");
+    		return new ErrorSTO ("Not a Pointer type");
     	}
-    	//TODO: what should be returned?
+    	//TODO: what if sto is a struct type?? 
+    	//else return baseType of sto
     	else
     	{
-    		
+    		retSTO = new VarSTO(sto.getName(), ((PointerType)sto.getType()).getBaseType() );
     	}
-    	
-    	
-    	return sto;
+	
+    	return retSTO;
     }
     
     /*

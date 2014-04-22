@@ -4,8 +4,8 @@ structdef MYSTRUCT {
 
 function : int * returnPtr() {
 	int y = 5;
-	int* yy = &y;
-	return yy;
+	int* yy;
+	return yy;	//err
 }
 
 function : MYSTRUCT f() {
@@ -15,20 +15,19 @@ function : MYSTRUCT f() {
 
 function : void main() {
 	MYSTRUCT* ptr;
+
 	int* ptr2;
 	int y = (*ptr).x;
 	int w = ptr->x;
 	int z = *ptr2;
+	
+
 }
 
-function : void pbyReference(MYSTRUCT * mp) {
+function : void pbyReference(MYSTRUCT * mp) { //err
 	int y = mp->x;	
 }
 
-function : void pbyValue(MYSTRUCT m) {
-	m.x = 2;
-	pbyReference(&m);
-}
 
 /*
 should NOT have these error

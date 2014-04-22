@@ -964,7 +964,7 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
                     :}
     |               Designator2:_1 T_LBRACKET Expr:_2 T_RBRACKET
                     {:
-                    	if(_2.isError())
+                    	if(_2 instanceof ErrorSTO)
                     	{
                     		RESULT = new ErrorSTO ("Error");
                     	}
