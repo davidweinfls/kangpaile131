@@ -1,7 +1,15 @@
-
-
-function : int ** foo4 ()
+function: void main()
 {
-	int** ptr;
-	return ptr;  	
+
+	structdef SSS 
+	{
+		int a;
+	};
+	
+	SSS *struct;
+	
+	
+	
+	int aVal = struct->a;
+
 }

@@ -193,14 +193,14 @@ class MyParser extends parser
 			if(expr != null)
 				exprType = expr.getType();
 		
+			VarSTO var;
+			
 			if (m_symtab.accessLocal (id) != null)
 			{
 				m_nNumErrors++;
 				m_errors.print(Formatter.toString(ErrorMsg.redeclared_id,id));
-			}
-			
-			VarSTO var;
-			if(exprType == null && varType == null)
+			}			
+			else if(exprType == null && varType == null)
 			{		
 				if(t instanceof ArrayType)
 					var = new VarSTO(id, t, true, false);
@@ -241,7 +241,7 @@ class MyParser extends parser
 			}
 			else if(varType == null)
 			{
-				if(exprType.isAssignable(varType))
+				if(exprType.isAssignable(t))
 				{
 					if(t instanceof ArrayType)
 						var = new VarSTO(id, t, true, false);

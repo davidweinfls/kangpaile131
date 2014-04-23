@@ -10,17 +10,24 @@ class IntType extends NumericType {
 		return true;
 	}
 
-	public boolean isAssignable(Type type) {
-		if (isEquivalent(type)) {
+	public boolean isAssignable(Type type)
+	{
+		if(type instanceof IntType || type instanceof FloatType)
+		{
 			return true;
-		}
-		if (type.getClass() == FloatType.class) {
-			return true;
-		}
-
-		return false;
+        }
+		else
+		{
+			return false;
+        }
 	}
-
+	
+	public boolean isEquivalentTo(Type t)
+    {
+		if 	(t instanceof IntType)
+			return true;
+        return false;
+    }
 
 	public boolean isIntType() {
 		return true;
