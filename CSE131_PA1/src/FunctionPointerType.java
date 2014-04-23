@@ -20,6 +20,16 @@ class FunctionPointerType extends PointerGroupType{
         setByRef (byReference);
         setParams (params);
     }
+	
+	public String getName()
+	{
+		if(isAlias()) return m_alias;
+		String paramNames = "";
+		if (!getByRef())
+            return "FunctionPointer : " + m_returnType.getName() + " (" + paramNames + ")";
+        else
+            return "FunctionPointer : " + m_returnType.getName() + " & (" + paramNames + ")";
+	}
 
 	//Need more
 	public boolean isFunctionPointer()

@@ -40,7 +40,8 @@ class PointerType extends PointerGroupType{
         {
             setBaseType(t);
         }
-        //setName (getType().getName() + m_typeName);
+        String temp = getBaseType().getName();
+        setName (temp + m_typeName);
     }
 
     public Type getType() 

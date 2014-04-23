@@ -6,3 +6,18 @@ function : void main() {
 	(*m).a = 1;
 	*x = 2;
 }
+
+
+structdef MYST {
+	int x;
+};
+
+function : void returnPtr() {
+	MYST* ptr;
+	int z = 5;
+	
+	ptr->x = 3;
+	(*ptr).x = 2;
+	
+	
+}

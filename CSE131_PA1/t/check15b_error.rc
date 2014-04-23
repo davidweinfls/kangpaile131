@@ -1,12 +1,14 @@
-structdef MYSTRUCT { float a; };
+structdef MYSTRUCT { int a; };
 function : void main() {
 	int x;
 	MYSTRUCT* m;
 	MYSTRUCT v;
 	m->b = 2.5; //field not found
 	(*m).b = 1; //field not found
+	
 	//NullPointerException
 	*x = 2; //incompatible type, expects pointer
 	v->a = 2; //expects pointer
+	m->a = 2.5;	//cant do float assign to int
 	(*x).a = 3;
 }

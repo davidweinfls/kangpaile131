@@ -176,6 +176,8 @@ class MyParser extends parser
 	void
 	DoVarDecl (Vector<VariableBox<STO, STO>> lstIDs, Type t)
 	{
+		if (t == null) return;
+		
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
 			VariableBox<STO, STO> box = lstIDs.elementAt(i);
@@ -196,49 +198,67 @@ class MyParser extends parser
 				m_nNumErrors++;
 				m_errors.print(Formatter.toString(ErrorMsg.redeclared_id,id));
 			}
-			if(exprType != null)
+			
+			VarSTO var;
+			if(exprType == null && varType == null)
+			{		
+				if(t instanceof ArrayType)
+					var = new VarSTO(id, t, true, false);
+				else
+					var = new VarSTO (id, t);
+				m_symtab.insert (var);
+				
+			}
+			else if(varType instanceof PointerType)
 			{
-				if(exprType.isAssignable(t))
+				((PointerType) varType).setType(t);
+				if(exprType != null && exprType.isAssignable(varType))
 				{
-					VarSTO var;
+					if(t instanceof ArrayType)
+						var = new VarSTO(id, varType, true, false);
+					else
+						var = new VarSTO (id, varType);
+					m_symtab.insert (var);
+				}
+				else if(exprType == null)
+				{
+                    var = new VarSTO(id, varType, true, true);
+                    m_symtab.insert (var);
+				}
+				else	//right is not assignable to left
+				{
+					m_nNumErrors++;
+	                m_errors.print(Formatter.toString(ErrorMsg.error8_Assign,
+	                		exprType.getName(), ((PointerType) varType).getName()));
+				}
+			}
+			else if(varType instanceof ArrayType)
+			{
+				Type arrType = new ArrayType("Array", 1, 
+						((ArrayType) varType).getArraySize(), t);
+				var = new VarSTO(id, arrType, true, false);
+				m_symtab.insert (var);
+			}
+			else if(varType == null)
+			{
+				if(exprType.isAssignable(varType))
+				{
 					if(t instanceof ArrayType)
 						var = new VarSTO(id, t, true, false);
 					else
 						var = new VarSTO (id, t);
 					m_symtab.insert (var);
 				}
-				else	//right is not assignable to left
+				//not assignable
+				else
 				{
 					m_nNumErrors++;
 	                m_errors.print(Formatter.toString(ErrorMsg.error8_Assign,
 	                		exprType.getName(), t.getName()));
 				}
 			}
-			else if(varType instanceof PointerType)
+			else	//varType != null, exprType != null
 			{
-				((PointerType) varType).setType(t);
-				//if(exprType == null)
-				//{
-					VarSTO var = new VarSTO(id, varType, true, true);
-					m_symtab.insert (var);
-				//}
-				//else
-				//{
-					//VarSTO var = new VarSTO(id, varType, true, true);
-					//m_symtab.insert (var);
-				//}
-			}
-			else if(varType instanceof ArrayType)
-			{
-				VarSTO var;
-				Type arrType = new ArrayType("Array", 1, 
-						((ArrayType) varType).getArraySize(), t);
-				var = new VarSTO(id, arrType, true, false);
-				m_symtab.insert (var);
-			}
-			else
-			{
-				VarSTO var;
 				if(t instanceof ArrayType)
 					var = new VarSTO(id, t, true, false);
 				else
@@ -669,12 +689,13 @@ class MyParser extends parser
 	STO DoInitCheck(String id, STO sto)
 	{
 		if(sto == null) return new VarSTO ("empty", null);
-		if(sto != null && sto.isError()) return sto;	
+		if(sto instanceof ErrorSTO) return sto;	
 		
 		// not known at compile time
 		if((m_static || m_symtab.getLevel() == 1) )
 		{
-			if( sto == null || (!sto.isConst() && !sto.isFunc()) )
+			if( ( !(sto.isConst()) && !(sto.isFunc()) &&
+					!(sto.getType().isArray()) ) )
 			{
 				m_nNumErrors++;
 				m_errors.print(Formatter.toString(ErrorMsg.error8a_CompileTime, 
@@ -690,10 +711,10 @@ class MyParser extends parser
 	 */
 	STO DoConstInit(String id, STO sto)
 	{
-		if(sto != null && sto.isError()) return sto;
+		if(sto instanceof ErrorSTO) return sto;
 		
 		// not known at compile time
-		if( sto == null || !sto.isConst() )
+		if( !(sto instanceof ConstSTO) )
 		{
 			m_nNumErrors++;
 			m_errors.print(Formatter.toString(ErrorMsg.error8b_CompileTime, 
@@ -1008,7 +1029,7 @@ class MyParser extends parser
 			// Good place to do the assign checks
 			m_nNumErrors++;
 			m_errors.print(ErrorMsg.error3a_Assign);
-			return new ErrorSTO(stoDes.getName());
+			return new ErrorSTO("illegal assignment (check3)");
 		}
 		
 		

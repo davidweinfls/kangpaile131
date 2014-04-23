@@ -1,0 +1,36 @@
+typedef int[10] INTAR; 		//int[10]
+typedef INTAR* PTAR; 		//int[10]*
+typedef PTAR[10] PTARAR; 	//int[10]*[10]
+PTARAR* ar;					//int[10]*[10]
+
+typedef int* PT; 			//int*
+typedef PT[10] PTARR; 		//int*[10]
+typedef PTARR[10] PTARRARR; //int*[10]*
+PTARRARR* arr; 				//int*[10]*
+
+
+function : void main (){
+    *ar = *arr;             //Pass, 
+}
+
+typedef int[10] A;	//int[10]
+typedef A[10] A2D;	//int[10][10]
+A2D * a;			//int[10][10]*
+
+typedef float[10] B;//same
+typedef B[10] B2D;
+B2D * b;
+
+function : void foo(){
+    *a = *b;              //pass
+}
+
+
+typedef int* C;
+typedef C[2] CC;
+CC* c;
+
+
+function : void fuu(){
+    CC* d = c;			//      int*[1]*   =    int*[1]*
+} 

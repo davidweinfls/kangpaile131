@@ -23,6 +23,7 @@ abstract class Type
 	public String
 	getName ()
 	{
+		if(isAlias()) return m_alias;
 		return m_typeName;
 	}
 
@@ -104,6 +105,6 @@ abstract class Type
 	protected String  	m_typeName;
 	protected int		m_size;
 	protected String	m_alias;
-	protected boolean m_isAlias;
+	protected boolean 	m_isAlias;
 }
 
