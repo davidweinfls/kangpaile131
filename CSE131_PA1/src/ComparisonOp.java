@@ -18,6 +18,69 @@ public class ComparisonOp extends BinaryOp{
 				return new ErrorSTO(Formatter.toString(ErrorMsg.error1b_Expr,
 						aType.getName(), this.getName(), bType.getName()));
 			} 
+			else if(aType instanceof FunctionPointerType ||
+	                bType instanceof FunctionPointerType)
+			{
+				if((aType instanceof NullPointerType) ||
+						(bType instanceof NullPointerType))
+				{
+					return new ExprSTO("result", new BoolType("bool", 4));
+				}
+				else
+				{
+					return new ErrorSTO(Formatter.toString(
+							ErrorMsg.error1b_Expr, aType.getName(),
+							this.getName(), bType.getName()));
+				}
+			}
+			else if(aType instanceof PointerType || bType instanceof PointerType)
+			{
+					if ((aType instanceof NullPointerType) ||
+	                        (bType instanceof NullPointerType))
+					{
+						return new ExprSTO("result", new BoolType("bool", 4));
+					}
+					else if ((aType instanceof NullPointerType) &&
+	                    (bType instanceof NullPointerType))
+					{
+						return new ConstSTO ("nullptr", new NullPointerType("nullptr", 4));
+					}
+					else if (!aType.isEquivalent (bType))
+					{
+						return new ErrorSTO(Formatter.toString(ErrorMsg.error17_Expr,
+								this.getName(), aType.getName(), bType.getName()));
+					}
+					else if (!(aType.isPointer()) || !(bType.isPointer()))
+					{
+						return new ErrorSTO(Formatter.toString(ErrorMsg.error1b_Expr,
+	                    aType.getName(), this.getName(), bType.getName()));
+					}
+					else
+					{
+						return new ExprSTO("result", new BoolType("bool", 4));
+					}
+			}
+			else if(aType instanceof NullPointerType || bType instanceof NullPointerType)
+			{
+                if(!aType.isEquivalent(bType))
+                {
+                    return new ErrorSTO(Formatter.toString(ErrorMsg.error17_Expr,
+                     this.getName(), aType.getName(), bType.getName()));
+                }
+                else if(a.isConst() && b.isConst())
+                {
+                    boolean b_value = false;
+                    if(this.getName() == "==")
+                        b_value = (((ConstSTO) a).getValue() == ((ConstSTO) b).getValue());
+                    else
+                        b_value = (((ConstSTO) a).getValue() != ((ConstSTO) b).getValue());
+                    return new ConstSTO (Boolean.toString(b_value), new BoolType("bool", 4));
+                }
+                else
+                {
+                    return new ExprSTO("result", new BoolType("bool", 4));
+                }
+            }
 			else if ( a.isConst() && b.isConst() ) 
 			{
 				boolean result = false;

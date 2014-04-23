@@ -29,17 +29,3 @@ function : void pbyReference(MYSTRUCT * mp) { //err
 }
 
 
-/*
-should NOT have these error
-
-Error, "check15a_pointer_compile.rc": 
-  Type of return expression (int), not assignment compatible with function's return type (*).
-Error, "check15a_pointer_compile.rc": 
-  Type of expression referenced by "." (*) is not a struct.
-Error, "check15a_pointer_compile.rc": 
-  Initialization value of type * not assignable to constant/variable of type int.
-Error, "check15a_pointer_compile.rc": 
-  Incompatible type MYSTRUCT to operator ->, pointer to struct expected.
-Compile: failure.
-
-*/

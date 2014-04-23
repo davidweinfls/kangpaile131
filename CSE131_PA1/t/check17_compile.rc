@@ -6,10 +6,10 @@ function : void main() {
 	int* w = nullptr;
 	bool* b = nullptr;
 
-	if (x == y || x != y || x == z || x != z || w == z || w != z) {}
+	//if (x == y || x != y || x == z || x != z || w == z || w != z) {}
 
-	x++;
-	++x;
-	y--;
-	--y;
+	//x++;
+	//++x;
+	//y--;
+	//--y;
 }

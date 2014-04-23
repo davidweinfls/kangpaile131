@@ -1023,7 +1023,7 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
                     :}
     |               T_NULLPTR
                     {:
-                        RESULT = new ConstSTO ("nullptr");
+                        RESULT = new ConstSTO ("nullptr", new NullPointerType ("nullptr", 4));
                     :}
     |               T_COLONCOLON T_ID:_1
                     {:

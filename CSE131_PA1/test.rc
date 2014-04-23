@@ -1,15 +1,10 @@
-function: void main()
-{
+int* x;
+int* y;
 
-	structdef SSS 
-	{
-		int a;
-	};
-	
-	SSS *struct;
-	
-	
-	
-	int aVal = struct->a;
+function : void main() {
+	int* z = nullptr;
+	int* w = nullptr;
 
+	if (x == y || x != y || x == z || x != z || w == z || w != z) {}
+	
 }

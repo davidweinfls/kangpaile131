@@ -10,5 +10,5 @@ function : void main() {
 	*x = 2; //incompatible type, expects pointer
 	v->a = 2; //expects pointer
 	m->a = 2.5;	//cant do float assign to int
-	(*x).a = 3;
+	(*x).a = 3;	//cant do deref
 }

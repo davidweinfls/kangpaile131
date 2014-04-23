@@ -25,9 +25,6 @@ class ConstSTO extends STO
 			if(array[1] == 'x' || array[1] == 'X')
 			{
 				array[1] = '0';
-				//add nothing
-				//add nothing2
-				//boolean isHex = strName.matches("[0-9A-F]+");
 				//if(isHex)
 				//{
 					String s = new String(array);
@@ -54,7 +51,7 @@ class ConstSTO extends STO
 	ConstSTO (String strName)
 	{
 		super (strName);
-		this.assignValue(strName);
+		//this.assignValue(strName);
 				// fix this
                 // You may want to change the isModifiable and isAddressable                      
                 // fields as necessary
@@ -66,18 +63,14 @@ class ConstSTO extends STO
 	{
 		super (strName, typ);
 		
-/* TODO ¼ÇµÃ¸Ä£¡£¡£¡ */
-		if(typ.isBoolType())
-		{
-			if(strName == "true")
-				m_value = 1.0;
-			else if(strName == "false")
-				m_value = 0.0;
-		}
-		else 
-			this.assignValue(strName);// fix this
-                // You may want to change the isModifiable and isAddressable                      
-                // fields as necessary
+        if(strName.equals("true")) 
+        	m_value = 1.0;
+        else if (strName.equals("false")) 
+        	m_value = 0.0;
+        else if (typ instanceof IntType)
+        	m_value = new Double(Long.decode(strName).intValue()); 
+        else if (typ instanceof FloatType)
+        	m_value = Double.valueOf(strName);
 	}
 	
 	public
