@@ -519,7 +519,7 @@ class MyParser extends parser
         boolean error = false;
         boolean byRef = false;
 		
-		if (!sto.isFunc() && sto.getType().isFuncPtr() ) 
+		if (!sto.isFunc() && !sto.getType().isFunctionPointer() ) 
 		{
 			m_nNumErrors++;
 			m_errors.print(Formatter.toString(ErrorMsg.not_function,

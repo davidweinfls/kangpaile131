@@ -25,6 +25,25 @@ class FunctionPointerType extends PointerGroupType{
 	{
 		if(isAlias()) return m_alias;
 		String paramNames = "";
+		if (m_params.size() > 0) {
+            if (!m_params.elementAt (0).isRef()) {
+                paramNames = m_params.elementAt (0).getType().getName() +
+                " " + m_params.elementAt (0).getName();
+             }
+             else {
+                paramNames = m_params.elementAt (0).getType().getName() +
+                " &" + m_params.elementAt (0).getName();
+             }
+            for (int i = 1; i < m_params.size(); i++) {
+                if (!m_params.elementAt (i).isRef()) {
+                    paramNames = paramNames + ", " + m_params.elementAt (i).getType().getName() +
+                    " " + m_params.elementAt (i).getName();
+                } else {
+                    paramNames = paramNames + ", " + m_params.elementAt (i).getType().getName() +
+                    " &" + m_params.elementAt (i).getName();
+                }
+            }
+        }
 		if (!getByRef())
             return "FunctionPointer : " + m_returnType.getName() + " (" + paramNames + ")";
         else
@@ -88,6 +107,50 @@ class FunctionPointerType extends PointerGroupType{
     public Type copy () 
     {
         return new FunctionPointerType (this.m_typeName, this.m_returnType, this.m_byRef, this.m_params);
+    }
+    
+    public boolean isAssignable(Type t)
+    {
+    	if((t instanceof FunctionPointerType) &&
+    		m_returnType.isAssignable(((FunctionPointerType) t).getReturnType()) &&
+    		m_byRef == ((FunctionPointerType) t).getByRef() &&
+    		compareParam(t))
+    	{
+            return true;
+        }
+        return false;
+    }
+    
+	public boolean isEquivalent(Type t)
+	{
+		if((t instanceof FunctionPointerType) &&
+			m_byRef == ((FunctionPointerType) t).getByRef() && 
+			m_returnType.isEquivalent(((FunctionPointerType) t).getReturnType())  && 
+			compareParam(t)) 
+		{
+			return true;
+		}
+		return false;
+	}
+    
+    public boolean compareParam(Type t)
+    {
+    	Vector<VarSTO> paramList = ((FunctionPointerType) t).getParams();
+    	
+    	if(m_params.size() != paramList.size()) return false;
+    	
+    	VarSTO x, y;
+    	for(int i = 0; i < paramList.size(); i++)
+    	{
+    		x = m_params.get(i);
+    		y = paramList.get(i);
+			if(!(x.getType().isEquivalent(y.getType()))
+					|| x.isRef() != y.isRef())
+			{
+				return false;
+			}
+    	}
+    	return true;
     }
 
     //fields

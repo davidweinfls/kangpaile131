@@ -78,14 +78,13 @@ abstract class Type
 	public boolean	isFloat ()			{ return false; }
 	public boolean	isNumeric ()		{ return false; }
 	public boolean	isBasic ()			{ return false; }
-	public boolean	isVoid ()			{ return false; }
 	public boolean	isComposite ()		{ return false; }
 	public boolean	isArray ()			{ return false; }
 	public boolean	isStruct ()     	{ return false; }
 	public boolean	isPtrGrp ()     	{ return false; }
 	public boolean	isPointer ()    	{ return false; }
 	public boolean	isNullPtr ()		{ return false; }
-	public boolean	isFuncPtr ()		{ return false; }
+	public boolean	isFunctionPointer ()		{ return false; }
 	public boolean  isChar ()       	{ return false; }
 	
 	public boolean isAssignable(Type t) { return false; }

@@ -43,6 +43,7 @@ class FuncSTO extends STO
 	setReturnType (Type typ)
 	{
 		m_returnType = typ;
+		((FunctionPointerType)getType()).setReturnType(typ);
 	}
 
 	public Type

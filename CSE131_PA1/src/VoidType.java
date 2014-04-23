@@ -11,4 +11,17 @@ class VoidType extends Type {
 	public boolean	isVoidType ()	{ return true; }
 	
 	public Type copy(){return null;}
+	
+	public boolean isAssignable(Type t)
+	{
+        return isEquivalent(t);
+    }
+
+    public boolean isEquivalent(Type t)
+    {
+        if(t.isVoidType())
+        	return true;
+        else
+        	return false;
+    }
 }

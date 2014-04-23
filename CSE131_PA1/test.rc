@@ -1,19 +1,10 @@
+typedef funcptr : void (int* x, int* y) MYPTRREFALIAS;
+MYPTRREFALIAS myPtr3;
 
-
-function : int addition(int x, int y) {
-	return x + y;
-}
-
+function : void doStuff(int* foo, int* bar) {}
 
 function : int main() {
 
-	typedef funcptr : int (int x, int y) MYPTRALIAS;
-	
-	MYPTRALIAS myPtr1;
-		
-	myPtr1 = addition;
-	
-	myPtr1(4, 6);
-
+	myPtr3 = doStuff;
 	return 0;
 }
