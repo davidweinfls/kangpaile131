@@ -1,0 +1,21 @@
+int * iptr;
+
+float * fptr;
+
+bool * bptr;
+
+function : void main(){
+
+	decltype(fptr) fptr2 = fptr;
+	
+	fptr2 = nullptr;
+	iptr = nullptr;
+	bptr = nullptr;
+	
+	*iptr = 1.1;
+	*iptr = false;
+	*fptr = true;
+	*bptr = 1;
+	*fptr2 = false;
+
+}

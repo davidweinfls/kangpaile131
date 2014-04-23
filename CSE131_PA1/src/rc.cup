@@ -335,11 +335,17 @@ Type ::=         SubType:_1 OptModifiers:_2
                     else
                         RESULT = _1;
 				 :}
-    |               T_FUNCPTR T_COLON ReturnType OptRef T_LPAREN OptParamList:_3 T_RPAREN
+    |               T_FUNCPTR T_COLON ReturnType:_1 OptRef:_2 T_LPAREN OptParamList:_3 T_RPAREN
+    				{:
+    					RESULT = ((MyParser) parser).DoFuncptr(_1, (Boolean)_2, _3);
+    				:}
     ;
 
 UndecoratedType ::= SubType:_1 {: RESULT = _1; :}
-    |               T_FUNCPTR T_COLON ReturnType OptRef T_LPAREN OptParamList:_3 T_RPAREN
+    |               T_FUNCPTR T_COLON ReturnType:_1 OptRef:_2 T_LPAREN OptParamList:_3 T_RPAREN
+    				{:
+    					RESULT = ((MyParser) parser).DoFuncptr(_1, (Boolean)_2, _3);
+    				:}
     ;
 
 SubType ::=    		QualIdent:_1 {: RESULT = _1.getType(); :}

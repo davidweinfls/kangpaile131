@@ -10,8 +10,9 @@ PTARRARR* arr; 				//int*[10]*
 
 
 function : void main (){
-    *ar = *arr;             //Pass, 
+    *ar = *arr;             //int[10]* <= int*[10]
 }
+
 
 typedef int[10] A;	//int[10]
 typedef A[10] A2D;	//int[10][10]

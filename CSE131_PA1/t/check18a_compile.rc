@@ -18,6 +18,7 @@ function : int main() {
 	if (myPtr1 == nullptr) {
 		myPtr1 = addition;
 	}
+	
 	myPtr2 = subtraction;
 	myPtr2 = myPtr1;
 	myPtr2 = nullptr;

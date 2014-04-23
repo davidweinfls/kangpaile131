@@ -22,12 +22,12 @@ function : int main() {
 	if (myPtr1 == nullptr) {
 		myPtr1 = addition; //error, don't match
 	}
-	myPtr2 = subtraction;
+	myPtr2 = subtraction;	//error
 	myPtr2 = myPtr1;
 	myPtr2 = nullptr;
 
-	if(myPtr2 == myPtr3){ //not equivalent ptr type - error
-		myPtr3 = doStuff; //error, don't match
+	if(myPtr2 == myPtr3){ 	//not equivalent ptr type - error
+		myPtr3 = doStuff; 	//error, don't match
 		myPtr3 = doMoreStuff; //error
 	}
 	return 0;

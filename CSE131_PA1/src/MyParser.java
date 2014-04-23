@@ -519,7 +519,7 @@ class MyParser extends parser
         boolean error = false;
         boolean byRef = false;
 		
-		if (!sto.isFunc() && !sto.getType().isFuncPtr() ) 
+		if (!sto.isFunc() && sto.getType().isFuncPtr() ) 
 		{
 			m_nNumErrors++;
 			m_errors.print(Formatter.toString(ErrorMsg.not_function,
@@ -979,6 +979,15 @@ class MyParser extends parser
             m_errors.print(Formatter.toString (ErrorMsg.error16_Delete,
              sto.getType().getName()));
         }
+    }
+    
+    /*
+     * check18
+     */
+    Type DoFuncptr(Type returnType, boolean byRef, Vector<VarSTO> param)
+    {
+    	Type retType = new FunctionPointerType("funcptr", returnType, byRef, param);
+    	return retType;
     }
     
     /*
