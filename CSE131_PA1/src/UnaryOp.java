@@ -33,25 +33,25 @@ class UnaryOp extends Operator
                 return new ExprSTO("result", new BoolType("bool", 4));
         }
         // for op: ++, --
-        if (!(aType instanceof NumericType) && !(aType instanceof PointerType)) 
+        if(!(aType instanceof NumericType) && !(aType instanceof PointerType)) 
         {
             return new ErrorSTO(Formatter.toString(ErrorMsg.error2_Type, aType.getName(), this.getName()));
         } 
-        else if (!a.isModLValue()) 
+        else if(!a.isModLValue()) 
         {
-            return new ErrorSTO(Formatter.toString(ErrorMsg.error2_Lval, this.getName()));
+        	return new ErrorSTO(Formatter.toString(ErrorMsg.error2_Lval, this.getName()));
         }
-        else if (aType instanceof IntType) 
+        else if(aType instanceof IntType) 
         {
-            return new ExprSTO("result", aType);
+        	return new ExprSTO("result", aType);
         } 
-        else if (aType instanceof FloatType) 
+        else if(aType instanceof FloatType) 
         {
-            return new ExprSTO("result", aType);
+        	return new ExprSTO("result", aType);
         } 
         else 
         {
-            return new ExprSTO("result", aType);
+        	return new ExprSTO("result", aType);
         }
         
     }

@@ -1,10 +1,10 @@
-int* x;
-int* y;
+
 
 function : void main() {
-	int* z = nullptr;
-	int* w = nullptr;
 
-	if (x == y || x != y || x == z || x != z || w == z || w != z) {}
+	int* x;
+	int* y;
+	
+	if (x == y) {}
 	
 }

@@ -11,29 +11,7 @@ public class ComparisonOp extends BinaryOp{
 		//for op: ==, !=
 		if (this.getName() == "==" || this.getName() == "!=") 
 		{
-			//check for both numeric or bool, return error: error1b
-			if (!(aType instanceof NumericType && bType instanceof NumericType) &&
-				!(aType instanceof BoolType && bType instanceof BoolType)) 
-			{
-				return new ErrorSTO(Formatter.toString(ErrorMsg.error1b_Expr,
-						aType.getName(), this.getName(), bType.getName()));
-			} 
-			else if(aType instanceof FunctionPointerType ||
-	                bType instanceof FunctionPointerType)
-			{
-				if((aType instanceof NullPointerType) ||
-						(bType instanceof NullPointerType))
-				{
-					return new ExprSTO("result", new BoolType("bool", 4));
-				}
-				else
-				{
-					return new ErrorSTO(Formatter.toString(
-							ErrorMsg.error1b_Expr, aType.getName(),
-							this.getName(), bType.getName()));
-				}
-			}
-			else if(aType instanceof PointerType || bType instanceof PointerType)
+			if(aType instanceof PointerType || bType instanceof PointerType)
 			{
 					if ((aType instanceof NullPointerType) ||
 	                        (bType instanceof NullPointerType))
@@ -60,6 +38,21 @@ public class ComparisonOp extends BinaryOp{
 						return new ExprSTO("result", new BoolType("bool", 4));
 					}
 			}
+			else if(aType instanceof FunctionPointerType ||
+	                bType instanceof FunctionPointerType)
+			{
+				if((aType instanceof NullPointerType) ||
+						(bType instanceof NullPointerType))
+				{
+					return new ExprSTO("result", new BoolType("bool", 4));
+				}
+				else
+				{
+					return new ErrorSTO(Formatter.toString(
+							ErrorMsg.error1b_Expr, aType.getName(),
+							this.getName(), bType.getName()));
+				}
+			}
 			else if(aType instanceof NullPointerType || bType instanceof NullPointerType)
 			{
                 if(!aType.isEquivalent(bType))
@@ -81,6 +74,13 @@ public class ComparisonOp extends BinaryOp{
                     return new ExprSTO("result", new BoolType("bool", 4));
                 }
             }
+			//check for both numeric or bool, return error: error1b
+			else if (!(aType instanceof NumericType && bType instanceof NumericType) &&
+					!(aType instanceof BoolType && bType instanceof BoolType)) 
+			{
+					return new ErrorSTO(Formatter.toString(ErrorMsg.error1b_Expr,
+							aType.getName(), this.getName(), bType.getName()));
+			} 
 			else if ( a.isConst() && b.isConst() ) 
 			{
 				boolean result = false;
