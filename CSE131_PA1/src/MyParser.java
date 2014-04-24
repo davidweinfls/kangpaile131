@@ -1064,6 +1064,31 @@ class MyParser extends parser
     	return retSTO;
     }
     
+    /*
+     * check21. addressof operator
+     */
+    STO DoAddressOf(STO sto)
+    {
+    	STO retSTO = null;
+    	if(sto instanceof ErrorSTO) return sto;
+    	
+    	//if not addressable, return error
+		if(!sto.getIsAddressable()) 
+		{
+			m_nNumErrors++;
+			m_errors.print(Formatter.toString(ErrorMsg.error21_AddressOf, sto
+					.getType().getName()));
+			retSTO = new ErrorSTO("Designator not addressable");
+		}
+		else
+		{
+			PointerType ptrType = new PointerType("*", 4, sto.getType());
+			retSTO = new ExprSTO(sto.getName(), ptrType);
+		}
+    	
+    	return retSTO;
+    }
+    
     
 	//----------------------------------------------------------------
 	// check 3

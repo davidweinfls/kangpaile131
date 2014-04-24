@@ -929,7 +929,7 @@ Designator ::= T_STAR Designator:_1
                     :}
     |               T_AMPERSAND Designator:_1
                     {:
-			RESULT = _1;
+						RESULT = ((MyParser) parser).DoAddressOf(_1);
                     :}
     |               UnarySign:_2 Designator:_1
                     {:
