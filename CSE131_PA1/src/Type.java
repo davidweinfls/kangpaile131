@@ -83,7 +83,7 @@ abstract class Type
 	public boolean	isStruct ()     	{ return false; }
 	public boolean	isPtrGrp ()     	{ return false; }
 	public boolean	isPointer ()    	{ return false; }
-	public boolean	isNullPtr ()		{ return false; }
+	public boolean	isNullPointer ()		{ return false; }
 	public boolean	isFunctionPointer ()		{ return false; }
 	public boolean  isChar ()       	{ return false; }
 	

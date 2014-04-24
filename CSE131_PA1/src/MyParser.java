@@ -1024,6 +1024,46 @@ class MyParser extends parser
     	return sto;
     }
     
+    /*
+     * check20 do typecast
+     */
+    STO DoTypeCast(Type t, STO sto)
+    {
+    	if(sto.isError()) return sto;
+        Type type = sto.getType ();
+        STO retSTO;
+        if ((!(type.isBasicType()) && !(type.isPointer()) && !(type.isNullPointer())) ||
+            (!(t.isBasicType()) && !(t.isPointer())))
+        {
+            m_nNumErrors++;
+            m_errors.print (Formatter.toString (ErrorMsg.error20_Cast,
+             type.getName(), t.getName()));
+            retSTO = new ErrorSTO ("illegal Type cast");
+        }
+        else if(sto instanceof ConstSTO)
+        {
+			Double boolVal = 0.0;
+			Double v = ((ConstSTO) sto).getValue();
+			if (t.isBool() && v != 0)
+				boolVal = 1.0;
+			else if (t.isBool() && v == null)
+				boolVal = 0.0;
+			if(t.isBool())
+			{
+				retSTO = new ConstSTO(sto.getName(), t, boolVal);
+			}
+			else
+			{
+				retSTO = new ConstSTO(sto.getName(), t, v);
+			}
+		}
+        else
+        {
+			retSTO = new ExprSTO(sto.getName(), t);
+		}
+    	return retSTO;
+    }
+    
     
 	//----------------------------------------------------------------
 	// check 3
