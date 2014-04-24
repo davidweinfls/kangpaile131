@@ -998,6 +998,8 @@ class MyParser extends parser
      */
     STO DoSizeof(Object obj)
     {
+    	if(obj instanceof ErrorSTO) return new ErrorSTO("wrong param in  sizeof()");
+    	
     	STO sto;
     	//a.
     	if(obj instanceof Type)
@@ -1006,10 +1008,11 @@ class MyParser extends parser
     	             (double)((Type) obj).getSize());
     	}
     	//b.
-    	else if( !((STO)obj).getIsAddressable() )
+    	else if( ((STO)obj).getIsAddressable() )
     	{
+    		Type t = ((STO) obj).getType();
     		sto =  new ConstSTO("result", new IntType("int", 4),
-    	             (double)((STO) obj).getType().getSize());
+    	             (double)t.getSize());
     	}
     	else
     	{
