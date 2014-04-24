@@ -72,19 +72,13 @@ abstract class Type
 	//	etc. Below is an example of isInt(). Feel free to
 	//	change this around.
 	//----------------------------------------------------------------
-	public boolean	isInt ()			{ return false; }
 	
-	public boolean  isBool()			{ return false;	}
-	public boolean	isFloat ()			{ return false; }
-	public boolean	isNumeric ()		{ return false; }
-	public boolean	isBasic ()			{ return false; }
-	public boolean	isComposite ()		{ return false; }
-	public boolean	isArray ()			{ return false; }
-	public boolean	isStruct ()     	{ return false; }
-	public boolean	isPtrGrp ()     	{ return false; }
-	public boolean	isPointer ()    	{ return false; }
-	public boolean	isNullPointer ()		{ return false; }
-	public boolean	isFunctionPointer ()		{ return false; }
+	public boolean	isArrayType ()			{ return false; }
+	public boolean	isStructType ()     	{ return false; }
+	public boolean	isPointerGroupType ()     	{ return false; }
+	public boolean	isPointerType ()    	{ return false; }
+	public boolean	isNullPointerType ()		{ return false; }
+	public boolean	isFunctionPointerType ()		{ return false; }
 	public boolean  isChar ()       	{ return false; }
 	
 	public boolean isAssignable(Type t) { return false; }

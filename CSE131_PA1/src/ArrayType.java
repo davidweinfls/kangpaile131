@@ -21,7 +21,7 @@ class ArrayType extends CompositeType {
 	}
 
 	// need more
-	public boolean isArray() {
+	public boolean isArrayType() {
 		return true;
 	}
 
@@ -30,7 +30,7 @@ class ArrayType extends CompositeType {
 		if (isEquivalent(type)) {
 			return true;
 		}
-		else if((type.isPointer() && 
+		else if((type.isPointerType() && 
 				((PointerType) type).getBaseType().isEquivalent(getBaseType())))
 			return true;
 		return false;
@@ -38,7 +38,7 @@ class ArrayType extends CompositeType {
 	
 	public boolean isEquivalent(Type type)
 	{
-		if (type.isArray() && ((ArrayType)type).getSize() == getSize() &&
+		if (type.isArrayType() && ((ArrayType)type).getSize() == getSize() &&
 			((ArrayType) type).getBaseType().isEquivalent(getBaseType()))
 			return true;
 		else

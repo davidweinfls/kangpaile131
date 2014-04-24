@@ -11,7 +11,7 @@ class PointerType extends PointerGroupType{
 	{
 		super(name, size);
 		setBaseType(baseType);
-		if(baseType.isPointer())
+		if(baseType.isPointerType())
 			num_of_stars = ((PointerType)baseType).getNumOfStars()+1;
 	}
 
@@ -20,7 +20,7 @@ class PointerType extends PointerGroupType{
         return new PointerType (m_typeName, m_size, getBaseType());
     }
 	
-	public boolean isPointer()
+	public boolean isPointerType()
 	{
 		return true;
 	}
@@ -32,7 +32,7 @@ class PointerType extends PointerGroupType{
 	
 	public void setType(Type t) 
 	{
-        if (getBaseType() != null && getBaseType().isPointer()) 
+        if (getBaseType() != null && getBaseType().isPointerType()) 
         {
             ((PointerType)getBaseType()).setType(t);
         } 
@@ -46,7 +46,7 @@ class PointerType extends PointerGroupType{
 
     public Type getType() 
     {
-        if (getBaseType() != null && getBaseType().isPointer()) 
+        if (getBaseType() != null && getBaseType().isPointerType()) 
         {
             return ((PointerType) getBaseType()).getType();
         } 

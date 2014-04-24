@@ -14,7 +14,7 @@ public class StructType extends CompositeType{
         fieldList = list;
     }
 	
-	public boolean isStruct()
+	public boolean isStructType()
 	{
 		return true;
 	}

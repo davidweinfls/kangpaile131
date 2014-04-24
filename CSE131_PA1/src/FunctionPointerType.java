@@ -51,7 +51,7 @@ class FunctionPointerType extends PointerGroupType{
 	}
 
 	//Need more
-	public boolean isFunctionPointer()
+	public boolean isFunctionPointerType()
 	{
 		return true;
 	}

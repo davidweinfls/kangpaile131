@@ -28,7 +28,7 @@ public class ComparisonOp extends BinaryOp{
 						return new ErrorSTO(Formatter.toString(ErrorMsg.error17_Expr,
 								this.getName(), aType.getName(), bType.getName()));
 					}
-					else if (!(aType.isPointer()) || !(bType.isPointer()))
+					else if (!(aType.isPointerType()) || !(bType.isPointerType()))
 					{
 						return new ErrorSTO(Formatter.toString(ErrorMsg.error1b_Expr,
 	                    aType.getName(), this.getName(), bType.getName()));
@@ -87,7 +87,7 @@ public class ComparisonOp extends BinaryOp{
 				switch (this.getName()) 
 				{
 					case "==":
-					if (aType.isFloat() || bType.isFloat())
+					if (aType.isFloatType() || bType.isFloatType())
 						result = (((ConstSTO) a).getFloatValue() == ((ConstSTO) b)
 								.getFloatValue());
 					else
@@ -96,7 +96,7 @@ public class ComparisonOp extends BinaryOp{
 					break;
 				 
 					case "!=":
-					if (aType.isFloat() || bType.isFloat())
+					if (aType.isFloatType() || bType.isFloatType())
 						result = (((ConstSTO) a).getFloatValue() != ((ConstSTO) b)
 								.getFloatValue());
 					else

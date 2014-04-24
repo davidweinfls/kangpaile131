@@ -7,10 +7,6 @@ class FloatType extends NumericType {
 
 	// Need more
 
-	public boolean isFloat() {
-
-		return true;
-	}
 
 	public boolean isAssignable(Type type) {
 		if (isEquivalent(type)){

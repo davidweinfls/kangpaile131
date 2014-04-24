@@ -14,7 +14,7 @@ class NullPointerType extends PointerType {
 	
 	public void setType(Type t)
 	{
-		if(getBaseType() != null && getBaseType().isPointer())
+		if(getBaseType() != null && getBaseType().isPointerType())
 		{
             ((PointerType)getBaseType()).setType (t);
         }
@@ -26,7 +26,7 @@ class NullPointerType extends PointerType {
 
     public Type getType()
     {
-    	if(getBaseType() != null && getBaseType().isPointer())
+    	if(getBaseType() != null && getBaseType().isPointerType())
     	{
             return ((PointerType)getBaseType()).getType();
         }
@@ -41,7 +41,7 @@ class NullPointerType extends PointerType {
     	return getType().getName() + getName();
     }
 
-    public boolean isNullPointer()
+    public boolean isNullPointerType()
     {
         return true;
     }

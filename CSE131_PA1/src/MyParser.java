@@ -404,7 +404,7 @@ class MyParser extends parser
                 		id));
 			}
 			// check13b
-			else if( m_structName.equals(t.getName()) && !t.isPointer() )
+			else if( m_structName.equals(t.getName()) && !t.isPointerType() )
 			{
 				m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error13b_Struct,
@@ -412,7 +412,7 @@ class MyParser extends parser
 			}
 			else 
 			{
-                if (t.isArray()) 
+                if (t.isArrayType()) 
                 	var = new VarSTO (id, t, true, false);
                 else 
                 	var = new VarSTO(id, t);
@@ -519,7 +519,7 @@ class MyParser extends parser
         boolean error = false;
         boolean byRef = false;
 		
-		if (!sto.isFunc() && !sto.getType().isFunctionPointer() ) 
+		if (!sto.isFunc() && !sto.getType().isFunctionPointerType() ) 
 		{
 			m_nNumErrors++;
 			m_errors.print(Formatter.toString(ErrorMsg.not_function,
@@ -590,7 +590,7 @@ class MyParser extends parser
                     error = true;
                 } 
                 // no.4
-                else if ( !arg.isModLValue() && !aType.isArray() ) {
+                else if ( !arg.isModLValue() && !aType.isArrayType() ) {
                     m_nNumErrors++;
                     m_errors.print (Formatter.toString(ErrorMsg.error5c_Call,
                                parameter.getName(), aType.getName()));
@@ -695,7 +695,7 @@ class MyParser extends parser
 		if((m_static || m_symtab.getLevel() == 1) )
 		{
 			if( ( !(sto.isConst()) && !(sto.isFunc()) &&
-					!(sto.getType().isArray()) ) )
+					!(sto.getType().isArrayType()) ) )
 			{
 				m_nNumErrors++;
 				m_errors.print(Formatter.toString(ErrorMsg.error8a_CompileTime, 
@@ -873,7 +873,7 @@ class MyParser extends parser
     
     	STO retSTO;
     	
-    	if(!sto.getType().isPointer())
+    	if(!sto.getType().isPointerType())
     	{
     		m_nNumErrors++;
     		m_errors.print (Formatter.toString(ErrorMsg.error15_Receiver,
@@ -900,8 +900,8 @@ class MyParser extends parser
     {
     	if(sto.isError())	return sto;
     	//check 15a.1
-    	if(!sto.getType().isPointer() || 
-    		!((PointerType)sto.getType()).getBaseType().isStruct() )
+    	if(!sto.getType().isPointerType() || 
+    		!((PointerType)sto.getType()).getBaseType().isStructType() )
     	{
     		m_nNumErrors++;
     		m_errors.print(Formatter.toString(ErrorMsg.error15_ReceiverArrow,
@@ -951,7 +951,7 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error16_New_var);
         }
-    	else if (!(sto.getType().isPointer()))
+    	else if (!(sto.getType().isPointerType()))
     	{
             m_nNumErrors++;
             m_errors.print(Formatter.toString (ErrorMsg.error16_New,
@@ -973,7 +973,7 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error16_Delete_var);
         }
-    	else if (!(sto.getType().isPointer()))
+    	else if (!(sto.getType().isPointerType()))
     	{
             m_nNumErrors++;
             m_errors.print(Formatter.toString (ErrorMsg.error16_Delete,
@@ -1032,8 +1032,8 @@ class MyParser extends parser
     	if(sto.isError()) return sto;
         Type type = sto.getType ();
         STO retSTO;
-        if ((!(type.isBasicType()) && !(type.isPointer()) && !(type.isNullPointer())) ||
-            (!(t.isBasicType()) && !(t.isPointer())))
+        if ((!(type.isBasicType()) && !(type.isPointerType()) && !(type.isNullPointerType())) ||
+            (!(t.isBasicType()) && !(t.isPointerType())))
         {
             m_nNumErrors++;
             m_errors.print (Formatter.toString (ErrorMsg.error20_Cast,
@@ -1044,11 +1044,11 @@ class MyParser extends parser
         {
 			Double boolVal = 0.0;
 			Double v = ((ConstSTO) sto).getValue();
-			if (t.isBool() && v != 0)
+			if (t.isBoolType() && v != 0)
 				boolVal = 1.0;
-			else if (t.isBool() && v == null)
+			else if (t.isBoolType() && v == null)
 				boolVal = 0.0;
-			if(t.isBool())
+			if(t.isBoolType())
 			{
 				retSTO = new ConstSTO(sto.getName(), t, boolVal);
 			}
@@ -1253,7 +1253,7 @@ class MyParser extends parser
 			else
 			{
 				Type t = ((ArrayType) aType).getBaseType();
-                if (t.isArray()) 
+                if (t.isArrayType()) 
                 	retSTO = new VarSTO (sto.getName(), t, true, false);
                 else 
                 	retSTO = new VarSTO (sto.getName(), t);
@@ -1266,7 +1266,7 @@ class MyParser extends parser
 		else
 		{
 			Type t = ((ArrayType) aType).getBaseType();
-            if (t.isArray()) 
+            if (t.isArrayType()) 
             	retSTO = new VarSTO (sto.getName(), t, true, false);
             else 
             	retSTO = new VarSTO (sto.getName(), t);
