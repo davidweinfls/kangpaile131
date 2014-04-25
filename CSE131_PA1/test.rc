@@ -1,3 +1,4 @@
-
-
-int x = sizeof(sizeof(int));
+function : void main(){
+	int x;
+	bool* r = &x;
+}

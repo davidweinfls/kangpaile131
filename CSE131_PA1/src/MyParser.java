@@ -1153,7 +1153,7 @@ class MyParser extends parser
 		}
 		else
 		{
-			PointerType ptrType = new PointerType("*", 4, sto.getType());
+			PointerType ptrType = new PointerType(sto.getType().getName() + "*", 4, sto.getType());
 			retSTO = new ExprSTO(sto.getName(), ptrType);
 		}
     	
