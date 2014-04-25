@@ -752,10 +752,10 @@ class MyParser extends parser
 		// check10. 
 		// Given a type declaration such as -- Type[Index] List1;
 		// An error should be generated if
-		// ¡ñ the type of the index expression is not equal to int
-		// ¡ñ the value of the index expression is not known at compile time
+		//  the type of the index expression is not equal to int
+		//  the value of the index expression is not known at compile time
 		//		(i.e., not a constant);
-		// ¡ñ the value of the index expression is not greater than 0.
+		//  the value of the index expression is not greater than 0.
 		//----------------------------------------------------------------
 	STO DoArrayCheck(STO sto)
 	{
@@ -865,7 +865,7 @@ class MyParser extends parser
     /*
      * check15a-1
      * An error should be generated if
-     * ¡ñ The type of ptr is not a pointer type for the * operator
+     *  The type of ptr is not a pointer type for the * operator
      */
     STO DoDereferenceCheck(STO sto)
     {
@@ -893,8 +893,8 @@ class MyParser extends parser
     /*
      * check15a-2
      * An error should be generated if
-     *	¡ñ 1. The type of ptr is not a pointer to a struct for the -> operator.
-     * 	¡ñ 2. The right side is a field within the struct. use errmsg from check14.
+     *	 1. The type of ptr is not a pointer to a struct for the -> operator.
+     * 	 2. The right side is a field within the struct. use errmsg from check14.
      */
     STO DoArrowCheck(STO sto, String id)
     {
@@ -940,8 +940,8 @@ class MyParser extends parser
     /*
      * check16a. check new statement --- new x;
      *  an error should be generated if
-     *	¡ñ x is not a modifiable L-value;
-     *	¡ñ x is not of a valid pointer type.
+     *	 x is not a modifiable L-value;
+     *	 x is not of a valid pointer type.
      */
     void DoNewStmtCheck(STO sto)
     {
@@ -962,8 +962,8 @@ class MyParser extends parser
     /*
      * check16b. check delete statement --- delete x;
      *  an error should be generated if
-     *	¡ñ x is not a modifiable L-value;
-     *	¡ñ x is not of a valid pointer type.
+     *	 x is not a modifiable L-value;
+     *	 x is not of a valid pointer type.
      */
     void DoDeleteStmtCheck(STO sto)
     {
@@ -1178,8 +1178,8 @@ class MyParser extends parser
 	//	Given a designator such as
 	//			MyStruct.SomeField
 	//	an error should be generated if
-	// ¡ñ a. the type of MyStruct is not a struct type;
-	// ¡ñ b. the type of MyStruct has no field named SomeField
+	//  a. the type of MyStruct is not a struct type;
+	//  b. the type of MyStruct has no field named SomeField
 	//----------------------------------------------------------------
 	STO
 	DoDesignator2_Dot (STO sto, String strID)
@@ -1221,11 +1221,11 @@ class MyParser extends parser
 
 	/*
 	 * check11. Error if
-	 * ¡ñ a. The type of the desig preceding any [] operator is not an array
+	 *  a. The type of the desig preceding any [] operator is not an array
 	 *   or pointer type;
-	 * ¡ñ b. The type of the index expression (nIndex in this case) is not 
+	 *  b. The type of the index expression (nIndex in this case) is not 
 	 * 	 equivalent to int;
-	 * ¡ñ c. If the index expression is a constant, an error should be generate
+	 *  c. If the index expression is a constant, an error should be generate
 	 *   if the index is outside the bounds of the array 
 	 *   (does not apply when the designator preceding the [] is of pointer
 	 *    type).

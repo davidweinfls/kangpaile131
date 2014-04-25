@@ -1,24 +1,46 @@
+JAVACUP_JAR = java-cup-v11a.jar
 
 SOURCES = \
+	ArithmeticOp.java \
+	ArrayType.java \
+	BasicType.java \
+	BinaryOp.java \
+	BitwiseOp.java \
+	BooleanOp.java \
+	BoolType.java \
+	ComparisonOp.java \
+	CompositeType.java \
+	ConstSTO.java \
 	ErrorMsg.java \
 	ErrorPrinter.java \
-	Formatter.java \
-	Token.java \
-	LineNumberPushbackStream.java \
-	Lexer.java \
-	STO.java \
-	ExprSTO.java \
-	ConstSTO.java \
-	VarSTO.java \
-	FuncSTO.java \
-	TypedefSTO.java \
 	ErrorSTO.java \
-	Type.java \
-	Scope.java \
-	SymbolTable.java \
+	ExprSTO.java \
+	Formatter.java \
+	FuncSTO.java \
+	FunctionPointerType.java \
+	IntType.java \
+	Lexer.java \
+	LineNumberPushbackStream.java \
 	MyParser.java \
+	NullPointerType.java \
+	NumericType.java \
+	Operator.java \
+	parser.java \
+	PointerGroupType.java \
 	RC.java \
 	RCdbg.java
+	Scope.java \
+	STO.java \
+	StructType.java \
+	sym.java \
+	SymbolTable.java \
+	Token.java \
+	Type.java \
+	TypedefSTO.java \
+	UnaryOp.java \
+	VariableBox.java \
+	VarSTO.java \
+	VoidType.java
 
 new:
 	make clean
