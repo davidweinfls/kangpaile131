@@ -1,2 +1,12 @@
-int a;
-const int k = a;
+static int [5] sArr;
+static int [4] sArr2;
+
+function : void foo (int [5] arrParam)
+{}
+
+function : void main ()
+{
+	foo (sArr); 		//ok
+
+	foo (sArr2);		// err
+}

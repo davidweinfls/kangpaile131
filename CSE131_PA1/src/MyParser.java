@@ -198,6 +198,7 @@ class MyParser extends parser
 			if (m_symtab.accessLocal (id) != null)
 			{
 				m_nNumErrors++;
+				System.out.println("in DoVarDecl");
 				m_errors.print(Formatter.toString(ErrorMsg.redeclared_id,id));
 			}			
 			else if(exprType == null && varType == null)
