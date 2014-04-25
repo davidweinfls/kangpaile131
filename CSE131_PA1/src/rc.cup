@@ -238,12 +238,12 @@ VarDecl ::=     OptStatic UndecoratedType:_2 IdListWOptInit:_3 T_SEMI
     ;
 
 ConstDecl ::=  OptStatic T_CONST UndecoratedType:_2 IdListWInit:_3 T_SEMI
-                    {:
+               {:
                         ((MyParser) parser).DoConstDecl (_3, _2);
-                    :}
+               :}
     |          OptStatic T_CONST T_AUTO T_ID:_4 T_ASSIGN Expr:_5 T_SEMI
     			{:
-    				((MyParser) parser).DoConstCheck (_4, _5);
+    				((MyParser) parser).DoConstInit (_4, _5);
     				Vector<VariableBox<STO,STO>> v = new Vector();
                     VariableBox<STO, STO> box = new VariableBox<STO, STO>
                     (new VarSTO(_4, null), _5);
@@ -310,7 +310,7 @@ FuncDef ::=    T_FUNCTION T_COLON ReturnType:_1 OptRef:_4 T_ID:_2
                     :}
                     T_LBRACE OptStmtList T_RBRACE
                     {:
-                        ((MyParser) parser).DoFuncDecl_2();
+                        ((MyParser) parser).DoFuncDecl_2(false);
                     :}
     ;
 
@@ -325,7 +325,7 @@ FuncDecl ::=   T_EXTERN T_FUNCTION T_COLON ReturnType:_4 T_ID:_2
                     :}
                     T_SEMI
                     {:
-                        ((MyParser) parser).DoFuncDecl_2();
+                        ((MyParser) parser).DoFuncDecl_2(true);
                     :}
     ;
 
@@ -436,9 +436,9 @@ ReturnType ::=      SubType:_1 OptPointerList:_2
 
 
 CodeBlock ::=       T_LBRACE
-                    {: ((MyParser) parser).DoBlockOpen(); :}
+                    	{: ((MyParser) parser).DoBlockOpen(); :}
                     OptStmtList
-		    {: ((MyParser) parser).DoBlockClose(); :}
+		    			{: ((MyParser) parser).DoBlockClose(); :}
                     T_RBRACE
     ;
 

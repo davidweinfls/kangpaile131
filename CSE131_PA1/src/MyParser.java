@@ -467,14 +467,15 @@ class MyParser extends parser
 	// check 6c
 	//----------------------------------------------------------------
 	void
-	DoFuncDecl_2 ()
+	DoFuncDecl_2 (boolean extern)
 	{
 		FuncSTO func = m_symtab.getFunc();
-		/*if (!(func.getReturnType() instanceof VoidType) && !m_symtab.curScope().getRet() && !ext) 
+		if (!(func.getReturnType() instanceof VoidType) && 
+				!m_symtab.getCurrScope().getReturned() && !extern) 
 		{
             m_nNumErrors++;
             m_errors.print (ErrorMsg.error6c_Return_missing);
-        }*/
+        }
 		m_symtab.closeScope ();	//close scope, pops top scope off
 		m_symtab.setFunc (null);	// we are back in outer scope
 	}
@@ -616,6 +617,7 @@ class MyParser extends parser
 	{
 		FuncSTO func = m_symtab.getFunc();
 		Type ret = func.getReturnType();
+		m_symtab.getCurrScope().markReturned();
 		
 		if(returnExpr instanceof ErrorSTO) return;
 		else if(ret instanceof VoidType && returnExpr == null)

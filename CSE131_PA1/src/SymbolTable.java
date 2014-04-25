@@ -112,6 +112,11 @@ class SymbolTable
 	{
 		return m_nLevel;
 	}
+	
+	public Scope getCurrScope()
+	{
+		return m_stkScopes.peek();
+	}
 
 
 	//----------------------------------------------------------------

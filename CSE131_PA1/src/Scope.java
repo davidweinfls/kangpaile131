@@ -45,7 +45,16 @@ class Scope
 
 		return (null);
 	}
+	
+	public void markReturned()
+	{
+		m_isReturned = true;
+	}
 
+	public boolean getReturned()
+	{
+		return m_isReturned;
+	}
 
 	//----------------------------------------------------------------
 	//
@@ -61,4 +70,5 @@ class Scope
 //	Instance variables.
 //----------------------------------------------------------------
 	private Vector<STO>		m_lstLocals;
+	private boolean 		m_isReturned;
 }
