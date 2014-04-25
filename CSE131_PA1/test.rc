@@ -1,4 +1,6 @@
-function : void main(){
-	int x;
-	bool* r = &x;
+function: int foo(int x)
+{
+   x = &(float)(1); // Error typecast returns r value.
+   
+   return 0;
 }

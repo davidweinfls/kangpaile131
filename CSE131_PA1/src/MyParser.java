@@ -1122,10 +1122,12 @@ class MyParser extends parser
 			if(t.isBoolType())
 			{
 				retSTO = new ConstSTO(sto.getName(), t, boolVal);
+				retSTO.setIsAddressable(false);
 			}
 			else
 			{
 				retSTO = new ConstSTO(sto.getName(), t, v);
+				retSTO.setIsAddressable(false);
 			}
 		}
         else
