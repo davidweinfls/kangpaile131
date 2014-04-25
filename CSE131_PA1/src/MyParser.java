@@ -650,6 +650,8 @@ class MyParser extends parser
 		// the return type of the function
 		else if(!func.getRef())
 		{
+			//TODO: need to test this
+			if(returnExpr.getType() == null) return;
 			if(!returnExpr.getType().isAssignable(ret))
 			{
 				m_nNumErrors++;
@@ -867,13 +869,13 @@ class MyParser extends parser
 	// for check12
 	void InWhile()
 	{
-        m_while = 1;
+        m_while++;
     }
 
 	// for check12
     void OutWhile()
     {
-        m_while = 0;
+        m_while--;
     }
     
     /*

@@ -1,6 +1,17 @@
-int i = 4;
+typedef float[2] FARR;
+FARR farr;
 
-function: void foo(int[i] a)
+
+function : void main ()
 {
-	return a;
+	
+	/* OK */
+
+	float *fp = farr; 			// (float and float)
+
+//我们：Initialization value of type FARR not assignable to constant/variable of type int*.
+//应该：Initialization value of global/static variable named intptr not known at compile time.
+	static int* intptr = farr;
+	
+
 }

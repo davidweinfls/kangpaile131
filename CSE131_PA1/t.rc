@@ -1,10 +1,7 @@
-typedef float[2] FARR;	//1-D
-
-typedef FARR[3] FARR3;	//2-D [2][3]
-
-FARR3 fa2a3;			//2-D [2][3]
-
-function : void main ()
+function: int foo(int x)
 {
-	FARR *fa2p = fa2a3;			// (float[2]* <= float[2][3])
+  if ( x > 0 )
+  {
+    return x;
+  }
 }
