@@ -1,12 +1,65 @@
-static int [5] sArr;
-static int [4] sArr2;
+// No errors.
+function : void test1() {
+    int[3] x;
+    float[5] a = {0,1,2,3,4.5};
+    bool[10] b = {true};
+}
 
-function : void foo (int [5] arrParam)
-{}
+// 1 error.
+function : void test2() {
+    float x;
 
-function : void main ()
-{
-	foo (sArr); 		//ok
+    // Number of initializer expressions exceeds the array size.
+    float[3] arr = {-3, x, 3.5, 25}; // Semantic error
+}
 
-	foo (sArr2);		// err
+// 1 error.
+function : void test3() {
+    int x;
+
+    // Array initialization expression is not a constant expression.
+    int[2] arr1 = {x, 1}; // x is not a constant STO
+}
+
+// 1 error.
+function : void test4() {
+    // Value of type bool not assignable to variable of type int[5].
+    int[5] arr2 = {2, true, -5};
+    float[2] b = {1, 2};
+}
+
+
+// Homemade tests below --------------------------------------------------------
+
+
+// 2 errors.
+function : void test5() {
+    // Value of type float not assignable to variable of type int[3].
+    int[3] int3 = {2.5, 2.25, 2.0};
+
+    // Number of initializer expressions exceeds the array size.
+    int[4] int4 = {2.0, 3, 4, 5, 6};
+}
+
+// 1 error.
+function : void test6() {
+    typedef float[2] FLOAT2;
+    typedef FLOAT2 ALSO_FLOAT2;
+    typedef ALSO_FLOAT2 MORE_FLOAT2;
+
+    // Number of initializer expressions exceeds the array size.
+    MORE_FLOAT2[2] a = {1, false, 3};
+
+    // No error.
+    ALSO_FLOAT2 b = {1};
+}
+
+// No errors.
+function : void test7() {
+    typedef int INT;
+
+    INT *a, *b;
+    int *c, *d;
+
+    INT[2] e = {1, 2}, f = 0x2;
 }
