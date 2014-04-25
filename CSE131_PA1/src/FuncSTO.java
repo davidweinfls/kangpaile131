@@ -87,6 +87,114 @@ class FuncSTO extends STO
 	{
 		return m_overloadFuncList;
 	}
+	
+	public boolean isOverloaded()
+	{
+		if(m_overloadFuncList.size() > 1)
+			return true;
+		else
+			return false;
+	}
+	
+	public FunctionPointerType checkOverload(Vector v)
+	{
+		for(int i = 0; i < m_overloadFuncList.size(); i++)
+		{
+			//get overloaded functinonpointer
+			FunctionPointerType funcType = m_overloadFuncList.get(i);
+			Vector<VarSTO> paramList =  funcType.getParams();
+			
+			if(v.size() == paramList.size())
+			{
+				for(int j = 0; j < paramList.size(); j++)
+				{
+					STO p = (STO)v.get(i);
+					VarSTO param = paramList.get(i);
+					Type pType = p.getType();
+					Type paramType = param.getType();
+					
+					//if parameter is by reference, need to check two cases
+					if(param.isRef())
+					{
+						if(!(pType.isEquivalent(paramType)))
+						{
+							return null;
+						}
+						else if(!p.isModLValue() && !pType.isArrayType())
+						{
+							return null;
+						}
+					}
+					else
+					{
+						if(!(pType.isEquivalent(paramType)))
+						{
+							return null;
+						}
+					}
+				}
+				return funcType;
+			}
+			
+		}
+		return null;
+	}
+	
+	public boolean setOverloadedParams(Vector<VarSTO> param)
+	{
+		boolean check = false;
+
+		for (int i = 0; i < m_overloadFuncList.size() - 1; i++)
+		{
+			FunctionPointerType funcPtr = m_overloadFuncList.get(i);
+			Vector<VarSTO> p = funcPtr.getParams();
+			check = false;
+
+			if (p.size() == param.size())
+			{
+				for (int j = 0; j < p.size(); j++)
+				{
+					VarSTO a = p.get(j);
+					VarSTO b = param.get(j);
+					Type aType = a.getType();
+					Type bType = b.getType();
+					//check pass only if param and p have different type
+					if (!(aType.isEquivalent(bType)))
+					{
+						check = true;
+					}
+				}
+			}
+			//size is not equal. is not duplicate
+			else
+			{
+				check = true;
+			}
+
+			//remove last overload funcptr
+			if(!check)
+			{
+				m_overloadFuncList
+						.removeElementAt(m_overloadFuncList.size() - 1);
+				return check;
+			}
+		}
+
+		StringBuilder id = new StringBuilder();
+		id.append("._" + getName());
+		for (int i = 0; i < param.size(); i++)
+		{
+			VarSTO var = param.elementAt(i);
+			id.append(var.getType().getName() + "_" + (i + 1));
+		}
+
+		//update new param list
+		(m_overloadFuncList.get(m_overloadFuncList.size() - 1))
+				.setParams(param);
+		(m_overloadFuncList.get(m_overloadFuncList.size() - 1))
+				.setFuncName(id.toString());
+		return check;
+	}
 
 //----------------------------------------------------------------
 //	Instance variables.

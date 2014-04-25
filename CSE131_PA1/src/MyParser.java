@@ -438,6 +438,7 @@ class MyParser extends parser
 				m_nNumErrors++;
 				m_errors.print (Formatter.toString(ErrorMsg.redeclared_id, id));
 			}
+			//overloaded
 			else
 			{
 				FunctionPointerType type = new FunctionPointerType (id, 4);
@@ -451,12 +452,14 @@ class MyParser extends parser
 			}
 		}
 	
-		m_funcName = id;
+		
 		FuncSTO sto = new FuncSTO (id);
 		
-		if(ref) sto.setRef(ref); 
+		if(ref) 
+			sto.setRef(ref); 
 		sto.setReturnType(returnType);
 		
+		m_funcName = id;
 		m_symtab.insert (sto);	//insert into current scope
 		m_symtab.openScope ();	//open new scope
 		m_symtab.setFunc (sto);	//current function we're in is set
@@ -492,14 +495,38 @@ class MyParser extends parser
 			m_nNumErrors++;
 			m_errors.print ("internal: DoFormalParams says no proc!");
 		}
-		m_symtab.getFunc().setParams(params);
+		FuncSTO sto = m_symtab.getFunc ();
+		sto.setParams(params);
+		
 		// insert parameters here
 		if(params != null)
 		{
+			//check if function is overloaded
+			if(!(m_symtab.getFunc().isOverloaded()))
+			{
+                m_symtab.getFunc().setParams(params);
+			}
+			//need to reset its params
+            else
+            {             
+            	//call funcSTO.setOverloadedParams to handle overload func
+                boolean check = sto.setOverloadedParams (params);
+                if(!check) 
+                {
+                    m_nNumErrors++;
+                    m_errors.print (Formatter.toString(ErrorMsg.error22_Decl,
+                    m_symtab.getFunc().getName()));
+                }
+            }
 			//FuncSTO sto = m_symtab.getFunc ();
 			for(int i = 0; i < params.size(); i++)
 			{
 				VarSTO var = params.get(i);
+				
+				if(var.getType().isArrayType())
+				{
+					var.setRef();
+                }
 				m_symtab.insert(var);
 				
 			}
@@ -508,106 +535,126 @@ class MyParser extends parser
 	}
 	
 	// ----------------------------------------------------------------
-	//
+	//	handle function call. check 6. also did with overload function call
 	// ----------------------------------------------------------------
 	STO DoFuncCall(STO sto, Vector args) 
 	{
 		if(sto instanceof ErrorSTO) return sto;
 		
-		STO stoDes;
         Type returnType;
         Vector<VarSTO> params;
         boolean error = false;
         boolean byRef = false;
 		
-		if (!sto.isFunc() && !sto.getType().isFunctionPointerType() ) 
-		{
+		if (!sto.isFunc() && !sto.getType().isFunctionPointerType()) {
 			m_nNumErrors++;
 			m_errors.print(Formatter.toString(ErrorMsg.not_function,
 					sto.getName()));
 			return (new ErrorSTO(sto.getName()));
 		}
-		
-		//if(sto.isFunc() || sto.isVar())
-		//{
-			if(sto.isVar())
-			{
+
+		if ((sto.isFunc() && !(((FuncSTO)sto).isOverloaded()) ) || sto.isVar()) {
+			if (sto.isVar()) {
 				params = ((FunctionPointerType) sto.getType()).getParams();
 				returnType = ((FunctionPointerType) sto.getType())
 						.getReturnType();
 				byRef = ((FunctionPointerType) sto.getType()).getByRef();
-			}
-			else
-			{
+			} else {
 				params = ((FuncSTO) m_symtab.access(sto.getName())).getParams();
 				returnType = ((FuncSTO) m_symtab.access(sto.getName()))
 						.getReturnType();
-				byRef = ((FuncSTO)m_symtab.access(sto.getName())).getRef();
+				byRef = ((FuncSTO) m_symtab.access(sto.getName())).getRef();
 			}
-		
-		//do check5 no.1
-		if (params.size() != args.size()) 
-		{
-            m_nNumErrors++;
-            m_errors.print (Formatter.toString(ErrorMsg.error5n_Call,
-                                                  args.size(), params.size()));
-            return (new ErrorSTO (sto.getName()));
-        }
-		
-		for(int i = 0; i < params.size(); i++)
-		{
-			STO arg = (STO) args.get(i);
-            if (arg.isError()) return arg;
-            VarSTO parameter = params.get(i);
-            Type aType = arg.getType();
-            Type bType = parameter.getType();
-            
-            /* Do check5 no.2
-             * A parameter is declared as pass-by-value (default) and the 
-             * corresponding argument's
-             * type is not assignable to the parameter type
-             */
-            if ( !(parameter.isRef()) && !(aType.isAssignable(bType)) ) 
-            {
-                m_nNumErrors++;
-                m_errors.print (Formatter.toString(ErrorMsg.error5a_Call,
-                		aType.getName(), parameter.getName(), bType.getName()));
-                error = true;
-            }
-            /* Do check5 no.3, no.4
-             * no.3: A parameter is declared as pass-by-reference (using the &)
-             * 		 and the corresponding argument's type is not equivalent to
-             * 		 the parameter type;
-             * no.4: A parameter is declared as pass-by-reference and the 
-             * 		 corresponding argument is not a modifiable L-value.
-             */
-            else if (parameter.isRef()) 
-            {
-            	// no.3
-                if ( !(aType.isEquivalent(bType)) ) {
-                    m_nNumErrors++;
-                    m_errors.print (Formatter.toString(ErrorMsg.error5r_Call,
-                           aType.getName(), parameter.getName(), bType.getName()));
-                    error = true;
-                } 
-                // no.4
-                else if ( !arg.isModLValue() && !aType.isArrayType() ) {
-                    m_nNumErrors++;
-                    m_errors.print (Formatter.toString(ErrorMsg.error5c_Call,
-                               parameter.getName(), aType.getName()));
-                    error = true;
-                }
-            }            
+
+			// do check5 no.1
+			if (params.size() != args.size()) {
+				m_nNumErrors++;
+				m_errors.print(Formatter.toString(ErrorMsg.error5n_Call,
+						args.size(), params.size()));
+				return (new ErrorSTO(sto.getName()));
+			}
+
+			for (int i = 0; i < params.size(); i++) {
+				STO arg = (STO) args.get(i);
+				if (arg instanceof ErrorSTO)
+					return arg;
+				VarSTO parameter = params.get(i);
+				Type aType = arg.getType();
+				Type bType = parameter.getType();
+
+				/*
+				 * Do check5 no.2 A parameter is declared as pass-by-value
+				 * (default) and the corresponding argument's type is not
+				 * assignable to the parameter type
+				 */
+				if (!(parameter.isRef()) && !(aType.isAssignable(bType))) {
+					m_nNumErrors++;
+					m_errors.print(Formatter.toString(ErrorMsg.error5a_Call,
+							aType.getName(), parameter.getName(),
+							bType.getName()));
+					error = true;
+				}
+				/*
+				 * Do check5 no.3, no.4 no.3: A parameter is declared as
+				 * pass-by-reference (using the &) and the corresponding
+				 * argument's type is not equivalent to the parameter type;
+				 * no.4: A parameter is declared as pass-by-reference and the
+				 * corresponding argument is not a modifiable L-value.
+				 */
+				else if (parameter.isRef()) {
+					// no.3
+					if (!(aType.isEquivalent(bType))) {
+						m_nNumErrors++;
+						m_errors.print(Formatter.toString(
+								ErrorMsg.error5r_Call, aType.getName(),
+								parameter.getName(), bType.getName()));
+						error = true;
+					}
+					// no.4
+					else if (!arg.isModLValue() && !aType.isArrayType()) {
+						m_nNumErrors++;
+						m_errors.print(Formatter.toString(
+								ErrorMsg.error5c_Call, parameter.getName(),
+								aType.getName()));
+						error = true;
+					}
+				}
+			}
+			if (error)
+				return new ErrorSTO(sto.getName());
+
+			STO ret;
+			if (byRef) {
+				ret = new VarSTO("result", returnType);
+				((VarSTO) ret).setRef();
+			} else
+				ret = new ExprSTO("result", returnType);
+			return ret;
 		}
-		if (error) return new ErrorSTO (sto.getName());
-		
-		STO ret;
-		if (byRef) { 
-            ret = new VarSTO ("result", returnType);
-            ((VarSTO) ret).setRef();
-        } else ret = new ExprSTO ("result", returnType);
-		return ret;
-		//}
+		// function is overloaded
+		else 
+		{
+			// check illegal overloaded function call
+			FunctionPointerType check = ((FuncSTO) sto).checkOverload(args);
+			if (check == null)
+			{
+				m_nNumErrors++;
+				m_errors.print (Formatter.toString(ErrorMsg.error22_Illegal,
+						sto.getName()));
+				return (new ErrorSTO (sto.getName()));
+            }
+			returnType = check.getReturnType(); 
+			byRef = check.getByRef();
+			STO ret;
+            if (byRef)
+            { 
+                ret = new VarSTO ("result", returnType);
+                ((VarSTO) ret).setRef();
+            }
+            else 
+            	ret = new ExprSTO ("result", returnType);
+            return ret;
+		}
 	}
 	
 	/*
@@ -710,8 +757,8 @@ class MyParser extends parser
 		// not known at compile time
 		if((m_static || m_symtab.getLevel() == 1) )
 		{
-			if( ( !(sto.isConst()) && !(sto.isFunc()) &&
-					!(sto.getType().isArrayType()) ) )
+			if( ( !(sto.isConst()) /* &&
+					!(sto.getType().isArrayType())*/ ) )
 			{
 				m_nNumErrors++;
 				m_errors.print(Formatter.toString(ErrorMsg.error8a_CompileTime, 

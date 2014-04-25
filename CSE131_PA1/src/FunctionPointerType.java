@@ -52,9 +52,9 @@ class FunctionPointerType extends PointerGroupType{
 			}
 		}
 		if( !getByRef() )
-			return "FunctionPointer : " + m_returnType.getName() + " (" + paramNames + ")";
+			return "funcptr : " + m_returnType.getName() + " (" + paramNames + ")";
 		else
-			return "FunctionPointer : " + m_returnType.getName() + " & (" + paramNames + ")";
+			return "funcptr : " + m_returnType.getName() + " & (" + paramNames + ")";
 		}
 
 	//Need more
@@ -140,17 +140,17 @@ class FunctionPointerType extends PointerGroupType{
 		return false;
 	}
     
+	//compare paramList. used in isEquivalent(), isAssignable()
     public boolean compareParam(Type t)
     {
     	Vector<VarSTO> paramList = ((FunctionPointerType) t).getParams();
     	
     	if(m_params.size() != paramList.size()) return false;
     	
-    	VarSTO x, y;
     	for(int i = 0; i < paramList.size(); i++)
     	{
-    		x = m_params.get(i);
-    		y = paramList.get(i);
+    		VarSTO x = m_params.get(i);
+    		VarSTO y = paramList.get(i);
 			if(!(x.getType().isEquivalent(y.getType()))
 					|| x.isRef() != y.isRef())
 			{
