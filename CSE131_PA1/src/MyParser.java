@@ -625,13 +625,15 @@ class MyParser extends parser
 			//Do nothing
 			return;
 		}
-		else if(returnExpr.getType() == null) {return;}
 		//if function return type is void and return expression is not null
 		else if(ret instanceof VoidType && returnExpr != null)
 		{
-			m_nNumErrors++;
-            m_errors.print(Formatter.toString(ErrorMsg.error6a_Return_type,
-             (returnExpr.getType()).getName(), ret.getName()));
+			if(returnExpr.getType() != null)
+			{
+				m_nNumErrors++;
+            	m_errors.print(Formatter.toString(ErrorMsg.error6a_Return_type,
+            			(returnExpr.getType()).getName(), ret.getName()));
+			}
             return;
 		}
 		// check 6a
