@@ -619,11 +619,13 @@ class MyParser extends parser
 		Type ret = func.getReturnType();
 		m_symtab.getCurrScope().markReturned();
 		
-		if(returnExpr instanceof ErrorSTO) return;
+		if(returnExpr instanceof ErrorSTO) {return;}
 		else if(ret instanceof VoidType && returnExpr == null)
 		{
 			//Do nothing
+			return;
 		}
+		else if(returnExpr.getType() == null) {return;}
 		//if function return type is void and return expression is not null
 		else if(ret instanceof VoidType && returnExpr != null)
 		{
