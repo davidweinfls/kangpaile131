@@ -21,8 +21,12 @@ function : void main() {
 	int w = ptr->x;
 	int z = *ptr2;
 	
+	MYSTRUCT s, t;
+	t = *ptr;	
 
 }
+
+
 
 function : void pbyReference(MYSTRUCT * mp) { //err
 	int y = mp->x;	

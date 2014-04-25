@@ -883,6 +883,13 @@ class MyParser extends parser
     		return new ErrorSTO ("Not a Pointer type");
     	}
     	//TODO: what if sto is a struct type?? 
+    	else if(((PointerType) sto.getType()).getBaseType().isStructType())
+    	{
+    		STO s = m_symtab.access (((PointerType) sto.getType()).
+    				getBaseType().getName());
+    		Type type = s.getType();
+    		retSTO = new VarSTO (sto.getName(), type);
+        }
     	//else return baseType of sto
     	else
     	{

@@ -28,7 +28,7 @@ SOURCES = \
 	parser.java \
 	PointerGroupType.java \
 	RC.java \
-	RCdbg.java
+	RCdbg.java \
 	Scope.java \
 	STO.java \
 	StructType.java \
