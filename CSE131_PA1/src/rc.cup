@@ -243,6 +243,7 @@ ConstDecl ::=  OptStatic T_CONST UndecoratedType:_2 IdListWInit:_3 T_SEMI
                :}
     |          OptStatic T_CONST T_AUTO T_ID:_4 T_ASSIGN Expr:_5 T_SEMI
     			{:
+    				STO s = ((MyParser) parser).DoInitCheck (_4, _5);	//TODO: make sure this is needed
     				STO sto = ((MyParser) parser).DoConstInit (_4, _5);
     				Vector<STO> v = new Vector();
     				v.addElement(sto);
@@ -604,6 +605,7 @@ IdListWOptInit ::=  OptModifiers:_3 T_ID:_1 OptInit:_2
 
 IdListWInit ::=     OptModifiers T_ID:_1 T_ASSIGN ConstExpr:_2
                     {:
+                    	STO s = ((MyParser) parser).DoInitCheck(_1, (STO)_2); //TODO: make sure this is needed
                     	STO sto = ((MyParser) parser).DoConstInit(_1, (STO)_2);
 						RESULT = new Vector ();
 						RESULT.addElement (sto);
@@ -611,6 +613,7 @@ IdListWInit ::=     OptModifiers T_ID:_1 T_ASSIGN ConstExpr:_2
   //|       Do not need an extra rule since we are not doing constant arrays
     |               IdListWInit:_1 T_COMMA OptModifiers T_ID:_3 T_ASSIGN ConstExpr:_2
                     {:
+                    	STO s = ((MyParser) parser).DoInitCheck(_3, (STO)_2); //TODO: make sure this is needed
                     	STO sto = ((MyParser) parser).DoConstInit(_3, (STO)_2);
 						RESULT = _1;
 						RESULT.addElement (sto);

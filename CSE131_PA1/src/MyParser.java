@@ -444,7 +444,7 @@ class MyParser extends parser
                 type.setReturnType (returnType);
                 type.setByRef(ref);
                 ((FuncSTO) sto).setReturnType (returnType);
-                ((FuncSTO) sto).setFuncType (type);
+                ((FuncSTO) sto).addOverloadFunction(type);
                 m_symtab.openScope ();	//open new scope
                 m_symtab.setFunc ((FuncSTO)sto);	//current function we're in is set
                 return;

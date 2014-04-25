@@ -16,7 +16,7 @@ class FuncSTO extends STO
 		setReturnType (null);
         m_byRef = false;
         m_params = new Vector<VarSTO>();
-        m_funcType = new Vector<FunctionPointerType> ();
+        m_overloadFuncList = new Vector<FunctionPointerType> ();
         ((FunctionPointerType) getType()).setFuncName(strName);
                 // You may want to change the isModifiable and isAddressable                      
                 // fields as necessary
@@ -74,18 +74,18 @@ class FuncSTO extends STO
 		((FunctionPointerType) getType()).setParams (param);
 	}
 	
-	public void setFuncType(FunctionPointerType functionType)
+	public void addOverloadFunction(FunctionPointerType functionType)
 	{
-		if (m_funcType.size() == 0) 
+		if (m_overloadFuncList.size() == 0) 
 		{
-            m_funcType.addElement ((FunctionPointerType) getType());
+			m_overloadFuncList.addElement ((FunctionPointerType) getType());
         }
-        m_funcType.addElement (functionType);
+		m_overloadFuncList.addElement (functionType);
 	}
 	
-	public Vector<FunctionPointerType> getFuncType()
+	public Vector<FunctionPointerType> getOverloadFunctionList()
 	{
-		return m_funcType;
+		return m_overloadFuncList;
 	}
 
 //----------------------------------------------------------------
@@ -94,5 +94,5 @@ class FuncSTO extends STO
 	private Type 		m_returnType;
 	private boolean	m_byRef;
 	private Vector<VarSTO> m_params;
-	private Vector<FunctionPointerType> m_funcType;
+	private Vector<FunctionPointerType> m_overloadFuncList;
 }

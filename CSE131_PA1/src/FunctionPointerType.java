@@ -25,30 +25,37 @@ class FunctionPointerType extends PointerGroupType{
 	{
 		if(isAlias()) return m_alias;
 		String paramNames = "";
-		if (m_params.size() > 0) {
-            if (!m_params.elementAt (0).isRef()) {
-                paramNames = m_params.elementAt (0).getType().getName() +
-                " " + m_params.elementAt (0).getName();
-             }
-             else {
-                paramNames = m_params.elementAt (0).getType().getName() +
-                " &" + m_params.elementAt (0).getName();
-             }
-            for (int i = 1; i < m_params.size(); i++) {
-                if (!m_params.elementAt (i).isRef()) {
-                    paramNames = paramNames + ", " + m_params.elementAt (i).getType().getName() +
-                    " " + m_params.elementAt (i).getName();
-                } else {
-                    paramNames = paramNames + ", " + m_params.elementAt (i).getType().getName() +
-                    " &" + m_params.elementAt (i).getName();
-                }
-            }
-        }
-		if (!getByRef())
-            return "FunctionPointer : " + m_returnType.getName() + " (" + paramNames + ")";
-        else
-            return "FunctionPointer : " + m_returnType.getName() + " & (" + paramNames + ")";
-	}
+		if (m_params.size() > 0)
+		{
+			if (!m_params.get(0).isRef())
+			{
+				paramNames = m_params.get(0).getType().getName() +
+						" " + m_params.get(0).getName();
+			}
+			else
+			{
+				paramNames = m_params.get(0).getType().getName() +
+						" &" + m_params.get(0).getName();
+			}
+			for (int i = 1; i < m_params.size(); i++)
+			{
+				if (!m_params.get(i).isRef())
+				{
+					paramNames = paramNames + ", " + m_params.get(i).getType().getName() +
+							" " + m_params.get(i).getName();
+				}
+				else
+				{
+					paramNames = paramNames + ", " + m_params.get(i).getType().getName() +
+							" &" + m_params.get(i).getName();
+				}
+			}
+		}
+		if( !getByRef() )
+			return "FunctionPointer : " + m_returnType.getName() + " (" + paramNames + ")";
+		else
+			return "FunctionPointer : " + m_returnType.getName() + " & (" + paramNames + ")";
+		}
 
 	//Need more
 	public boolean isFunctionPointerType()
