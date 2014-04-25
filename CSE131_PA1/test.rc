@@ -1,15 +1,3 @@
 
 
-
-
-function : void foo(bool[4] &p1, bool* p2) { 
-
-}
-
-
-function : void main() { 
-
-	bool[4] z; 
-
- 	foo(z, z); 
-} 
+int x = sizeof(sizeof(int));

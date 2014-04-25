@@ -1075,6 +1075,7 @@ class MyParser extends parser
     	{
     		sto =  new ConstSTO("result", new IntType("int", 4),
     	             (double)((Type) obj).getSize());
+    		sto.setIsAddressable(false);
     	}
     	//b.
     	else if( ((STO)obj).getIsAddressable() )
@@ -1082,6 +1083,7 @@ class MyParser extends parser
     		Type t = ((STO) obj).getType();
     		sto =  new ConstSTO("result", new IntType("int", 4),
     	             (double)t.getSize());
+    		sto.setIsAddressable(false);
     	}
     	else
     	{
