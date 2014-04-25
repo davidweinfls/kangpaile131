@@ -624,6 +624,14 @@ class MyParser extends parser
 		{
 			//Do nothing
 		}
+		//if function return type is void and return expression is not null
+		else if(ret instanceof VoidType && returnExpr != null)
+		{
+			m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.error6a_Return_type,
+             (returnExpr.getType()).getName(), ret.getName()));
+            return;
+		}
 		// check 6a
 		// Detect an illegal return statement where no Expr is specified
 		// and the return type is not void
