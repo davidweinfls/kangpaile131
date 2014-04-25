@@ -496,7 +496,6 @@ class MyParser extends parser
 			m_errors.print ("internal: DoFormalParams says no proc!");
 		}
 		FuncSTO sto = m_symtab.getFunc ();
-		sto.setParams(params);
 		
 		// insert parameters here
 		if(params != null)

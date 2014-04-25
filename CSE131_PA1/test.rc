@@ -1,8 +1,15 @@
-function : void main()
-{
-int x;
 
-int* r = &x;
 
+
+
+function : void foo(bool[4] &p1, bool* p2) { 
 
 }
+
+
+function : void main() { 
+
+	bool[4] z; 
+
+ 	foo(z, z); 
+} 
