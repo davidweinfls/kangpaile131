@@ -243,12 +243,10 @@ ConstDecl ::=  OptStatic T_CONST UndecoratedType:_2 IdListWInit:_3 T_SEMI
                :}
     |          OptStatic T_CONST T_AUTO T_ID:_4 T_ASSIGN Expr:_5 T_SEMI
     			{:
-    				((MyParser) parser).DoConstInit (_4, _5);
-    				Vector<VariableBox<STO,STO>> v = new Vector();
-                    VariableBox<STO, STO> box = new VariableBox<STO, STO>
-                    (new VarSTO(_4, null), _5);
-                    v.addElement(box);
-                    ((MyParser) parser).DoVarDecl(v, _5.getType());
+    				STO sto = ((MyParser) parser).DoConstInit (_4, _5);
+    				Vector<STO> v = new Vector();
+    				v.addElement(sto);
+                    ((MyParser) parser).DoConstDecl(v, _5.getType());
     			:}
     ;
 
