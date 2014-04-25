@@ -10,6 +10,7 @@ class PointerType extends PointerGroupType{
 	public PointerType(String name, int size, Type baseType)
 	{
 		super(name, size);
+		num_of_stars = 1;
 		setBaseType(baseType);
 		if(baseType.isPointerType())
 			num_of_stars = ((PointerType)baseType).getNumOfStars()+1;
