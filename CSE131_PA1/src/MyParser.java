@@ -198,7 +198,6 @@ class MyParser extends parser
 			if (m_symtab.accessLocal (id) != null)
 			{
 				m_nNumErrors++;
-				System.out.println("in DoVarDecl");
 				m_errors.print(Formatter.toString(ErrorMsg.redeclared_id,id));
 			}			
 			else if(exprType == null && varType == null)
@@ -1337,7 +1336,6 @@ class MyParser extends parser
 		{
 			
 			m_nNumErrors++;
-			System.out.println("In DoDesignator3_ID. ");
 		 	m_errors.print (Formatter.toString(ErrorMsg.undeclared_id, strID));	
 			sto = new ErrorSTO (strID);
 		}			
@@ -1381,7 +1379,6 @@ class MyParser extends parser
 		if ((sto = m_symtab.access (strID)) == null && !strID.equals(m_structName))
 		{
 			m_nNumErrors++;
-			System.out.println("in doqualIdent");
 		 	m_errors.print (Formatter.toString(ErrorMsg.undeclared_id, strID));	
 			return (new ErrorSTO (strID));
 		}
