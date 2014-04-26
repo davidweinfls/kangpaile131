@@ -522,7 +522,9 @@ class MyParser extends parser
 			{
 				VarSTO var = params.get(i);
 				
-				if(var.getType().isArrayType())
+				if(var.getType() == null) return;
+				
+				else if(var.getType().isArrayType())
 				{
 					var.setRef();
                 }
