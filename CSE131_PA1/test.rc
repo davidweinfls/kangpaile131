@@ -1,4 +1,18 @@
-int i = 10;
-function : int foo(int[i] arr){
-	return arr;
+function: float foo(float &x) {
+return 0;
+}
+
+
+//no error
+function: float foo(float x, float y, float z) {
+return 0;
+}
+
+function: int main() {
+
+//================================================BBUUG=====================
+
+foo(1.0);//no error
+
+return 0;
 }

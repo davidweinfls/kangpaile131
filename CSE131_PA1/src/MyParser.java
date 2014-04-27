@@ -444,8 +444,14 @@ class MyParser extends parser
 				FunctionPointerType type = new FunctionPointerType (id, 4);
                 type.setReturnType (returnType);
                 type.setByRef(ref);
+                
+                //TODO: make sure to handle overload func's return type 
+                //set sto's return type, both don't change its funcptr's return type
                 ((FuncSTO) sto).setReturnType (returnType);
+                
+                //add this new funcptr type to overload func list
                 ((FuncSTO) sto).addOverloadFunction(type);
+                
                 m_symtab.openScope ();	//open new scope
                 m_symtab.setFunc ((FuncSTO)sto);	//current function we're in is set
                 return;
@@ -455,9 +461,11 @@ class MyParser extends parser
 		
 		FuncSTO sto = new FuncSTO (id);
 		
-		if(ref) 
-			sto.setRef(ref); 
+		if(ref) sto.setRef(ref); 
+		
+		//set returntype for both FuncSTO and FunctionPointerType
 		sto.setReturnType(returnType);
+		((FunctionPointerType)sto.getType()).setReturnType (returnType);
 		
 		m_funcName = id;
 		m_symtab.insert (sto);	//insert into current scope

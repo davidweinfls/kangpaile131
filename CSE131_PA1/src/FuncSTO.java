@@ -43,7 +43,7 @@ class FuncSTO extends STO
 	setReturnType (Type typ)
 	{
 		m_returnType = typ;
-		((FunctionPointerType)getType()).setReturnType(typ);
+		//((FunctionPointerType)getType()).setReturnType(typ);
 	}
 
 	public Type
@@ -76,6 +76,7 @@ class FuncSTO extends STO
 	
 	public void addOverloadFunction(FunctionPointerType functionType)
 	{
+		//add funcSTO orignal funcPtr into its overload function list
 		if (m_overloadFuncList.size() == 0) 
 		{
 			m_overloadFuncList.addElement ((FunctionPointerType) getType());
@@ -96,13 +97,15 @@ class FuncSTO extends STO
 			return false;
 	}
 	
+	//triggered by dofunccall. try to find the correct funcptr in 
+	//m_overloadFuncList. 
 	public FunctionPointerType checkOverload(Vector v)
 	{
 		for(int i = 0; i < m_overloadFuncList.size(); i++)
 		{
 			//get overloaded functinonpointer
-			FunctionPointerType funcType = m_overloadFuncList.get(i);
-			Vector<VarSTO> paramList =  funcType.getParams();
+			FunctionPointerType funcPtr = m_overloadFuncList.get(i);
+			Vector<VarSTO> paramList =  funcPtr.getParams();
 			
 			if(v.size() == paramList.size())
 			{
@@ -133,7 +136,8 @@ class FuncSTO extends STO
 						}
 					}
 				}
-				return funcType;
+				//found funcptr
+				return funcPtr;
 			}
 			
 		}
@@ -144,7 +148,8 @@ class FuncSTO extends STO
 	{
 		boolean check = false;
 
-		for (int i = 0; i < m_overloadFuncList.size() - 1; i++)
+		//only need to compare from 0 ~ list.size()-1, cuz last one is itself
+		for (int i = 0; i < m_overloadFuncList.size()-1; i++)
 		{
 			FunctionPointerType funcPtr = m_overloadFuncList.get(i);
 			Vector<VarSTO> p = funcPtr.getParams();
@@ -168,10 +173,11 @@ class FuncSTO extends STO
 			//size is not equal. is not duplicate
 			else
 			{
+				//its a overloaded func
 				check = true;
 			}
 
-			//remove last overload funcptr
+			//remove last overload funcptr since its a duplicate func
 			if(!check)
 			{
 				m_overloadFuncList
@@ -179,8 +185,12 @@ class FuncSTO extends STO
 				return check;
 			}
 		}
+		
+		//update new param list for this new overload function
+		m_overloadFuncList.get(m_overloadFuncList.size() - 1)
+			.setParams(param);
 
-		StringBuilder id = new StringBuilder();
+		/*StringBuilder id = new StringBuilder();
 		id.append("._" + getName());
 		for (int i = 0; i < param.size(); i++)
 		{
@@ -188,11 +198,9 @@ class FuncSTO extends STO
 			id.append(var.getType().getName() + "_" + (i + 1));
 		}
 
-		//update new param list
+		
 		(m_overloadFuncList.get(m_overloadFuncList.size() - 1))
-				.setParams(param);
-		(m_overloadFuncList.get(m_overloadFuncList.size() - 1))
-				.setFuncName(id.toString());
+				.setFuncName(id.toString());*/
 		return check;
 	}
 
