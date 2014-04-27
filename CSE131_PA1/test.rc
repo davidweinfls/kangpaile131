@@ -1,18 +1,8 @@
-function: float foo(float &x) {
-return 0;
+function : float foo(float &x) {
+  return 1;
 }
-
-
-//no error
-function: float foo(float x, float y, float z) {
-return 0;
-}
-
-function: int main() {
-
-//================================================BBUUG=====================
-
-foo(1.0);//no error
-
-return 0;
+function : float foo (float y) {      // illegal overload, function not added to the symbol table, no new scope
+  int x;
+  float y = x;   // Error, thinks this is global scope because no function scope
+  return 1;
 }

@@ -523,6 +523,8 @@ class MyParser extends parser
                     m_nNumErrors++;
                     m_errors.print (Formatter.toString(ErrorMsg.error22_Decl,
                     m_symtab.getFunc().getName()));
+                    return;	//if illegal overload function declaration, return
+                    		//dont insert param to symtab
                 }
             }
 			//FuncSTO sto = m_symtab.getFunc ();
