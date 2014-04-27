@@ -768,8 +768,8 @@ class MyParser extends parser
 		// not known at compile time
 		if((m_static || m_symtab.getLevel() == 1) )
 		{
-			if( ( !(sto.isConst()) /* &&
-					!(sto.getType().isArrayType())*/ ) )
+			if( ( !(sto.isConst())  && !(sto.isFunc())
+					/* !(sto.getType().isArrayType())*/ ) )
 			{
 				m_nNumErrors++;
 				m_errors.print(Formatter.toString(ErrorMsg.error8a_CompileTime, 
