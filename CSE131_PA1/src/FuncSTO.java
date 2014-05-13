@@ -190,17 +190,6 @@ class FuncSTO extends STO
 		m_overloadFuncList.get(m_overloadFuncList.size() - 1)
 			.setParams(param);
 
-		/*StringBuilder id = new StringBuilder();
-		id.append("._" + getName());
-		for (int i = 0; i < param.size(); i++)
-		{
-			VarSTO var = param.elementAt(i);
-			id.append(var.getType().getName() + "_" + (i + 1));
-		}
-
-		
-		(m_overloadFuncList.get(m_overloadFuncList.size() - 1))
-				.setFuncName(id.toString());*/
 		return check;
 	}
 

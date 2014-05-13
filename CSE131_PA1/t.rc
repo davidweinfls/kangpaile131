@@ -1,7 +1,15 @@
-function: int foo(int x)
-{
-  if ( x > 0 )
-  {
-    return x;
-  }
+int a = 0123;
+//boolean b = true && false;
+const int c = 0X420;
+const float d = c ^ c;
+float * e = nullptr;
+function : float & foo() {
+	//return e[-9000];
+	//auto f = &(++a);
+	return a;
+	a = sizeof(e[c]);
+	return *&foo();
+	return *e;
+	int[3] g = {0,1,2,3};
+
 }
