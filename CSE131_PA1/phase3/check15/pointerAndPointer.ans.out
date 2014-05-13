@@ -1,0 +1,15 @@
+Error, "phase3/check15/pointerAndPointer.rc": 
+  Initialization value of type nullptr not assignable to constant/variable of type int.
+Error, "phase3/check15/pointerAndPointer.rc": 
+  Initialization value of type int* not assignable to constant/variable of type int.
+Error, "phase3/check15/pointerAndPointer.rc": 
+  Initialization value of type int** not assignable to constant/variable of type int*.
+Error, "phase3/check15/pointerAndPointer.rc": 
+  Initialization value of type int*** not assignable to constant/variable of type int**.
+Error, "phase3/check15/pointerAndPointer.rc": 
+  Initialization value of type int**** not assignable to constant/variable of type int***.
+Error, "phase3/check15/pointerAndPointer.rc": 
+  Initialization value of type int**** not assignable to constant/variable of type float****.
+Error, "phase3/check15/pointerAndPointer.rc": 
+  Initialization value of type int*** not assignable to constant/variable of type bool***.
+Compile: failure.

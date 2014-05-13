@@ -1,0 +1,9 @@
+Error, "phase3/check20/typecastConstantFolding.rc": 
+  Arithmetic exception occurred during constant folding.
+Error, "phase3/check20/typecastConstantFolding.rc": 
+  Arithmetic exception occurred during constant folding.
+Error, "phase3/check20/typecastConstantFolding.rc": 
+  Value of type bool not assignable to variable of type int.
+Error, "phase3/check20/typecastConstantFolding.rc": 
+  Arithmetic exception occurred during constant folding.
+Compile: failure.

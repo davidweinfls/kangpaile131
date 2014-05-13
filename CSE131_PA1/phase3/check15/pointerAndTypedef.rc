@@ -1,0 +1,21 @@
+typedef int * PTR;
+PTR * pt;
+typedef PTR * PTRR;
+PTRR * ptt;
+PTR i;
+int ii;
+
+function : void main ()
+{
+    i = *pt;   // ok
+        
+    int y = (*i);  // Okay, i is a PTR (which is int *)
+    
+    ii = **pt;     // okay, **pt is an int.
+
+    ii = *pt;    // Error, ii is int, *pt is still a pointer
+    
+    ii = *ptt;     // Error, ptt is PTRR type. testing if it prints PTRR correctly. 
+     
+    bool b = *pt;  //err
+}

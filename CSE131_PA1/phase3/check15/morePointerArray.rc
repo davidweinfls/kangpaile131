@@ -1,0 +1,46 @@
+/* More pointer and array */
+/*
+
+typedef int[10] INTAR; //array type
+typedef INTAR* PTAR; //array pointer
+typedef PTAR[10] PTARAR; //array array pointer
+PTARAR* ar;
+
+typedef int* PT; //array type
+typedef PT[10] PTARR; //array pointer
+typedef PTARR[10] PTARRARR; //array array pointer
+PTARRARR* arr; 
+
+
+function : void main (){
+    *ar = *arr;             //error. array name cant be mordified.
+}
+
+
+typedef int[10] A;
+typedef A[10] A2D;
+A2D * a;
+
+
+typedef float[10] B;
+typedef B[10] B2D;
+B2D * b;
+
+function : void foo(){
+    *a = *b;                // error array name cant be modified.
+}
+
+*/
+
+
+/* testing multiple pointers array */
+
+typedef int* C;
+typedef C[1] CC;
+CC* c;
+
+
+function : void fuu(){
+    CC*d = c;			//      int*[1]*   <-    int*[1]*
+} 
+

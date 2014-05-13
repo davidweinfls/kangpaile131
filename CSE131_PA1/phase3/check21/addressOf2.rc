@@ -1,0 +1,32 @@
+/* 3 ERRORS */
+
+int x, y;
+int *z;
+const int w = 77;
+function : void main()
+{
+	z = &x;        	// &x is simply an r-val
+	&x = nullptr;  	// error, not a modifiable l-val
+	y = *&x;		// *&x basically just x, so ok
+	*&x = y;		// the * reverses the &x, making it a modifiable l-val
+	*&w = y;		// the * reverses the &w, making it a modifiable l-val
+					// even though w was originally a constant
+	&*z = z;		// error, result of address-of is not a modifiable l-val
+}
+
+
+function : int foo() { return 0; }
+typedef funcptr : int() MYFP;
+MYFP myFuncPtr;
+
+function : void main2 ()
+{
+	myFuncPtr = foo;
+	myFuncPtr();              // this will be a call to foo
+	MYFP* myFuncPtrPtr;
+	myFuncPtrPtr = &foo;      // error, foo is a constant r-val
+	myFuncPtrPtr = &myFuncPtr; // totally fine
+	(*myFuncPtrPtr)();        // this will be a call to foo
+}
+
+

@@ -1,0 +1,11 @@
+Error, "phase3/check15/15b.rc": 
+  Value of type float not assignable to variable of type int.
+Error, "phase3/check15/15b.rc": 
+  Value of type int not assignable to variable of type bool.
+Error, "phase3/check15/15b.rc": 
+  Value of type bool not assignable to variable of type float.
+Error, "phase3/check15/15b.rc": 
+  Incompatible type int* to operator ->, pointer to struct expected.
+Error, "phase3/check15/15b.rc": 
+  Referenced field h not found in type MYSTRUCT.
+Compile: failure.

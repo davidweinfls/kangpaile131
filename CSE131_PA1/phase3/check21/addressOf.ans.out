@@ -1,0 +1,5 @@
+Error, "phase3/check21/addressOf.rc": 
+  Left-hand operand is not assignable (not a modifiable L-value).
+Error, "phase3/check21/addressOf.rc": 
+  Left-hand operand is not assignable (not a modifiable L-value).
+Compile: failure.

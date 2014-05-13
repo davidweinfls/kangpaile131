@@ -1,0 +1,16 @@
+typedef funcptr : int( int x, int y) MYPTRALIAS;
+typedef MYPTRALIAS MYPTR2ALIAS;
+
+MYPTRALIAS myPtr1;
+
+MYPTR2ALIAS myPtr4;
+
+
+function : void main() {
+
+	if(myPtr1 == myPtr4) 
+	{ 
+
+	}
+
+}

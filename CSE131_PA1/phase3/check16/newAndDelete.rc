@@ -1,0 +1,18 @@
+int x;
+int * y;
+
+int [5] arr;
+
+function : void main()
+{
+	/* Error */
+
+	new (x + 1);
+	delete (x++);
+
+	new x;
+	delete x;
+
+	new arr;
+	delete arr;
+}

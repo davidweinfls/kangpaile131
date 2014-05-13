@@ -1,0 +1,19 @@
+int *x ;
+
+function : void main ()
+{
+    decltype(x) y;
+    decltype (*x) n;
+
+    /* ok */
+
+    *y =10;
+	n = 10;
+    
+
+	/* err   */
+
+	
+    *y = true;     
+    n = 1.1;
+}

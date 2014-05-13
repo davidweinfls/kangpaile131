@@ -1,0 +1,28 @@
+int i;
+int * iptr;
+int ** iptr2;
+
+
+function : void main ()
+{
+	/* 6 ERRORS */
+	
+	iptr == i;
+	iptr != i;
+	i == iptr;
+	i != iptr;
+
+	iptr == iptr2;
+	iptr != iptr2;
+
+	/* OK */
+
+	iptr == nullptr;
+
+	iptr != nullptr;
+
+	/* Constant folding */
+
+	nullptr == nullptr;   	// true  or 1
+	nullptr != nullptr;	 	// false or 0
+}

@@ -1,0 +1,64 @@
+const bool x = true;
+int[10] y;
+int z;
+int a;
+
+int[1] k;
+
+function : int foo(){
+    return 1;
+}
+
+function : int main() {
+    
+
+    /* Errors */
+
+    const int ii = 9/((int)(!true));
+
+    const float f = 9 / ((int) 0.1);
+    
+    a = (bool) foo() ;
+    
+    const int i = 9/((int)(0.2 < 0.1));
+    
+    
+    
+    
+
+    /* OK */
+    z = y[ (int) x ]; // the index into the array will be 1 
+
+    bool b = (bool) 1.1;
+
+    int i =  (int)  5.5;
+
+    int i2 = (int) true;
+    int i3 = (int) false;
+    
+    
+    
+    
+    return 1;   
+    
+}
+
+
+structdef STR {
+    int m;
+    float n;
+    bool v;
+};
+
+STR Mystruct;
+
+function : int fuu(){
+    Mystruct.m = (int)Mystruct.n;       //Okay
+   
+    return (int)Mystruct.n;             // Okay
+    
+}
+
+
+
+

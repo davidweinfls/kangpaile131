@@ -1,0 +1,14 @@
+Error, "phase3/check18a/funcptr-bad.rc": 
+  Value of type funcptr : int (int x, int y) not assignable to variable of type funcptr : int (float x, int y).
+Error, "phase3/check18a/funcptr-bad.rc": 
+  Value of type funcptr : int (int x, int y) not assignable to variable of type funcptr : int (float x, int y).
+Error, "phase3/check18a/funcptr-bad.rc": 
+  Incompatible types to operator ==:
+    funcptr : int (float x, int y),
+    funcptr : int & (int &x, float* y);
+  both must be of equivalent pointer type.
+Error, "phase3/check18a/funcptr-bad.rc": 
+  Value of type funcptr : void (int* foo, int* bar) not assignable to variable of type funcptr : int & (int &x, float* y).
+Error, "phase3/check18a/funcptr-bad.rc": 
+  Value of type funcptr : int & (int &x, int y) not assignable to variable of type funcptr : int & (int &x, float* y).
+Compile: failure.

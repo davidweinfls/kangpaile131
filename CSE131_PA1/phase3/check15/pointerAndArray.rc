@@ -1,0 +1,39 @@
+typedef float[2] FARR;
+FARR farr;
+
+typedef FARR[3] FARR3;
+FARR3 fa2a3;
+
+FARR3* ptrFARR3;
+
+typedef int*** IPTR;
+IPTR[5]   arrPTR;	
+
+typedef IPTR[5] IPTR5;
+IPTR5 * iptr5PTR;
+
+function : void main ()
+{
+	
+	/* OK */
+
+	float *fp = farr; 			// (float and float)
+	
+	FARR *fa2p = fa2a3;			// (float[2]* <= float[3][2])
+
+	//FARR ** fp3 = ptrFARR3;   	// float[2]**	<=  float[3][2] *
+
+	iptr5PTR = iptr5PTR; 		//   int***[5]* <=  int***[5]*	
+
+
+
+	/* ERROR */
+    
+    float **err = farr; 		// (float and float*)
+
+	float **err = fa2a3;		// err: (float** <= float[3][2])	
+
+	iptr5PTR = *iptr5PTR;		//   int***[5]* <=  int***[5]
+	
+
+}

@@ -1,0 +1,5 @@
+Error, "phase3/check17/incAndDec.rc": 
+  Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
+Error, "phase3/check17/incAndDec.rc": 
+  Incompatible type bool to operator --, equivalent to int, float, or pointer expected.
+Compile: failure.

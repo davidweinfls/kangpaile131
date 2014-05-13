@@ -1,0 +1,7 @@
+Error, "phase3/check19/sizeofStruct.rc": 
+  Left-hand operand is not assignable (not a modifiable L-value).
+Error, "phase3/check19/sizeofStruct.rc": 
+  Referenced field ss not found in type STR.
+Error, "phase3/check19/sizeofStruct.rc": 
+  Invalid operand to sizeof. Not a type or not addressable.
+Compile: failure.

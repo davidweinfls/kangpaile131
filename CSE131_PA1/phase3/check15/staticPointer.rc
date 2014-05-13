@@ -1,0 +1,54 @@
+typedef float[2] FARR;
+FARR farr;
+
+typedef FARR[3] FARR3;
+static FARR3 fa2a3;
+
+static FARR3* ptrFARR3;
+
+typedef int*** IPTR;
+static IPTR[5]   arrPTR;	
+
+typedef IPTR[5] IPTR5;
+IPTR5 * iptr5PTR;
+
+function : void main ()
+{
+	
+	/* OK */
+
+	float *fp = farr; 			// (float and float)
+	
+	FARR *fa2p = fa2a3;			// (float[2]* <= float[3][2])
+
+	//FARR ** fp3 = ptrFARR3;   	// float[2]**	<=  float[3][2] *
+
+	iptr5PTR = iptr5PTR; 		//   int***[5]* <=  int***[5]*	
+
+
+
+
+
+	/* ERROR */
+    
+    float **err = farr; 		// (float and float*)
+
+	float **err = fa2a3;		// err: (float** <= float[3][2])	
+
+	iptr5PTR = *iptr5PTR;		//   int***[5]* <=  int***[5]
+
+
+
+
+
+//============================BUG===================================
+//Initialization value of global/static variable named arrPTR2 not known at compile time.
+	static IPTR5   arrPTR2 =  arrPTR;		
+
+	static FARR** fp4 = ptrFARR3;
+//我们：Initialization value of type FARR not assignable to constant/variable of type int*.
+//应该：Initialization value of global/static variable named intptr not known at compile time.
+	static int* intptr = farr;
+	
+
+}

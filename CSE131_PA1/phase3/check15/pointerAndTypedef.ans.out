@@ -1,0 +1,7 @@
+Error, "phase3/check15/pointerAndTypedef.rc": 
+  Value of type PTR not assignable to variable of type int.
+Error, "phase3/check15/pointerAndTypedef.rc": 
+  Value of type PTRR not assignable to variable of type int.
+Error, "phase3/check15/pointerAndTypedef.rc": 
+  Initialization value of type PTR not assignable to constant/variable of type bool.
+Compile: failure.

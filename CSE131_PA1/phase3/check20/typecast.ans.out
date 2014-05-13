@@ -1,0 +1,5 @@
+Error, "phase3/check20/typecast.rc": 
+  Invalid type cast. Type int[1] to type int is not supported.
+Error, "phase3/check20/typecast.rc": 
+  Invalid type cast. Type THREEINTFUNC to type int is not supported.
+Compile: failure.

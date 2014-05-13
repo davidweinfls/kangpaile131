@@ -1,0 +1,7 @@
+Error, "phase3/check15/pointerAndArray.rc": 
+  Initialization value of type FARR not assignable to constant/variable of type float**.
+Error, "phase3/check15/pointerAndArray.rc": 
+  Initialization value of type FARR3 not assignable to constant/variable of type float**.
+Error, "phase3/check15/pointerAndArray.rc": 
+  Value of type IPTR5 not assignable to variable of type IPTR5*.
+Compile: failure.

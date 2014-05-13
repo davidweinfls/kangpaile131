@@ -1,0 +1,43 @@
+structdef MYSTRUCT{
+	int x;
+};
+
+MYSTRUCT s1;
+
+typedef MYSTRUCT MYSTRUCT2;
+
+MYSTRUCT2 s2;
+
+function : MYSTRUCT foo (){	
+	return 1;	 // err :  should print out MYSTRUCT
+}
+
+function : MYSTRUCT main (){
+	
+	return s1;				// ok
+}
+
+
+
+function : MYSTRUCT main2 (){
+	
+	return s2;				// ok
+}
+
+
+structdef DIFFERENTSTRUCT{
+	int x;
+};
+
+DIFFERENTSTRUCT d1;
+
+function : MYSTRUCT main3 (){
+	
+	return d1;				// error
+}
+
+
+function : DIFFERENTSTRUCT main4 (){
+	
+	return s2;				// error
+}

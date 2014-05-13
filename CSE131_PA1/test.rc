@@ -1,8 +1,4 @@
-function : float foo(float &x) {
-  return 1;
-}
-function : float foo (float y) {      // illegal overload, function not added to the symbol table, no new scope
-  int x;
-  float y = x;   // Error, thinks this is global scope because no function scope
-  return 1;
+function : void main(){
+	bool c,d;
+	(c = d) = true;
 }

@@ -1,0 +1,39 @@
+/* size struct and its item */
+
+float u;
+const auto uu = 1;
+int i;
+
+structdef STR {
+    int x;
+    float y;
+    bool z;
+    int* s;
+};
+
+typedef STR[10] SARR; 
+
+STR Mystruct;
+
+SARR MyArrStruct;
+
+function : void foo(){
+    
+    const auto a = sizeof(Mystruct.x);  //Okay 
+    u = sizeof(SARR);                   // okay size of array of struct
+    u = sizeof(STR);
+    u = sizeof(SARR[1]);
+    u = sizeof(u);
+    i = sizeof(i);
+    const auto o = sizeof(uu);
+    i = sizeof(o); 
+    uu = sizeof(u);                     // Error, uu is constant
+    int ii = sizeof(MyArrStruct[0].ss); // Error, ss is not in type STR struct
+    
+    //======================BUG================================
+    //spec page 25
+    //The result of sizeof should be a constant R-value of int 
+    //	type with the proper size of the object
+    i = sizeof(sizeof(uu));             // error, sizeof return r-value.
+     
+}

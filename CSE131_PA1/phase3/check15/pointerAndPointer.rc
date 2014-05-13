@@ -1,0 +1,30 @@
+int* i1;
+int** i2;
+int*** i3;
+int**** i4;
+
+
+function : void main ()
+{
+	/* correctness */
+
+	int*    r1 = i1;
+	int**   r2 = i2;
+	int***  r3 = i3;
+	int****  r4 = i4;
+
+	int* n = nullptr;
+	float** n2 = nullptr;
+
+
+	/* error */
+	int    e = nullptr;
+	int    e = i1;
+	int*   e = i2;
+	int**  e = i3;
+	int*** e = i4;	
+
+	float**** e = i4;
+	bool***   e = i3;		
+	
+}

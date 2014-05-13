@@ -1,0 +1,11 @@
+Error, "phase3/check18/pointerToFunc.rc": 
+  Type of return expression (int) is not equivalent to the function's return type (int**).
+Error, "phase3/check18/pointerToFunc.rc": 
+  Value of type funcptr : int** & (int x, int y, int &z) not assignable to variable of type TWOINTFUNC.
+Error, "phase3/check18/pointerToFunc.rc": 
+  Value of type funcptr : int (int*** x, int y) not assignable to variable of type TWOINTFUNC.
+Error, "phase3/check18/pointerToFunc.rc": 
+  Value of type funcptr : void () not assignable to variable of type TWOINTFUNC.
+Error, "phase3/check18/pointerToFunc.rc": 
+  Value of type THREEINTFUNC not assignable to variable of type TWOINTFUNC.
+Compile: failure.

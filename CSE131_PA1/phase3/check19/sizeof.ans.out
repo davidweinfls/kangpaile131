@@ -1,0 +1,3 @@
+Error, "phase3/check19/sizeof.rc": 
+  Invalid operand to sizeof. Not a type or not addressable.
+Compile: failure.

@@ -1,0 +1,13 @@
+function: float foo(float &x) {
+return 0;
+}
+function: bool foo() {
+return false;
+}
+
+function : void main() {
+bool x = foo();
+float x1;
+//===========================================BUG======================
+float x2 = foo(x1);
+}

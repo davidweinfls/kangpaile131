@@ -1,0 +1,46 @@
+int i;
+bool b;
+float f;
+
+int * iptr;
+bool * bptr;
+float * fptr;
+
+function : void main ()
+{
+	/* ok */
+
+	*iptr = i;
+	*bptr = b;
+	*fptr = f;
+
+
+	/* 3 error */
+
+	*iptr = f;
+	*bptr = i;
+	*fptr = b;
+}
+
+/******************************/
+
+structdef MYSTRUCT{
+	int x;
+};
+
+int * ptr;
+MYSTRUCT *  ptrToStruct;
+
+function : void main2 ()
+{
+	/* OK */
+	
+	(*ptrToStruct).x = 10 ;  
+
+	ptrToStruct->x   = i;   
+
+	/* 2 Error */
+
+	*ptr->x = f;  
+	ptrToStruct->h = 11;  	
+}

@@ -1,0 +1,19 @@
+Error, "phase3/check21/addressofExtra.rc": 
+  Type of return expression (INTFUNC), not assignment compatible with function's return type (int).
+Error, "phase3/check21/addressofExtra.rc": 
+  Argument of type VOIDF not assignable to value parameter l, of type INTFUNC.
+Error, "phase3/check21/addressofExtra.rc": 
+  Argument of type FLOFUNC not assignable to value parameter l, of type INTFUNC.
+Error, "phase3/check21/addressofExtra.rc": 
+  Argument of type BOOFUNC not assignable to value parameter l, of type INTFUNC.
+Error, "phase3/check21/addressofExtra.rc": 
+  Invalid operand to sizeof. Not a type or not addressable.
+Error, "phase3/check21/addressofExtra.rc": 
+  Value of type float not assignable to variable of type int.
+Error, "phase3/check21/addressofExtra.rc": 
+  Non-addressable argument of type float to address-of operator.
+Error, "phase3/check21/addressofExtra.rc": 
+  Value of type int not assignable to variable of type bool.
+Error, "phase3/check21/addressofExtra.rc": 
+  Invalid type cast. Type INTFUNC to type int is not supported.
+Compile: failure.

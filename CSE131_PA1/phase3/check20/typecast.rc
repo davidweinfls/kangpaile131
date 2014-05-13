@@ -1,0 +1,29 @@
+typedef float FOO;
+typedef FOO* FPTR;
+typedef int* IPTR;
+int x;
+FOO y;
+FPTR z;
+int* intPtr;
+function : int main() {
+   
+	int [1] arr;
+	typedef funcptr : int (int x, int y, int z) THREEINTFUNC;
+	THREEINTFUNC ptr3;
+	/* ERROR */
+
+	x = (int) arr;
+	x = (int) ptr3;
+
+	/* OK */
+   	x = (int) y;
+   	x = (int) (x + 4.9);
+   	y = (FOO) (int) (65.3);
+   	intPtr = (IPTR) z;
+   
+
+
+
+
+   	return 0;
+}

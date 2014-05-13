@@ -1,0 +1,7 @@
+Error, "phase3/check15/functReturnStruct.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (MYSTRUCT).
+Error, "phase3/check15/functReturnStruct.rc": 
+  Type of return expression (DIFFERENTSTRUCT), not assignment compatible with function's return type (MYSTRUCT).
+Error, "phase3/check15/functReturnStruct.rc": 
+  Type of return expression (MYSTRUCT2), not assignment compatible with function's return type (DIFFERENTSTRUCT).
+Compile: failure.

@@ -1,0 +1,22 @@
+function: float foo(float &x) {
+return 0;
+}
+
+
+//no error
+function: float foo(float x, float y, float z) {
+return 0;
+}
+
+
+function: int main() {
+foo(1); //error
+
+//================================================BBUUG=====================
+foo(1.0);//no error <== XXXXXXXXXXXXXX  wrong. since 1.0 is not a mod-L value, it cannot be passed to &x
+		//"Error is: check 5: A parameter is declared as pass-by-reference and the corresponding argument
+		 //is not a modifiable L-value."
+
+
+return 0;
+}

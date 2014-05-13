@@ -1,0 +1,59 @@
+/* Extra tests on adress. Make sure type correct */ 
+
+int x;
+float y;
+bool z;
+const auto s = 1.2;
+
+typedef funcptr : int() INTFUNC;
+typedef funcptr : void() VOIDF;
+typedef funcptr : float() FLOFUNC;
+typedef funcptr : bool() BOOFUNC;
+INTFUNC inFunc;
+VOIDF vFunc;
+FLOFUNC fFunc;
+BOOFUNC bFunc;
+
+function : int fuu(INTFUNC l){
+    return l;                               // Error, wrong return type.
+}
+
+function : int fuu2(INTFUNC l){
+    return 1; 
+}
+
+function : bool fuu3(INTFUNC l){
+    return true;
+}
+
+function : int fuu4(VOIDF f){
+    return 1;
+}
+
+
+function : void foo(){
+    
+    x = fuu2(vFunc);      // Should be an error, mismatch param type.  
+
+    y = fuu2(fFunc);      // Similar error mismatch param type.
+    z = fuu3(bFunc);      // Similar as above, for Bool. 
+       
+    y = sizeof(&x);  // Error, & gives r value
+    x = (float)&y;   // Error, float not assignable to int.
+    x = &(float)(1); // Error typecast returns r value.
+    z = 10/((*&x) - (*&x)); // Error, int cant be assigned to bool.
+    
+    x = (int)*&inFunc;   // Error inFunc is INTFUNC type not int.  
+    
+    
+    /* correct */
+
+    
+    x = fuu4(vFunc);
+    x = fuu(inFunc); 
+    z = (bool)(10/((float)&x));  // Okay
+ 
+        
+}
+
+

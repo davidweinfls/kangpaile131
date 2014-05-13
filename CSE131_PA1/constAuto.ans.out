@@ -1,0 +1,13 @@
+Error, "phase1/auto/constAuto.rc": 
+  Initialization value of constant named g not known at compile time.
+Error, "phase1/auto/constAuto.rc": 
+  Initialization value of constant named gg not known at compile time.
+Error, "phase1/auto/constAuto.rc": 
+  Initialization value of type bool not assignable to constant/variable of type float.
+Error, "phase1/auto/constAuto.rc": 
+  Initialization value of type int not assignable to constant/variable of type bool.
+Error, "phase1/auto/constAuto.rc": 
+  Initialization value of type float not assignable to constant/variable of type int.
+Error, "phase1/auto/constAuto.rc": 
+  Initialization value of type int not assignable to constant/variable of type bool.
+Compile: failure.

@@ -1,0 +1,9 @@
+function : void foo(){
+	if(3.0) {
+	   int i = 3;
+	   //我们是：
+	   //bool or int required for conditional test, 3.0 found.
+	   //正确答案：
+	   //bool or int required for conditional test, float found.
+	}
+}

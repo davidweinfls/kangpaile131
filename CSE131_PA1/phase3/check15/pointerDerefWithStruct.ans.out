@@ -1,0 +1,13 @@
+Error, "phase3/check15/pointerDerefWithStruct.rc": 
+  Incompatible type int* to operator ->, pointer to struct expected.
+Error, "phase3/check15/pointerDerefWithStruct.rc": 
+  Referenced field h not found in type MYSTRUCT.
+Error, "phase3/check15/pointerDerefWithStruct.rc": 
+  Initialization value of type int not assignable to constant/variable of type bool.
+Error, "phase3/check15/pointerDerefWithStruct.rc": 
+  undeclared identifier 'ptTostruct'.
+Error, "phase3/check15/pointerDerefWithStruct.rc": 
+  Incompatible type STYPE* to operator ->, pointer to struct expected.
+Error, "phase3/check15/pointerDerefWithStruct.rc": 
+  Initialization value of type float not assignable to constant/variable of type int.
+Compile: failure.

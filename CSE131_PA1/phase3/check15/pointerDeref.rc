@@ -1,0 +1,11 @@
+int * ptr;
+int i;
+
+function : void main ()
+{
+	int y = (*i);  // error
+
+	i = *ptr;   // ok
+
+	bool b = *ptr;  //err
+}   

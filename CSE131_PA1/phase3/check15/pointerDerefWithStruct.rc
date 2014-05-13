@@ -1,0 +1,30 @@
+structdef MYSTRUCT{
+	int x;
+	float f;
+};
+
+int * ptr;
+MYSTRUCT *  ptrToStruct;
+typedef MYSTRUCT * STYPE;
+STYPE * ptStruct;
+
+function : void main ()
+{
+	int y = (*ptrToStruct).x;  // ok
+
+	int z = ptrToStruct->x;    // ok
+
+	/* Error */
+
+	int c = *ptr->x;  
+	
+	int d = ptrToStruct->h;  
+
+	bool k = ptrToStruct->x;    
+	
+	int j = *ptTostruct->x;
+	
+	int j = *(ptStruct)->x; //error because -> has higher precedence than * 
+	
+	int t = (*ptStruct)->f; // f is float, t is int.
+}

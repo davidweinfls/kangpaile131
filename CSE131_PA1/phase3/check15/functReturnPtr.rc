@@ -1,0 +1,22 @@
+function : int ** foo ()
+{
+	return 1;
+}
+
+function : float **** foo2 ()
+{
+	return 1;
+}
+
+function : bool ******** foo3 ()
+{
+	return 1;
+}
+
+/* Test declType with this sht */
+
+function : int ** foo4 ()
+{
+	int ** ptr;
+	return ptr;  		// ok
+}

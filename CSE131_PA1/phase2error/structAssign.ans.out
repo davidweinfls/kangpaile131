@@ -1,0 +1,15 @@
+Error, "phase2/check14/structAssign.rc": 
+  Value of type S2 not assignable to variable of type S1.
+Error, "phase2/check14/structAssign.rc": 
+  Value of type S4 not assignable to variable of type S1.
+Error, "phase2/check14/structAssign.rc": 
+  Value of type S4 not assignable to variable of type S2.
+Error, "phase2/check14/structAssign.rc": 
+  Value of type S5 not assignable to variable of type S1.
+Error, "phase2/check14/structAssign.rc": 
+  Value of type S5 not assignable to variable of type S3.
+Error, "phase2/check14/structAssign.rc": 
+  Value of type S5 not assignable to variable of type S2.
+Error, "phase2/check14/structAssign.rc": 
+  Initialization value of type FF not assignable to constant/variable of type bool.
+Compile: failure.

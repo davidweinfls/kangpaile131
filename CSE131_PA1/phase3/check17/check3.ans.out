@@ -1,0 +1,9 @@
+Error, "phase3/check17/check3.rc": 
+  Value of type float not assignable to variable of type int.
+Error, "phase3/check17/check3.rc": 
+  Value of type bool not assignable to variable of type float.
+Error, "phase3/check17/check3.rc": 
+  Value of type int not assignable to variable of type bool.
+Error, "phase3/check17/check3.rc": 
+  Value of type bool not assignable to variable of type float.
+Compile: failure.

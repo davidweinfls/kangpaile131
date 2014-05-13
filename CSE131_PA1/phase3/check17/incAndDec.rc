@@ -1,0 +1,26 @@
+int* i;
+
+int y;
+
+bool b;
+
+bool * bptr;
+
+function : void main()
+{
+	/* ERROR */
+	
+	++b;
+	
+	b--;
+
+	/* OK */
+
+	++i;
+
+	i--;
+
+	bptr++;
+
+	--bptr;
+}

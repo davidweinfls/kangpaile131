@@ -1,0 +1,59 @@
+structdef S1 {
+	int i;
+};
+
+structdef S2 {
+	int w;
+};
+
+
+function : void main()
+{
+
+	/* Setup */
+
+	S1 s1;
+	S2 s2;
+
+	typedef S1 S3;
+
+	S3 s3;		
+
+
+	/* error */
+
+	s1 = s2;		// error not assignable.
+
+
+	/* correctness */
+
+	s1 = s3;
+
+
+	/* Setup  */
+
+	typedef S3 S4;
+	S4 s4;
+
+	s1 = s4;		
+
+	s2 = s4;			// error not assignable.
+
+	typedef S4 S5;
+	S5 s5;
+
+	s1 = s5;
+	s3 = s5;
+	s4 = s5;
+
+	s2 = s5;		// error not assignable.
+
+
+	typedef float FF;
+
+	FF myFLoat = 1.5;
+
+	float f = myFLoat;
+
+	bool b = myFLoat;			// error.
+}
