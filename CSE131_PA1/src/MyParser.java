@@ -1426,7 +1426,6 @@ class MyParser extends parser
 			sto = new ErrorSTO (strID);		
 		}
 				
-		
 		return (sto);
 	}
 
