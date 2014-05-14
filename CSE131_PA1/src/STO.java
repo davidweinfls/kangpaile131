@@ -201,5 +201,5 @@ abstract class STO
 	private VariableBox	m_array;
 	private String		m_base;
 	private int			m_offset;
-	private String 		m_global_offset;
+	private String 		m_global_offset = "";
 }

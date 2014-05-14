@@ -269,6 +269,58 @@ public class AssemblyCodeGenerator {
     	
     }
     
+    public void writeExpr(STO sto, boolean itof)
+    {
+    	if(debug) writeDebug("-------in writeExpr------------");
+    	
+		if (sto instanceof FuncSTO)
+		{
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, sto.getName(), Sparc.L1);
+			return;
+		}
+		
+		Type t = sto.getType();
+		
+		if(t instanceof FloatType)
+		{
+			
+		}
+		else if(t instanceof IntType)
+		{
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+		}
+    	
+    	/*if (t.isFloat()) {
+            if (floatReg == 0) {
+                if (sto.isVar() && ((VarSTO) sto).isRef())
+                    appendString(text_buffer, Sparc.TWO_PARAM, Sparc.LD_OP, "["+LOC0+"]", LOC0);
+                appendString(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + LOC0 + "]", FLT0);
+                if(itof)
+                    appendString(text_buffer, Sparc.TWO_PARAM, ITOF_OP, FLT0, FLT0);
+                floatReg = 1;
+            } else {
+                if (sto.isVar() && ((VarSTO) sto).isRef())
+                    appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
+                appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", FLT1);
+                if(isFloat)
+                    appendString(text_buffer, Sparc.TWO_PARAM, ITOF_OP, FLT1, FLT1);
+                floatReg = 0;
+            }
+        } else {
+            if (reg == 0) {
+                if (sto.isVar() && ((VarSTO) sto).isRef())
+                    appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
+                appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC1);
+                reg = 1;
+            } else {
+                if (sto.isVar() && ((VarSTO) sto).isRef())
+                    appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
+                appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC2);
+                reg = 0;
+            }
+        }*/
+    }
+    
     public void writeFuncDec(String id) {
         if(debug) writeDebug("in writeFuncDec");
         has_text = true;
@@ -319,38 +371,7 @@ public class AssemblyCodeGenerator {
         floatReg = 0;*/
     }
     
-    public void writeExpr(STO sto, boolean isFloat)
-    {
-    	/*if (t.isFloat()) {
-            if (floatReg == 0) {
-                if (sto.isVar() && ((VarSTO) sto).isRef())
-                    appendString(text_buffer, Sparc.TWO_PARAM, Sparc.LD_OP, "["+LOC0+"]", LOC0);
-                appendString(text_buffer, Sparc.TWO_PARAM, Sparc.LD_OP, "["+LOC0+"]", FLT0);
-                if(itof)
-                    appendString(text_buffer, Sparc.TWO_PARAM, ITOF_OP, FLT0, FLT0);
-                floatReg = 1;
-            } else {
-                if (sto.isVar() && ((VarSTO) sto).isRef())
-                    appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
-                appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", FLT1);
-                if(isFloat)
-                    appendString(text_buffer, Sparc.TWO_PARAM, ITOF_OP, FLT1, FLT1);
-                floatReg = 0;
-            }
-        } else {
-            if (reg == 0) {
-                if (sto.isVar() && ((VarSTO) sto).isRef())
-                    appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
-                appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC1);
-                reg = 1;
-            } else {
-                if (sto.isVar() && ((VarSTO) sto).isRef())
-                    appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
-                appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC2);
-                reg = 0;
-            }
-        }*/
-    }
+    
     
 	/**
 	 * @param args
