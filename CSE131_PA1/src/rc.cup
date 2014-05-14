@@ -701,16 +701,16 @@ WriteStmt ::=       T_COUT T_OSTREAM WritePairList T_SEMI
 
 WritePairList ::=   WritePair:_1
 					{:
-						((MyParser) parser).DoPrint(_1);
+						((MyParser) parser).DoPrint((STO)_1);
 					:}
     |               WritePairList T_OSTREAM WritePair:_2
     				{:
-    					((MyParser) parser).DoPrint(_2);
+    					((MyParser) parser).DoPrint((STO)_2);
     				:}
     ;
 
 
-WritePair ::=    Expr {: RESULT = _1; :}
+WritePair ::=    Expr:_1 {: RESULT = _1; :}
     |               T_ENDL
     ;
 
@@ -1032,10 +1032,12 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
     |               T_INT_LITERAL:_1
                     {:
                         RESULT = new ConstSTO (_1, new IntType("int", 4));
+                        ((MyParser) parser).DoConstValue (RESULT);
                     :}
     |               T_FLOAT_LITERAL:_1
                     {:
                         RESULT = new ConstSTO (_1, new FloatType("float", 4));
+                        ((MyParser) parser).DoConstValue (RESULT);
                     :}
     |               T_CHAR_LITERAL:_1
                     {:
@@ -1048,10 +1050,12 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
     |               T_TRUE
                     {:
                         RESULT = new ConstSTO ("true", new BoolType("bool", 4));
+                        ((MyParser) parser).DoConstValue (RESULT);
                     :}
     |               T_FALSE
                     {:
                         RESULT = new ConstSTO ("false", new BoolType("bool", 4));
+                        ((MyParser) parser).DoConstValue (RESULT);
                     :}
     |               T_NULLPTR
                     {:

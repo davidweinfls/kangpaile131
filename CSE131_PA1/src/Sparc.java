@@ -21,61 +21,66 @@ class Sparc
     public static final String TEXT_SEC   = ".section \".text\"\n";
     public static final String DATA_SEC   = ".section \".data\"\n"; //+ "._memleak:\t.word\t0\n"; 
     public static final String BSS_SEC    = ".section \".bss\"\n"; 
-    public static final String RODATA_SEC = ".section \".rodata\"\n"; 
+    public static final String RODATA_SEC = ".section \".rodata\"\n" +
+            /*"._fincdec:\t.single 0r1\n" +*/
+            ".endl:\t.asciz \"\\n\"\n" +
+            ".intFmt:\t.asciz \"%%d\"\n" +
+            ".boolT:\t.asciz \"true\"\n" +
+            ".boolF:\t.asciz \"false\"\n"; 
 
     //-----------------------------------------------------------------------------
     //      Registers
     //-----------------------------------------------------------------------------
 
-    public static final String REG_FRAME = "%fp";
-    public static final String REG_STACK = "%sp";
+    public static final String FP = "%fp";
+    public static final String SP = "%sp";
 
     // Global
-    public static final String REG_GLOBAL0 = "%g0";
-    public static final String REG_GLOBAL1 = "%g1";
-    public static final String REG_GLOBAL2 = "%g2";
-    public static final String REG_GLOBAL3 = "%g3";
-    public static final String REG_GLOBAL4 = "%g4";
-    public static final String REG_GLOBAL5 = "%g5";
-    public static final String REG_GLOBAL6 = "%g6";
-    public static final String REG_GLOBAL7 = "%g7";
+    public static final String G0 = "%g0";
+    public static final String G1 = "%g1";
+    public static final String G2 = "%g2";
+    public static final String G3 = "%g3";
+    public static final String G4 = "%g4";
+    public static final String G5 = "%g5";
+    public static final String G6 = "%g6";
+    public static final String G7 = "%g7";
 
     // Local
-    public static final String REG_LOCAL0 = "%l0";
-    public static final String REG_LOCAL1 = "%l1";
-    public static final String REG_LOCAL2 = "%l2";
-    public static final String REG_LOCAL3 = "%l3";
-    public static final String REG_LOCAL4 = "%l4";
-    public static final String REG_LOCAL5 = "%l5";
-    public static final String REG_LOCAL6 = "%l6";
-    public static final String REG_LOCAL7 = "%l7";
+    public static final String L0 = "%l0";
+    public static final String L1 = "%l1";
+    public static final String L2 = "%l2";
+    public static final String L3 = "%l3";
+    public static final String L4 = "%l4";
+    public static final String L5 = "%l5";
+    public static final String L6 = "%l6";
+    public static final String L7 = "%l7";
 
     // Input
-    public static final String REG_INPUT0 = "%i0";
-    public static final String REG_INPUT1 = "%i1";
-    public static final String REG_INPUT2 = "%i2";
-    public static final String REG_INPUT3 = "%i3";
-    public static final String REG_INPUT4 = "%i4";
-    public static final String REG_INPUT5 = "%i5";
+    public static final String I0 = "%i0";
+    public static final String I1 = "%i1";
+    public static final String I2 = "%i2";
+    public static final String I3 = "%i3";
+    public static final String I4 = "%i4";
+    public static final String I5 = "%i5";
 
     // Output
-    public static final String REG_OUTPUT0 = "%o0";
-    public static final String REG_OUTPUT1 = "%o1";
-    public static final String REG_OUTPUT2 = "%o2";
-    public static final String REG_OUTPUT3 = "%o3";
-    public static final String REG_OUTPUT4 = "%o4";
-    public static final String REG_OUTPUT5 = "%o5";
+    public static final String O0 = "%o0";
+    public static final String O1 = "%o1";
+    public static final String O2 = "%o2";
+    public static final String O3 = "%o3";
+    public static final String O4 = "%o4";
+    public static final String O5 = "%o5";
 
     // Float
-    public static final String REG_FLOAT0 = "%f0";
-    public static final String REG_FLOAT1 = "%f1";
-    public static final String REG_FLOAT2 = "%f2";
-    public static final String REG_FLOAT3 = "%f3";
-    public static final String REG_FLOAT4 = "%f4";
-    public static final String REG_FLOAT5 = "%f5";
+    public static final String F0 = "%f0";
+    public static final String F1 = "%f1";
+    public static final String F2 = "%f2";
+    public static final String F3 = "%f3";
+    public static final String F4 = "%f4";
+    public static final String F5 = "%f5";
 
     // Pseudonyms - For ease of programming
-    public static final String REG_PARAM0 = REG_INPUT0;
+   /* public static final String REG_PARAM0 = REG_INPUT0;
     public static final String REG_PARAM1 = REG_INPUT1;
     public static final String REG_PARAM2 = REG_INPUT2;
     public static final String REG_PARAM3 = REG_INPUT3;
@@ -92,7 +97,7 @@ class Sparc
     public static final String[] ARG_REGS = new String[]{REG_OUTPUT0, REG_OUTPUT1, REG_OUTPUT2, REG_OUTPUT3, REG_OUTPUT4, REG_OUTPUT5};
 
     public static final String REG_SET_RETURN = REG_INPUT0;
-    public static final String REG_GET_RETURN = REG_OUTPUT0;
+    public static final String REG_GET_RETURN = REG_OUTPUT0;*/
 
     //-----------------------------------------------------------------------------
     //      Constants
@@ -125,17 +130,17 @@ class Sparc
     //-----------------------------------------------------------------------------
     //      Set
     //-----------------------------------------------------------------------------
-    public static final String SET_OP = "set";
+    public static final String SET = "set";
 
     //-----------------------------------------------------------------------------
     //      Ret
     //-----------------------------------------------------------------------------
-    public static final String RET_OP = "ret";
+    public static final String RET = "ret\n";
 
     //-----------------------------------------------------------------------------
     //      Restore
     //-----------------------------------------------------------------------------
-    public static final String RESTORE_OP  = "restore";
+    public static final String RESTORE  = "restore\n";
     
     //-----------------------------------------------------------------------------
     //      Move
@@ -181,18 +186,18 @@ class Sparc
     //-----------------------------------------------------------------------------
     //      Load
     //-----------------------------------------------------------------------------
-    public static final String LOAD_OP = "ld";
+    public static final String LD = "ld";
 
     //-----------------------------------------------------------------------------
     //      Store
     //-----------------------------------------------------------------------------
-    public static final String STORE_OP = "st";
+    public static final String ST = "st";
 
     //-----------------------------------------------------------------------------
     //      Compare
     //-----------------------------------------------------------------------------
-    public static final String CMP_OP   = "cmp";
-    public static final String FCMPS_OP = "fcmps";
+    public static final String CMP   = "cmp";
+    public static final String FCMPS = "fcmps";
 
     //-----------------------------------------------------------------------------
     //      Branch
@@ -216,15 +221,15 @@ class Sparc
     //-----------------------------------------------------------------------------
     //      Call
     //-----------------------------------------------------------------------------
-    public static final String CALL_OP = "call";
-    public static final String NOP_OP  = "nop";
+    public static final String CALL = "call";
+    public static final String NOP  = "nop\n\n";
     
     //-----------------------------------------------------------------------------
     //      Multiplication/Division/Modulus Arithmetic
     //-----------------------------------------------------------------------------
-    public static final String MUL_OP = ".mul";
-    public static final String DIV_OP = ".div";
-    public static final String REM_OP = ".rem";
+    public static final String MUL = ".mul";
+    public static final String DIV = ".div";
+    public static final String REM = ".rem";
 
     //-----------------------------------------------------------------------------
     //      Negating/2's Complement
@@ -279,9 +284,13 @@ class Sparc
     public static final String TWO_PARAM_COMM   = "%s" + SEPARATOR + "%s, %s" + SEPARATOR + SEPARATOR + SEPARATOR + "! %s\n";
     public static final String THREE_PARAM_COMM = "%s" + SEPARATOR + "%s, %s, %s" + SEPARATOR + SEPARATOR + SEPARATOR + "! %s\n";
 
-    public static final String SAVE_FUNC     = SAVE_WORD + ".%s = -(%s + %s) & -8\n";
+    public static final String SAVE_DOT_FUNCNAME     = SAVE_WORD + ".%s";
+    public static final String SAVE_FUNC = " = -(92 + %s) & -8\n";
     public static final String RO_DEFINE     = "%s:" + SEPARATOR + "%s" + SEPARATOR + "%s\n";
     public static final String GLOBAL_DEFINE = "%s:" + SEPARATOR + "%s" + SEPARATOR + "%s\n";
+    
+    public static final String FUNC_COMMENT = "! --%s--\n";
+    public static final String FUNC_LABEL = "%s:\n";
     
 
 

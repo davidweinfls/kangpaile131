@@ -169,14 +169,15 @@ class MyParser extends parser
 	{
 		m_symtab.closeScope ();
 		
-		if(myAsWriter.has_data)
-			myAsWriter.writeBuffer(myAsWriter.data_buffer);
-		if(myAsWriter.has_text)
-			myAsWriter.writeBuffer(myAsWriter.text_buffer);
 		if(myAsWriter.has_rodata)
 			myAsWriter.writeBuffer(myAsWriter.rodata_buffer);
+		if(myAsWriter.has_data)
+			myAsWriter.writeBuffer(myAsWriter.data_buffer);
 		if(myAsWriter.has_bss)
 			myAsWriter.writeBuffer(myAsWriter.bss_buffer);
+		if(myAsWriter.has_text)
+			myAsWriter.writeBuffer(myAsWriter.text_buffer);	
+		
 		myAsWriter.dispose();
 	}
 
@@ -511,6 +512,8 @@ class MyParser extends parser
 		m_symtab.insert (sto);	//insert into current scope
 		m_symtab.openScope ();	//open new scope
 		m_symtab.setFunc (sto);	//current function we're in is set
+		
+		myAsWriter.writeFuncDec(id);
 	}
 
 
@@ -527,6 +530,9 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print (ErrorMsg.error6c_Return_missing);
         }
+		
+		myAsWriter.writeFuncClose(func.getName(), m_currOffset, func.getReturnType());
+		
 		m_symtab.closeScope ();	//close scope, pops top scope off
 		m_symtab.setFunc (null);	// we are back in outer scope
 	}
@@ -841,6 +847,19 @@ class MyParser extends parser
 		             ((ConstSTO) sto).getValue());
 		}
 		return sto;
+	}
+	
+	//P2: store local const literals value at run time
+	void DoConstValue(STO sto)
+	{
+		if(m_symtab.getFunc() != null && m_symtab.getLevel() != 1)
+		{
+			m_currOffset -= sto.getType().getSize();
+            sto.setOffset(m_currOffset);
+            sto.setBase("%%fp");
+            myAsWriter.writeConstValue (sto);        
+		}
+			
 	}
 	
 	/*
@@ -1523,6 +1542,8 @@ class MyParser extends parser
 	private String      m_structName = null;
     private int         m_structSize = 0;
     private StructType  m_structType;
+    
+    private int m_currOffset;
 
 	private SymbolTable		m_symtab;
 }

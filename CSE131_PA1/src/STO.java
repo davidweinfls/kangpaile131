@@ -159,6 +159,21 @@ abstract class STO
     {
     	m_base = b;
     }
+    
+    // set x, %l0
+    // add %g0, %l0, %l0
+	public String getAddress()
+	{
+		StringBuilder s = new StringBuilder();
+
+		if (m_global_offset != "")
+			s.append("set" + "\t" + getGlobalOffset() + ", %%l0\n");
+		else
+			s.append("set" + "\t" + getOffset() + ", %%l0\n");
+
+		s.append("\tadd" + "\t" + getBase() + ", %%l0, %%l0\n");
+		return s.toString();
+	}
 
 
 	//----------------------------------------------------------------
