@@ -11,6 +11,7 @@ import java.util.Vector;
 
 class MyParser extends parser
 {
+	private AssemblyCodeGenerator myAsWriter;
 
 	//----------------------------------------------------------------
 	//
@@ -22,6 +23,8 @@ class MyParser extends parser
 		m_symtab = new SymbolTable ();
 		m_errors = errors;
 		m_nNumErrors = 0;
+		
+		myAsWriter = new AssemblyCodeGenerator("C:\\Users\\David Wei\\git\\Project1\\CSE131_PA1\\src\\rc.s");
 	}
 
 
@@ -165,14 +168,22 @@ class MyParser extends parser
 	DoProgramEnd()
 	{
 		m_symtab.closeScope ();
+		
+		if(myAsWriter.has_data)
+			myAsWriter.writeBuffer(myAsWriter.data_buffer);
+		if(myAsWriter.has_text)
+			myAsWriter.writeBuffer(myAsWriter.text_buffer);
+		if(myAsWriter.has_rodata)
+			myAsWriter.writeBuffer(myAsWriter.rodata_buffer);
+		if(myAsWriter.has_bss)
+			myAsWriter.writeBuffer(myAsWriter.bss_buffer);
+		myAsWriter.dispose();
 	}
 
 
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
-	//TODO: has erros on declare global var. if global and local are both declared, it reports
-	//redeclared. Which is wrong! 
 	void
 	DoVarDecl (Vector<VariableBox<STO, STO>> lstIDs, Type t)
 	{
@@ -199,13 +210,28 @@ class MyParser extends parser
 			{
 				m_nNumErrors++;
 				m_errors.print(Formatter.toString(ErrorMsg.redeclared_id,id));
-			}			
+			}
+			//var without init
 			else if(exprType == null && varType == null)
 			{		
 				if(t instanceof ArrayType)
 					var = new VarSTO(id, t, true, false);
 				else
 					var = new VarSTO (id, t);
+				
+				
+				//P2: 
+				if(m_symtab.getLevel() == 1)
+				{
+					var.setBase("%%g0");
+					var.setGlobalOffset(id);
+					if(!m_static)
+					{
+						var.setGlobal();
+					}
+					myAsWriter.writeGlobalVariable(id, false, expr, t);
+				}
+				
 				m_symtab.insert (var);
 				
 			}
@@ -239,6 +265,7 @@ class MyParser extends parser
 				var = new VarSTO(id, arrType, true, false);
 				m_symtab.insert (var);
 			}
+			//var with init
 			else if(varType == null)
 			{
 				if(exprType.isAssignable(t))
@@ -248,6 +275,19 @@ class MyParser extends parser
 					else
 						var = new VarSTO (id, t);
 					m_symtab.insert (var);
+					
+					//P2: 
+					if(m_symtab.getLevel() == 1)
+					{
+						var.setBase("%%g0");
+						var.setGlobalOffset(id);
+						if(!m_static)
+						{
+							var.setGlobal();
+						}
+						myAsWriter.writeGlobalVariable(id, true, expr, t);
+					}
+					
 				}
 				//not assignable
 				else
@@ -1458,6 +1498,13 @@ class MyParser extends parser
 		}
 
 		return (sto);
+	}
+	
+	//P2: 
+	// do print statement for cout
+	void DoPrint(STO sto)
+	{
+		myAsWriter.writePrint(sto);
 	}
 
 

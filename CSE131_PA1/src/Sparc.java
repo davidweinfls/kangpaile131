@@ -8,18 +8,20 @@ class Sparc
     public static final String IDENT_DIR   = ".ident";
     public static final String SECTION_DIR = ".section";
     public static final String GLOBAL_DIR  = ".global";
-    public static final String ALIGN_DIR   = ".align";
+    public static final String ALIGN_DIR   = ".align %s\n";
     public static final String ASCIZ_DIR   = ".asciz";
     public static final String SKIP_DIR    = ".skip";
     public static final String WORD_DIR    = ".word";
+    public static final String GLOBAL_VAR  = ".global %s\n";
+    public static final String BSS_VAR 	   = "%s:\t.skip %s\n";
 
     //-----------------------------------------------------------------------------
     //      Sections
     //-----------------------------------------------------------------------------
-    public static final String TEXT_SEC   = "\".text\"";
-    public static final String DATA_SEC   = "\".data\""; 
-    public static final String BSS_SEC    = "\".bss\""; 
-    public static final String RODATA_SEC = "\".rodata\""; 
+    public static final String TEXT_SEC   = ".section \".text\"\n";
+    public static final String DATA_SEC   = ".section \".data\"\n"; //+ "._memleak:\t.word\t0\n"; 
+    public static final String BSS_SEC    = ".section \".bss\"\n"; 
+    public static final String RODATA_SEC = ".section \".rodata\"\n"; 
 
     //-----------------------------------------------------------------------------
     //      Registers
@@ -264,7 +266,8 @@ class Sparc
     //-----------------------------------------------------------------------------
     public static final String LINE          = "%s\n";
     public static final String LABEL         = "%s:\n";
-    public static final String BLANK_LINE    = "\n";
+    public static final String VAR_LABEL	 = "%s:\t.%s %s\n";
+    public static final String NEW_LINE      = "\n";
 
     public static final String NO_PARAM      = "%s\n";
     public static final String ONE_PARAM     = "%s" + SEPARATOR + "%s\n";
@@ -279,6 +282,7 @@ class Sparc
     public static final String SAVE_FUNC     = SAVE_WORD + ".%s = -(%s + %s) & -8\n";
     public static final String RO_DEFINE     = "%s:" + SEPARATOR + "%s" + SEPARATOR + "%s\n";
     public static final String GLOBAL_DEFINE = "%s:" + SEPARATOR + "%s" + SEPARATOR + "%s\n";
+    
 
 
 }

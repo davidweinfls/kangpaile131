@@ -129,6 +129,36 @@ abstract class STO
     {
         m_array = v;
     }
+    
+    public String getGlobalOffset()
+    {
+    	return m_global_offset;
+    }
+    
+    public void setGlobalOffset(String offset)
+    {
+    	m_global_offset = offset;
+    }
+    
+    public int getOffset()
+    {
+    	return m_offset;
+    }
+    
+    public void setOffset(int offset)
+    {
+    	m_offset = offset;
+    }
+    
+    public String getBase()
+    {
+    	return m_base;
+    }
+    
+    public void setBase(String b)
+    {
+    	m_base = b;
+    }
 
 
 	//----------------------------------------------------------------
@@ -152,6 +182,9 @@ abstract class STO
 	private Type		m_type;
 	private boolean		m_isAddressable;
 	private boolean		m_isModifiable;
-	private boolean 	m_global;
+	private boolean 	m_global = false;
 	private VariableBox	m_array;
+	private String		m_base;
+	private int			m_offset;
+	private String 		m_global_offset;
 }

@@ -699,12 +699,18 @@ WriteStmt ::=       T_COUT T_OSTREAM WritePairList T_SEMI
     ;
 
 
-WritePairList ::=   WritePair
-    |               WritePairList T_OSTREAM WritePair
+WritePairList ::=   WritePair:_1
+					{:
+						((MyParser) parser).DoPrint(_1);
+					:}
+    |               WritePairList T_OSTREAM WritePair:_2
+    				{:
+    					((MyParser) parser).DoPrint(_2);
+    				:}
     ;
 
 
-WritePair ::=    Expr
+WritePair ::=    Expr {: RESULT = _1; :}
     |               T_ENDL
     ;
 

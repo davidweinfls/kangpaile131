@@ -1,4 +1,10 @@
-function : void main(){
-	bool c,d;
-	(c = d) = true;
+int x = 5;
+int y = 3;
+float z = 1.0;
+
+function : void main() 
+{
+
+int y = x;
+
 }
