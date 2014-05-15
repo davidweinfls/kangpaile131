@@ -1,9 +1,12 @@
 
+
 function : void main() 
 {	
 	
-	int a;
+	static float a;
+	static bool b = true;
 	
 	cout << "a is: " << a << endl;
+	cout << "b is: " << b << endl;
 
 }

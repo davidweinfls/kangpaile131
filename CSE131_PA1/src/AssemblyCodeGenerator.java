@@ -149,7 +149,7 @@ public class AssemblyCodeGenerator {
      */
     public void writeGlobalVariable(String id, boolean init, STO sto, Type t )
     {
-    	//if(debug) writeDebug("In writeGLobalVariable");
+    	if(debug) writeDebug("---------In writeGLobalVariable--------------");
     	
     	// add .global to file
     	if(init)
@@ -162,8 +162,38 @@ public class AssemblyCodeGenerator {
     		addToBuffer(bss_buffer, Sparc.GLOBAL_VAR, id);
     		addToBuffer(bss_buffer, Sparc.NEW_LINE);
     	}
-    		
-    		
+ 
+    	decreaseIndent();
+    	//check if this var is initialized
+    	if(init)
+    	{
+    		has_data = true;
+    		if(t instanceof IntType || t instanceof BoolType)
+                addToBuffer(data_buffer, Sparc.VAR_LABEL, id, "word", Integer.toString( ( (ConstSTO) sto ).getIntValue() ) );
+            else if(t instanceof FloatType)
+            	addToBuffer(data_buffer, Sparc.VAR_LABEL, id, "single", "0r" + Float.toString( ((ConstSTO) sto).getFloatValue()) );
+    	}
+    	else
+    	{
+    		addToBuffer(bss_buffer, Sparc.BSS_VAR, id, Integer.toString(t.getSize()) );
+    		has_bss = true;
+    	}
+    	
+    	increaseIndent();
+
+        decreaseIndent();
+        if(init)
+        	addToBuffer(data_buffer, Sparc.NEW_LINE);
+        else
+        	addToBuffer(bss_buffer, Sparc.NEW_LINE);
+        increaseIndent();
+   	
+    }
+    
+    public void writeStaticVariable(String id, boolean init, STO sto, Type t )
+    {
+    	if(debug) writeDebug("---------In writeStaticVariable--------------");
+ 
     	decreaseIndent();
     	//check if this var is initialized
     	if(init)

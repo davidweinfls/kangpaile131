@@ -236,7 +236,10 @@ class MyParser extends parser
 				{
 					if(m_static)
 					{
-
+						var.setGlobalOffset("static_" + m_funcName + "_" + id + (num_of_staticVar++) );
+                        var.setBase("%%g0");
+                        String static_name = var.getGlobalOffset();
+                        myAsWriter.writeStaticVariable(static_name, false, expr, t);
                     }
 					else
 					{
@@ -307,7 +310,10 @@ class MyParser extends parser
 					{
 						if(m_static)
 						{
-							
+							var.setGlobalOffset("static_" + m_funcName + "_" + id + (num_of_staticVar++) );
+	                        var.setBase("%%g0");
+	                        String static_name = var.getGlobalOffset();
+	                        myAsWriter.writeStaticVariable(static_name, true, expr, t);
 						}
 						else
 						{
@@ -1575,7 +1581,8 @@ class MyParser extends parser
     private int         m_structSize = 0;
     private StructType  m_structType;
     
-    private int m_currOffset;
+    private int m_currOffset = 0;
+    private int num_of_staticVar = 0;
 
 	private SymbolTable		m_symtab;
 }
