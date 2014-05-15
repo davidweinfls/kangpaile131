@@ -195,8 +195,10 @@ public class AssemblyCodeGenerator {
 		if (debug)
 			writeDebug("------in writeConst--------");
 		Type t = sto.getType();
+		
 		if (t instanceof IntType || t instanceof BoolType)
 		{
+			// set 
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
 					Integer.toString(((ConstSTO) sto).getIntValue()), Sparc.L1);
 			addToBuffer(text_buffer, sto.getAddress());
@@ -207,16 +209,22 @@ public class AssemblyCodeGenerator {
 		{
 			has_rodata = true;
 			decreaseIndent();
+			
+			// temp0:	.single 0r3.5
 			addToBuffer(rodata_buffer, Sparc.VAR_LABEL, "temp" + num_of_temp,
 					"single",
 					"0r" + Float.toString(((ConstSTO) sto).getFloatValue()));
 			increaseIndent();
+			// set	temp0, %l0
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "temp"
 					+ num_of_temp, Sparc.L0);
+			// ld	[%l0], %f0
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0
 					+ "]", Sparc.F0);
-
+			// set	-4, %l0
+			// add	%fp, %l0, %l0
 			addToBuffer(text_buffer, sto.getAddress());
+			// st	%f0, [%l0]
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "["
 					+ Sparc.L0 + "]");
 			num_of_temp++;
@@ -239,12 +247,7 @@ public class AssemblyCodeGenerator {
     	//has_text = true;
     	
     	if(debug) writeDebug("------------in writePrint---------------");
-    	/*
-    	 * set _intFmt, %o0
-		 * set 5, %o1
-		 * call printf
-		 * nop
-    	 */
+    	
     	if(sto == null)
     	{
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Sparc.ENDL, Sparc.O0 );
@@ -253,23 +256,35 @@ public class AssemblyCodeGenerator {
     		return;
     	}
     	
-    	Type t = sto.getType();    	
+    	Type t = sto.getType(); 
+    	// set
+    	// add
+    	// ld
+    	writeExpr(sto);
+    	
 	    if(t instanceof IntType)
 	    {
+	    	/*
+	    	 * set _intFmt, %o0
+			 * set 5, %o1
+			 * call printf
+			 * nop
+	    	 */
 	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Sparc.INTFMT, Sparc.O0 );
-	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(( (ConstSTO)sto).getIntValue()) , Sparc.O1);
+	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1 , Sparc.O1);
 	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
 	    	addToBuffer(text_buffer, Sparc.NOP);		
-	    }
+	    } 
 	    else if(t instanceof FloatType)
 	    {
+	    	// call printFloat
 	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTFLOAT);
 	    	addToBuffer(text_buffer, Sparc.NOP);
 	    }
     	
     }
     
-    public void writeExpr(STO sto, boolean itof)
+    public void writeExpr(STO sto)
     {
     	if(debug) writeDebug("-------in writeExpr------------");
     	
@@ -283,11 +298,16 @@ public class AssemblyCodeGenerator {
 		
 		if(t instanceof FloatType)
 		{
-			
+			// set	-4, %l0
+			// add	%fp, %l0, %l0
+			addToBuffer(text_buffer, sto.getAddress());
+			// ld	[%l0], %f0
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F0);
 		}
 		else if(t instanceof IntType)
 		{
-			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+			addToBuffer(text_buffer, sto.getAddress());
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
 		}
     	
     	/*if (t.isFloat()) {
@@ -363,6 +383,7 @@ public class AssemblyCodeGenerator {
         decreaseIndent();
         addToBuffer(text_buffer, Sparc.NEW_LINE);
         addToBuffer(text_buffer, Sparc.SEPARATOR);
+        // SAVE.main = -(92 + 8) & -8
         addToBuffer(text_buffer, String.format(Sparc.SAVE_DOT_FUNCNAME, currFuncName) + Sparc.SAVE_FUNC,
          Integer.toString(Math.abs(offset)));
         addToBuffer(text_buffer, Sparc.NEW_LINE);

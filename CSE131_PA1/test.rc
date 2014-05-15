@@ -5,9 +5,7 @@ float z = 1.0;
 
 
 function : void main() 
-{
-	int a = 1;
-	
-	cout << a << endl;
+{	
+	cout << z << endl;
 
 }
