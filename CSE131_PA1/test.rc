@@ -2,6 +2,8 @@
 function : void main() 
 {	
 	
-	cout << "x" << endl;
+	int a = 1;
+	
+	cout << "a is: " << a << endl;
 
 }

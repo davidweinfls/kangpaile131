@@ -376,7 +376,7 @@ public class AssemblyCodeGenerator {
     }
     
     public void writeFuncClose(String id, int offset, Type returnType) {
-        if(debug) writeDebug("in writeFuncClose");
+        if(debug) writeDebug("--------------in writeFuncClose--------------");
         if (returnType instanceof VoidType) {
 	        addToBuffer(text_buffer, Sparc.RET);
 	        addToBuffer(text_buffer, Sparc.RESTORE);
@@ -393,6 +393,28 @@ public class AssemblyCodeGenerator {
 /*        reg = 0;
         floatReg = 0;*/
     }
+    
+	void writeLocalVariableWInit(STO var, STO expr)
+	{
+		if (debug)
+			writeDebug("---------in writeLocalVariableWInit:" + var.getName());
+		addToBuffer(text_buffer, var.getAddress());
+
+		Type t = var.getType();
+		if (t instanceof FloatType)
+		{
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "["
+					+ Sparc.L0 + "]");
+		} else
+		{
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "["
+					+ Sparc.L0 + "]");
+		}
+
+		decreaseIndent();
+		addToBuffer(text_buffer, Sparc.NEW_LINE);
+		increaseIndent();
+	}
     
     
     

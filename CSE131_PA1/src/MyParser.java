@@ -275,9 +275,9 @@ class MyParser extends parser
 						var = new VarSTO(id, t, true, false);
 					else
 						var = new VarSTO (id, t);
-					m_symtab.insert (var);
 					
 					//P2: 
+					//global
 					if(m_symtab.getLevel() == 1)
 					{
 						var.setBase("%%g0");
@@ -288,6 +288,24 @@ class MyParser extends parser
 						}
 						myAsWriter.writeGlobalVariable(id, true, expr, t);
 					}
+					//local
+					else
+					{
+						if(m_static)
+						{
+							
+						}
+						else
+						{
+							myAsWriter.writeExpr(expr);
+							m_currOffset -= t.getSize();
+                            var.setOffset(m_currOffset);
+                            var.setBase("%%fp");
+                            myAsWriter.writeLocalVariableWInit(var, expr);
+						}
+						
+					}
+					m_symtab.insert (var);
 					
 				}
 				//not assignable
