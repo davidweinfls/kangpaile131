@@ -1,11 +1,7 @@
-int x;
-int y = 3;
-float z = 1.0;
-
-
 
 function : void main() 
 {	
-	cout << z << endl;
+	
+	cout << "x" << endl;
 
 }

@@ -14,6 +14,7 @@ class Sparc
     public static final String WORD_DIR    = ".word";
     public static final String GLOBAL_VAR  = ".global %s\n";
     public static final String BSS_VAR 	   = "%s:\t.skip %s\n";
+    public static final String STRING_TEMP    = "%s:\t.asciz \"%s\"\n";
 
     //-----------------------------------------------------------------------------
     //      Sections

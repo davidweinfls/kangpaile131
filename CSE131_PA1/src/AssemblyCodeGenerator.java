@@ -10,6 +10,7 @@ public class AssemblyCodeGenerator {
 	private int indent_level = 0;
 	private String currFuncName;
 	private int num_of_temp = 0;
+	private int num_of_bool = 0;
 	
 	// 2
     private static final String ERROR_IO_CLOSE = 
@@ -257,6 +258,21 @@ public class AssemblyCodeGenerator {
     	}
     	
     	Type t = sto.getType(); 
+    	
+    	if (t == null) {
+            has_rodata = true;
+            has_data = true;
+            String id = sto.getName();
+            decreaseIndent();
+            addToBuffer(rodata_buffer, Sparc.STRING_TEMP, "temp" + num_of_temp, id);
+            increaseIndent();
+            addToBuffer(rodata_buffer, Sparc.ALIGN_DIR, "4");
+            addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "temp" + num_of_temp, Sparc.O0);
+            addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+            addToBuffer(text_buffer, Sparc.NOP);
+            num_of_temp++;
+            return;
+        }
     	// set
     	// add
     	// ld
@@ -281,6 +297,22 @@ public class AssemblyCodeGenerator {
 	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTFLOAT);
 	    	addToBuffer(text_buffer, Sparc.NOP);
 	    }
+	    else if(t instanceof BoolType)
+	    {
+	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Sparc.BOOLF, Sparc.O0);
+	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
+	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, "be", ".printBool"+num_of_bool);
+	    	addToBuffer(text_buffer, Sparc.NOP);
+	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Sparc.BOOLT, Sparc.O0);
+
+            decreaseIndent();
+            addToBuffer(text_buffer, Sparc.NEW_LINE);
+            addToBuffer(text_buffer, ".printBool"+num_of_bool+":\n");
+            increaseIndent();
+            addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+            addToBuffer(text_buffer, Sparc.NOP);
+            num_of_bool++;
+	    }
     	
     }
     
@@ -304,41 +336,11 @@ public class AssemblyCodeGenerator {
 			// ld	[%l0], %f0
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F0);
 		}
-		else if(t instanceof IntType)
+		else if(t instanceof IntType || t instanceof BoolType)
 		{
 			addToBuffer(text_buffer, sto.getAddress());
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
 		}
-    	
-    	/*if (t.isFloat()) {
-            if (floatReg == 0) {
-                if (sto.isVar() && ((VarSTO) sto).isRef())
-                    appendString(text_buffer, Sparc.TWO_PARAM, Sparc.LD_OP, "["+LOC0+"]", LOC0);
-                appendString(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + LOC0 + "]", FLT0);
-                if(itof)
-                    appendString(text_buffer, Sparc.TWO_PARAM, ITOF_OP, FLT0, FLT0);
-                floatReg = 1;
-            } else {
-                if (sto.isVar() && ((VarSTO) sto).isRef())
-                    appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
-                appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", FLT1);
-                if(isFloat)
-                    appendString(text_buffer, Sparc.TWO_PARAM, ITOF_OP, FLT1, FLT1);
-                floatReg = 0;
-            }
-        } else {
-            if (reg == 0) {
-                if (sto.isVar() && ((VarSTO) sto).isRef())
-                    appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
-                appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC1);
-                reg = 1;
-            } else {
-                if (sto.isVar() && ((VarSTO) sto).isRef())
-                    appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
-                appendString(text_buffer, Sparc.TWO_PARAM, LD_OP, "["+LOC0+"]", LOC2);
-                reg = 0;
-            }
-        }*/
     }
     
     public void writeFuncDec(String id) {
