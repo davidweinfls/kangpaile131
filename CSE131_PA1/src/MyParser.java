@@ -12,6 +12,7 @@ import java.util.Vector;
 class MyParser extends parser
 {
 	private AssemblyCodeGenerator myAsWriter;
+	private boolean debug = true;
 
 	//----------------------------------------------------------------
 	//
@@ -1315,12 +1316,23 @@ class MyParser extends parser
 	DoBinaryExpr(STO a, Operator o, STO b) 
 	{
 		STO result = o.checkOperands(a, b);
+		
+		//if(debug) myAsWriter.writeDebug(a.getName() + o.getName() + b.getName());
+		
 		if (result instanceof ErrorSTO) {
 			// do stuff
 			m_nNumErrors++;
 			//m_errors.print (Formatter.toString(ErrorMsg.not_function, sto.getName()));
 			m_errors.print (result.getName());
 		}
+		
+		m_currOffset -= result.getType().getSize();
+        result.setOffset(m_currOffset);
+        result.setBase("%%fp");
+
+        if (m_symtab.getLevel() != 1)
+            myAsWriter.writeBinaryExpr(a, o, b, result);
+        
 		return result ;
 	}
 	
@@ -1335,6 +1347,14 @@ class MyParser extends parser
 			//m_errors.print (Formatter.toString(ErrorMsg.not_function, sto.getName()));
 			m_errors.print (result.getName());
 		}
+		
+		m_currOffset -= result.getType().getSize();
+        result.setOffset(m_currOffset);
+        result.setBase("%%fp");
+        
+        if (m_symtab.getLevel() != 1)
+            myAsWriter.writeUnaryExpr(a, o, result);
+        
 		return result ;	
 	}
 	

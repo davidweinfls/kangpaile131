@@ -3,10 +3,9 @@
 function : void main() 
 {	
 	
-	static float a;
-	static bool b = true;
+	int a = 1;
 	
-	cout << "a is: " << a << endl;
-	cout << "b is: " << b << endl;
+	cout << "a++ is: " << -a << endl;
+	//cout << "b is: " << b << endl;
 
 }

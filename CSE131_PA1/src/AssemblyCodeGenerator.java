@@ -373,6 +373,110 @@ public class AssemblyCodeGenerator {
 		}
     }
     
+    //used in DoBinaryExpr
+    void writeBinaryExpr(STO a, Operator o, STO b, STO result)
+    {
+    	if(debug) writeDebug("--------in writeBinaryExpr-------");
+    	writeDebug(a.getName() + o.getName() + b.getName());
+    	Type aType = a.getType();
+    	Type bType = b.getType();
+    	Type rType = result.getType();
+    	// if constant folding
+    	if(result instanceof ConstSTO)
+    	{
+    		if(rType instanceof IntType)
+    		{
+    			int value = ((ConstSTO) result).getIntValue ();
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
+                    Integer.toString(value), Sparc.L1);
+    			addToBuffer(text_buffer, result.getAddress());
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    		}
+    		else if (rType instanceof FloatType)
+			{
+				float value = ((ConstSTO) result).getFloatValue();
+				has_rodata = true;
+				decreaseIndent();
+				addToBuffer(rodata_buffer, Sparc.VAR_LABEL, "temp" + num_of_temp, "single",
+						"0r" + Float.toString(value));
+				increaseIndent();
+				//get float value
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "temp" + num_of_temp, Sparc.L0);
+
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F0);
+				//get var address
+				addToBuffer(text_buffer, result.getAddress());
+				//assign
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+			}
+    		else if(rType instanceof BoolType)
+    		{
+    			int value = ((ConstSTO) result).getIntValue ();
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
+                    Integer.toString(value), Sparc.L1);
+    			addToBuffer(text_buffer, result.getAddress());
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    		}
+    	}
+    	// not constant folding
+    	else
+    	{
+    		
+    	}
+    		
+    	
+    }
+    
+    void writeUnaryExpr(STO sto, Operator o, STO result)
+    {
+    	if(debug) writeDebug("-------writeUnaryExpr: " + sto.getName() + " " + o.getName());
+    	Type stoType = sto.getType();
+    	Type rType = result.getType();
+    	
+    	//const folding
+    	if(result instanceof ConstSTO)
+    	{
+    		if(rType instanceof IntType)
+    		{
+    			int value = ((ConstSTO) result).getIntValue ();
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
+                    Integer.toString(value), Sparc.L1);
+    			addToBuffer(text_buffer, result.getAddress());
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    		}
+    		else if (rType instanceof FloatType)
+			{
+				float value = ((ConstSTO) result).getFloatValue();
+				has_rodata = true;
+				decreaseIndent();
+				addToBuffer(rodata_buffer, Sparc.VAR_LABEL, "temp" + num_of_temp, "single",
+						"0r" + Float.toString(value));
+				increaseIndent();
+				//get float value
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "temp" + num_of_temp, Sparc.L0);
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F0);
+				//get var address
+				addToBuffer(text_buffer, result.getAddress());
+				//assign
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+				num_of_temp++;
+			}
+    		else if(rType instanceof BoolType)
+    		{
+    			int value = ((ConstSTO) result).getIntValue ();
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
+                    Integer.toString(value), Sparc.L1);
+    			addToBuffer(text_buffer, result.getAddress());
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    		}
+    	}
+    	//not const folding
+    	else 
+    	{
+    		
+    	}
+    }
+    
     public void writeFuncDec(String id) {
         if(debug) writeDebug("in writeFuncDec");
         has_text = true;

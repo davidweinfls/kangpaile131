@@ -1,5 +1,5 @@
 ! 
-! Generated Thu May 15 01:31:03 PDT 2014
+! Generated Thu May 15 02:56:13 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -9,19 +9,10 @@
 .boolF:	.asciz "false"
 	.align 4
 
-temp0:	.asciz "a is: "
-	.align 4
-temp1:	.asciz "b is: "
+temp0:	.asciz "a++ is: "
 	.align 4
 	.section ".data"
 	.align 4
-
-static_main_b1:	.word 1
-
-	.section ".bss"
-	.align 4
-
-static_main_a0:	.skip 4
 
 	.section ".text"
 	.align 4
@@ -37,35 +28,22 @@ main:
 	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
+	set	-4, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
 	set	temp0, %o0
 	call	printf
 	nop
 
-	set	static_main_a0, %l0
-	add	%g0, %l0, %l0
-	ld	[%l0], %f0
-	call	printFloat
-	nop
-
-	set	.endl, %o0
-	call	printf
-	nop
-
-	set	temp1, %o0
-	call	printf
-	nop
-
-	set	static_main_b1, %l0
-	add	%g0, %l0, %l0
+	set	0, %l0
+	add	null, %l0, %l0
 	ld	[%l0], %l1
-	set	.boolF, %o0
-	cmp	%l1, %g0
-	be	.printBool0
-	nop
-
-	set	.boolT, %o0
-
-.printBool0:
+	set	.intFmt, %o0
+	mov	%l1, %o1
 	call	printf
 	nop
 
@@ -76,5 +54,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 4) & -8
+	SAVE.main = -(92 + 8) & -8
 
