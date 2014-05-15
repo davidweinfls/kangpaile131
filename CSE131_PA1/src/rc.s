@@ -1,5 +1,5 @@
 ! 
-! Generated Thu May 15 11:45:28 PDT 2014
+! Generated Thu May 15 14:14:56 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -9,14 +9,18 @@
 .boolF:	.asciz "false"
 	.align 4
 
-temp0:	.asciz "a & b is: "
-	.align 4
 	.section ".data"
 	.align 4
+
+	.global x
+	
+x:	.word 5
 
 	.section ".text"
 	.align 4
 
+
+! ---------In writeGLobalVariable--------------
 
 ! in writeFuncDec
 ! --main--
@@ -28,34 +32,29 @@ main:
 
 
 ! ------in writeConst--------
-	set	8, %l1
+	set	3, %l1
 	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
+	set	-4, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
 
-! ------in writeConst--------
-	set	0, %l1
+! ---------in writeLocalVariableWInit:x
 	set	-8, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
-! ------------in writePrint---------------
-	set	temp0, %o0
-	call	printf
-	nop
 
+! ---------in writeLocalVariableW)Init:y
 
-! --------in writeBinaryExpr-------
-
-! a&b
-	set	0, %l1
+! ----------in writeAssignExpr: y  =  x
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
 	set	-12, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
-
-! ------------in writePrint---------------
-
-! -------in writeExpr------------
 	set	-12, %l0
 	add	%fp, %l0, %l0
 	ld	[%l0], %l1
@@ -64,8 +63,6 @@ main:
 	call	printf
 	nop
 
-
-! ------------in writePrint---------------
 	set	.endl, %o0
 	call	printf
 	nop

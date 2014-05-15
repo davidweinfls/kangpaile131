@@ -1304,10 +1304,9 @@ class MyParser extends parser
 		
 		//create returnval
 		ExprSTO returnValue = new ExprSTO(stoDes.getName(), stoDes.getType());
-		//return R-value
-		//returnValue.setIsRValue(true);
+
+		myAsWriter.writeAssignExpr(stoDes, expr);
 		
-		//return returnValue;
 		return stoDes;
 	}
 

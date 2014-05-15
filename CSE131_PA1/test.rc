@@ -1,12 +1,17 @@
-
+int x = 5;
 
 function : void main() 
 {	
+	int x = 3;
+	int y;
+	y = x;
 	
-	const int a = 8;
-	const int b = 0;
+	cout << y << endl;
 	
-	cout << "a & b is: " << a&b << endl;
+	//const int a = 8;
+	//const int b = 2;
+	
+	//cout << "a + b is: " << a + b << endl;
 	//cout << "b is: " << b << endl;
 
 }

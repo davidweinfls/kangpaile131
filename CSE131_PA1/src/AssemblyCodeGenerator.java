@@ -277,7 +277,7 @@ public class AssemblyCodeGenerator {
     	//normally we should just do this in write Func
     	//has_text = true;
     	
-    	if(debug) writeDebug("------------in writePrint---------------");
+    	//if(debug) writeDebug("------------in writePrint---------------");
     	
     	if(sto == null)
     	{
@@ -346,9 +346,10 @@ public class AssemblyCodeGenerator {
     	
     }
     
+    // assembly template, get address and then load the value stored in that address
     public void writeExpr(STO sto)
     {
-    	if(debug) writeDebug("-------in writeExpr------------");
+    	//if(debug) writeDebug("-------in writeExpr------------");
     	
 		if (sto instanceof FuncSTO)
 		{
@@ -474,6 +475,31 @@ public class AssemblyCodeGenerator {
     	else 
     	{
     		
+    	}
+    }
+    
+    void writeAssignExpr(STO var, STO expr)
+    {
+    	if(debug) writeDebug("----------in writeAssignExpr: " + var.getName() + "  =  " + expr.getName());
+    	Type varType = var.getType();
+    	Type exprType = expr.getType();
+    	if(varType instanceof FloatType)
+    	{
+    		//load expr value
+    		writeExpr(expr);
+    		//get var address
+    		addToBuffer(text_buffer, var.getAddress());
+    		//store expr value (%f0) to var address [%l0]
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]" ); 
+    	}
+    	else
+    	{
+    		//load expr value
+    		writeExpr(expr);
+    		//get var address
+    		addToBuffer(text_buffer, var.getAddress());
+    		//store expr value (%f0) to var address [%l0]
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]" ); 
     	}
     }
     
