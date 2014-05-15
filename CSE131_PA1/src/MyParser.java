@@ -232,6 +232,20 @@ class MyParser extends parser
 					}
 					myAsWriter.writeGlobalVariable(id, false, expr, t);
 				}
+				else
+				{
+					if(m_static)
+					{
+
+                    }
+					else
+					{
+                        m_currOffset -= t.getSize();
+                        var.setOffset(m_currOffset);
+                        var.setBase("%%fp");
+                        myAsWriter.writeLocalVariableWOInit(var);
+                    }
+				}
 				
 				m_symtab.insert (var);
 				

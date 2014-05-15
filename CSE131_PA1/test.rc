@@ -2,7 +2,7 @@
 function : void main() 
 {	
 	
-	int a = 1;
+	int a;
 	
 	cout << "a is: " << a << endl;
 

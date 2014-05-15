@@ -394,6 +394,7 @@ public class AssemblyCodeGenerator {
         floatReg = 0;*/
     }
     
+    // used in DoVarDecl. write assembly for local var with initialization
 	void writeLocalVariableWInit(STO var, STO expr)
 	{
 		if (debug)
@@ -416,6 +417,14 @@ public class AssemblyCodeGenerator {
 		increaseIndent();
 	}
     
+	// used in DoVarDecl. write assembly for local var without initialization
+	void writeLocalVariableWOInit(STO var)
+	{
+		if (debug)
+			writeDebug("---------in writeLocalVariableW)Init:" + var.getName());
+
+		//not sure what to do
+	}
     
     
 	/**

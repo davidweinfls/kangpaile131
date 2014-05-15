@@ -1,5 +1,5 @@
 ! 
-! Generated Thu May 15 00:48:08 PDT 2014
+! Generated Thu May 15 00:58:41 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -24,22 +24,11 @@ main:
 	set	SAVE.main, %g1
 	save	%sp, %g1, %sp
 
-	set	1, %l1
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %l1
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
 	set	temp0, %o0
 	call	printf
 	nop
 
-	set	-8, %l0
+	set	-4, %l0
 	add	%fp, %l0, %l0
 	ld	[%l0], %l1
 	set	.intFmt, %o0
@@ -54,5 +43,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 8) & -8
+	SAVE.main = -(92 + 4) & -8
 
