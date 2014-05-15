@@ -1019,6 +1019,11 @@ class MyParser extends parser
             m_errors.print(Formatter.toString(ErrorMsg.error4_Test,
              aType.getName()));
 		}
+		if(isIf)
+			myAsWriter.writeIf(a);
+		else
+			myAsWriter.writeWhile(a);
+		
 		return a;
 	}
 	

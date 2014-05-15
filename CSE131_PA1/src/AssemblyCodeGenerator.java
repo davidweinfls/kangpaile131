@@ -503,6 +503,16 @@ public class AssemblyCodeGenerator {
     	}
     }
     
+    void writeIf(STO sto)
+    {
+    	
+    }
+    
+    void writeWhile(STO sto)
+    {
+    	
+    }
+    
     public void writeFuncDec(String id) {
         if(debug) writeDebug("in writeFuncDec");
         has_text = true;
