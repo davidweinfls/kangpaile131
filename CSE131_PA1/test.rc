@@ -3,9 +3,10 @@
 function : void main() 
 {	
 	
-	int a = 1;
+	const int a = 8;
+	const int b = 0;
 	
-	cout << "a++ is: " << -a << endl;
+	cout << "a & b is: " << a&b << endl;
 	//cout << "b is: " << b << endl;
 
 }

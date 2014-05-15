@@ -1353,7 +1353,7 @@ class MyParser extends parser
         result.setBase("%%fp");
         
         if (m_symtab.getLevel() != 1)
-            myAsWriter.writeUnaryExpr(a, o, result);
+            myAsWriter.writeUnaryExpr(a, o.getName(), result);
         
 		return result ;	
 	}
@@ -1372,6 +1372,10 @@ class MyParser extends parser
         } else {
             stoDes = new ExprSTO(sign + sto.getName(), sto.getType());
         }
+        m_currOffset -= stoDes.getType().getSize();
+        stoDes.setOffset(m_currOffset);
+        stoDes.setBase("%%fp");
+        myAsWriter.writeUnaryExpr(sto, sign, stoDes);
 		return stoDes;
 	}
 	

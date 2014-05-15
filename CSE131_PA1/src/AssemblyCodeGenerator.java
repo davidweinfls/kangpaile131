@@ -4,7 +4,7 @@ import java.util.*;
 
 public class AssemblyCodeGenerator {
 
-	private boolean debug = false;
+	private boolean debug = true;
 	
 	//useful local vars
 	private int indent_level = 0;
@@ -427,9 +427,9 @@ public class AssemblyCodeGenerator {
     	
     }
     
-    void writeUnaryExpr(STO sto, Operator o, STO result)
+    void writeUnaryExpr(STO sto, String o, STO result)
     {
-    	if(debug) writeDebug("-------writeUnaryExpr: " + sto.getName() + " " + o.getName());
+    	if(debug) writeDebug("-------writeUnaryExpr: " + sto.getName() + " " + o);
     	Type stoType = sto.getType();
     	Type rType = result.getType();
     	
