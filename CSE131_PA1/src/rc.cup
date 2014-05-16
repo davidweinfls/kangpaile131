@@ -638,8 +638,8 @@ IfStmt ::=          T_IF
 					{: 
 						RESULT = ((MyParser) parser).DoIfWhileCheck (_1, true); 
 					:} 
-					CodeBlock 
-					OptElse
+					CodeBlock {: ((MyParser) parser).DoIfBlock(); :}
+					OptElse {: ((MyParser) parser).DoEndIf(true); :}
     ;
 
 

@@ -1,17 +1,15 @@
-const int x = 5;
+
 
 function : void main() 
 {	
+	if(2>1) 
+	{
+		cout << "here" << endl;
+	}
+	else
+	{
+		cout << "else" << endl;
+	}
 	
-	cout << "x is: " << x << endl;
-	
-	const int a = 8;
-	const int b = 2;
-	
-	cout << "a is: " << a << endl;
-	cout << "b is: " << b << endl;
-	
-	//cout << "a + b is: " << a + b << endl;
-	//cout << "b is: " << b << endl;
 
 }

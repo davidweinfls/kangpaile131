@@ -1045,6 +1045,16 @@ class MyParser extends parser
 		return a;
 	}
 	
+	void DoIfBlock()
+	{
+		myAsWriter.writeElse();
+	}
+	
+	void DoEndIf(boolean ifwhile)
+	{
+		myAsWriter.writeCloseBlock(ifwhile);
+	}
+	
 	// for check12
 	void InWhile()
 	{

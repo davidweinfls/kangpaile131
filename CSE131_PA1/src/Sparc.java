@@ -293,6 +293,8 @@ class Sparc
     public static final String FUNC_COMMENT = "! --%s--\n";
     public static final String FUNC_LABEL = "%s:\n";
     
+    public static final String ELSE = "else";
+    
 
 
 }

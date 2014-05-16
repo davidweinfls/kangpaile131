@@ -11,7 +11,10 @@ public class AssemblyCodeGenerator {
 	private String currFuncName;
 	private int num_of_temp = 0;
 	private int num_of_bool = 0;
-	private int num_of_endIf = 0;
+	private int num_of_if = 0;
+	private int num_of_else = 0;
+	
+	private Stack<String> ifStack = new Stack<String>();
 	
 	// 2
     private static final String ERROR_IO_CLOSE = 
@@ -538,7 +541,7 @@ public class AssemblyCodeGenerator {
     {
     	if(debug) writeDebug("------------in writeIf------------");
     	
-    	String endIfLabel = ".endIf" + num_of_endIf++;
+    	String endIfLabel = ".endIf" + num_of_if++;
     	if(sto.isConst())
     	{
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(((ConstSTO)sto).getIntValue()), Sparc.L1 ); 
@@ -549,11 +552,42 @@ public class AssemblyCodeGenerator {
     		addToBuffer(text_buffer, sto.getAddress());
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
     	}
+    	//compare %l0 with 0
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L0, Sparc.G0);
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, Sparc.ELSE + num_of_if);
+    	addToBuffer(text_buffer, Sparc.NOP);
+    	
+    	//add label to ifStack
+    	ifStack.push(endIfLabel);
+    	ifStack.push(Sparc.ELSE + num_of_if);
+    	num_of_if++;
+    }
+    
+    void writeElse()
+    {
+    	if(debug) writeDebug("---------writeElse---------");
+        String label = ifStack.pop();
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, "ba", ifStack.peek());
+        addToBuffer(text_buffer, Sparc.NOP);
+        decreaseIndent();
+        addToBuffer(text_buffer, label+":\n");
+        increaseIndent();
     }
     
     void writeWhile(STO sto)
     {
     	
+    }
+    
+    public void writeCloseBlock (boolean ifOrWhile)
+    {
+        if(debug) writeDebug("----------in writeCloseBlock-----------");
+        decreaseIndent();
+        if (ifOrWhile)
+        	addToBuffer(text_buffer, ifStack.pop()+":\n");
+        else
+            //addToBuffer(text_buffer, whileLabels.pop()+":\n");
+        increaseIndent();
     }
     
     public void writeFuncDec(String id) {
