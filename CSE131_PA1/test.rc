@@ -1,15 +1,15 @@
-int x = 5;
+const int x = 5;
 
 function : void main() 
 {	
-	int x = 3;
-	int y;
-	y = x;
 	
-	cout << y << endl;
+	cout << "x is: " << x << endl;
 	
-	//const int a = 8;
-	//const int b = 2;
+	const int a = 8;
+	const int b = 2;
+	
+	cout << "a is: " << a << endl;
+	cout << "b is: " << b << endl;
 	
 	//cout << "a + b is: " << a + b << endl;
 	//cout << "b is: " << b << endl;

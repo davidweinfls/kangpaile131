@@ -11,6 +11,7 @@ public class AssemblyCodeGenerator {
 	private String currFuncName;
 	private int num_of_temp = 0;
 	private int num_of_bool = 0;
+	private int num_of_endIf = 0;
 	
 	// 2
     private static final String ERROR_IO_CLOSE = 
@@ -221,10 +222,40 @@ public class AssemblyCodeGenerator {
    	
     }
     
+    void writeConstVar(String id, boolean is_static, boolean is_global, STO sto, Type t)
+    {
+    	if(debug) writeDebug("------------in writeConst: " + sto.getName());
+        has_rodata = true;
+
+        if(is_global && !is_static)
+            addToBuffer(rodata_buffer, Sparc.GLOBAL_VAR, id);
+
+        decreaseIndent();
+        if(t instanceof IntType || t instanceof BoolType)
+        	addToBuffer(rodata_buffer, Sparc.VAR_LABEL, id, "word",
+                Integer.toString( ((ConstSTO) sto).getIntValue()) );
+        else if(t instanceof FloatType)
+        	addToBuffer(rodata_buffer, Sparc.VAR_LABEL, id, "single", "0r" +
+                Float.toString( ((ConstSTO) sto).getFloatValue()) );
+        else if (t instanceof PointerType || t instanceof NullPointerType)
+        	addToBuffer(data_buffer, Sparc.VAR_LABEL, id, "word", "0");
+
+        increaseIndent();
+
+        decreaseIndent();
+        addToBuffer(rodata_buffer, Sparc.NEW_LINE);
+        increaseIndent();
+    }
+    
+    void writeLocalConst()
+    {
+    	
+    }
+    
 	public void writeConstValue(STO sto)
 	{
 		if (debug)
-			writeDebug("------in writeConst--------");
+			writeDebug("------in writeConst: " + sto.getName());
 		Type t = sto.getType();
 		
 		if (t instanceof IntType || t instanceof BoolType)
@@ -505,7 +536,19 @@ public class AssemblyCodeGenerator {
     
     void writeIf(STO sto)
     {
+    	if(debug) writeDebug("------------in writeIf------------");
     	
+    	String endIfLabel = ".endIf" + num_of_endIf++;
+    	if(sto.isConst())
+    	{
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(((ConstSTO)sto).getIntValue()), Sparc.L1 ); 
+    		
+    	}
+    	else
+    	{
+    		addToBuffer(text_buffer, sto.getAddress());
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+    	}
     }
     
     void writeWhile(STO sto)

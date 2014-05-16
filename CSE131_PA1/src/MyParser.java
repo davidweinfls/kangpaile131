@@ -395,6 +395,24 @@ class MyParser extends parser
             }
 		
 			ConstSTO 	c_sto = new ConstSTO (id, t, ((ConstSTO) sto).getValue());
+			// global const
+			if(m_symtab.getLevel() == 1)
+			{
+				c_sto.setBase("%%g0");
+				c_sto.setGlobalOffset(id);
+				if(!m_static)
+                    c_sto.setGlobal();
+				//write assembly
+				myAsWriter.writeConstVar(id, m_static, true, c_sto, t);
+			}
+			else
+			{
+				c_sto.setBase("%%g0");
+				c_sto.setGlobalOffset("const_" + m_funcName + "_" + id + (num_of_constVar++));
+				//write assembly
+				myAsWriter.writeConstVar(c_sto.getGlobalOffset(), m_static, false, c_sto, t);
+			}
+			
 			m_symtab.insert (c_sto);
 		}
 	}
@@ -1611,6 +1629,7 @@ class MyParser extends parser
     
     private int m_currOffset = 0;
     private int num_of_staticVar = 0;
+    private int num_of_constVar = 0;
 
 	private SymbolTable		m_symtab;
 }
