@@ -1374,6 +1374,7 @@ class MyParser extends parser
 		else myAsWriter.writePost(sto, o);
 	}
 	
+	//handle ++, --, !
 	STO DoUnaryOp(Operator o, STO a)
 	{
 		if(a instanceof ErrorSTO) return a;
@@ -1386,7 +1387,7 @@ class MyParser extends parser
 			m_errors.print (result.getName());
 		}
 		
-		m_currOffset -= result.getType().getSize();
+		//m_currOffset -= result.getType().getSize();
         result.setOffset(m_currOffset);
         result.setBase("%%fp");
         
@@ -1396,6 +1397,7 @@ class MyParser extends parser
 		return result ;	
 	}
 	
+	// handle +a, -a
 	STO DoUnarySign(String sign, STO sto)
 	{
 		STO stoDes;

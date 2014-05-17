@@ -581,10 +581,13 @@ public class AssemblyCodeGenerator {
     
     void writePre(STO sto, Operator o)
     {
-    	if(debug) writeDebug("----------writePre: " + sto.getName());
+    	if(debug) writeDebug("----------in writePre: " + sto.getName());
     	Type stoType = sto.getType();
     	//1. load value in sto to %l1 or %f1
+    	if(debug) writeDebug("-----------in writePre, step 1: load value to local1");
     	writeExpr(sto);
+    	
+    	if(debug) writeDebug("-----------in writePre, step 2: computation ");
     	//2. computation, add one or sub one
     	if(stoType instanceof IntType)
     	{
@@ -597,6 +600,7 @@ public class AssemblyCodeGenerator {
     			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L1, "1", Sparc.L1);
     		}
     		//3. store value in its address
+    		if(debug) writeDebug("-----------in writePre, step 3: store value ");
     		addToBuffer(text_buffer, sto.getAddress());
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
     	}
@@ -622,29 +626,46 @@ public class AssemblyCodeGenerator {
     
     void writePost(STO sto, Operator o)
     {
-    	if(debug) writeDebug("----------writePost------------");
+    	if(debug) writeDebug("----------writePost: " + sto.getName());
     	Type stoType = sto.getType();
+    	//1. load value in sto to %l1 or %f1
+    	if(debug) writeDebug("-----------in writePost, step 1: load value to local1");
+    	writeExpr(sto);
+    	
+    	if(debug) writeDebug("-----------in writePost, step 2: computation ");
+    	//2. computation, add one or sub one
     	if(stoType instanceof IntType)
     	{
     		if(o.getName() == "++")
     		{
-    			
+    			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L1, "1", Sparc.L3);
     		}
     		else
     		{
-    			
+    			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L1, "1", Sparc.L3);
     		}
+    		//3. store value in its address
+    		if(debug) writeDebug("-----------in writePost, step 3: store value ");
+    		addToBuffer(text_buffer, sto.getAddress());
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
     	}
     	else if(stoType instanceof FloatType)
     	{
+    		//1. load float_one to %l0
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".float_one", Sparc.L0);
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F2);
+    		//2. computation
     		if(o.getName() == "++")
     		{
-    			
+    			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FADDS_OP, Sparc.F0, Sparc.F2, Sparc.F3);
     		}
     		else
     		{
-    			
+    			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FSUBS_OP, Sparc.F0, Sparc.F2, Sparc.F3);
     		}
+    		//3. store value in its address
+    		addToBuffer(text_buffer, sto.getAddress());
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F3, "[" + Sparc.L0 + "]");
     	}
     }
     

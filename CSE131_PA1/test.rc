@@ -2,8 +2,9 @@
 
 function : void main() 
 {	
-	int a = 1;
-	cout << ++a << endl;
+	float a = 1.5;
+	a++;
+	cout << a++ << endl;
 	
 
 }

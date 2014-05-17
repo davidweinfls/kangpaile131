@@ -1,5 +1,5 @@
 ! 
-! Generated Sat May 17 15:09:36 PDT 2014
+! Generated Sat May 17 16:08:25 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,6 +10,7 @@
 .float_one:	.single 0r1
 	.align 4
 
+temp0:	.single 0r1.5
 	.section ".data"
 	.align 4
 
@@ -26,37 +27,59 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConst: 1
-	set	1, %l1
+! ------in writeConst: 1.5
+	set	temp0, %l0
+	ld	[%l0], %f0
 	set	-4, %l0
 	add	%fp, %l0, %l0
-	st	%l1, [%l0]
+	st	%f0, [%l0]
 	set	-4, %l0
 	add	%fp, %l0, %l0
-	ld	[%l0], %l1
+	ld	[%l0], %f0
 
 ! ---------in writeLocalVariableWInit:a
 	set	-8, %l0
 	add	%fp, %l0, %l0
-	st	%l1, [%l0]
+	st	%f0, [%l0]
 
 
 ! -------writeUnaryExpr: a ++
 
-! ----------writePre: a
+! ----------writePost: a
+
+! -----------in writePost, step 1: load value to local1
 	set	-8, %l0
 	add	%fp, %l0, %l0
-	ld	[%l0], %l1
-	add	%l1, 1, %l1
+	ld	[%l0], %f0
+
+! -----------in writePost, step 2: computation 
+	set	.float_one, %l0
+	ld	[%l0], %f2
+	fadds	%f0, %f2, %f3
 	set	-8, %l0
 	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-	set	-12, %l0
+	st	%f3, [%l0]
+
+! -------writeUnaryExpr: a ++
+
+! ----------writePost: a
+
+! -----------in writePost, step 1: load value to local1
+	set	-8, %l0
 	add	%fp, %l0, %l0
-	ld	[%l0], %l1
-	set	.intFmt, %o0
-	mov	%l1, %o1
-	call	printf
+	ld	[%l0], %f0
+
+! -----------in writePost, step 2: computation 
+	set	.float_one, %l0
+	ld	[%l0], %f2
+	fadds	%f0, %f2, %f3
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	st	%f3, [%l0]
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	call	printFloat
 	nop
 
 	set	.endl, %o0
@@ -68,5 +91,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 12) & -8
+	SAVE.main = -(92 + 8) & -8
 
