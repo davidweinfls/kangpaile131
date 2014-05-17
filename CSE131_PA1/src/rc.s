@@ -1,5 +1,5 @@
 ! 
-! Generated Thu May 15 23:24:33 PDT 2014
+! Generated Sat May 17 15:09:36 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -7,12 +7,9 @@
 .intFmt:	.asciz "%d"
 .boolT:	.asciz "true"
 .boolF:	.asciz "false"
+.float_one:	.single 0r1
 	.align 4
 
-temp0:	.asciz "here"
-	.align 4
-temp1:	.asciz "else"
-	.align 4
 	.section ".data"
 	.align 4
 
@@ -29,33 +26,36 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConst: 2
-	set	2, %l1
+! ------in writeConst: 1
+	set	1, %l1
 	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
+	set	-4, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
 
-! ------in writeConst: 1
-	set	1, %l1
+! ---------in writeLocalVariableWInit:a
 	set	-8, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
-! --------in writeBinaryExpr-------
 
-! 2>1
-	set	1, %l1
-	set	-12, %l0
+! -------writeUnaryExpr: a ++
+
+! ----------writePre: a
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+	add	%l1, 1, %l1
+	set	-8, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
-
-! ------------in writeIf------------
-	set	1, %l1
-	cmp	%l0, %g0
-	be	else1
-	nop
-
-	set	temp0, %o0
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+	set	.intFmt, %o0
+	mov	%l1, %o1
 	call	printf
 	nop
 
@@ -63,27 +63,10 @@ main:
 	call	printf
 	nop
 
-
-! ---------writeElse---------
-	ba	.endIf0
-	nop
-
-else1:
-	set	temp1, %o0
-	call	printf
-	nop
-
-	set	.endl, %o0
-	call	printf
-	nop
-
-
-! ----------in writeCloseBlock-----------
-.endIf0:
 
 ! --------------in writeFuncClose--------------
-ret
-restore
+	ret
+	restore
 
 	SAVE.main = -(92 + 12) & -8
 

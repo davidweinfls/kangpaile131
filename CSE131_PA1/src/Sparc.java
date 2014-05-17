@@ -27,7 +27,8 @@ class Sparc
             ".endl:\t.asciz \"\\n\"\n" +
             ".intFmt:\t.asciz \"%%d\"\n" +
             ".boolT:\t.asciz \"true\"\n" +
-            ".boolF:\t.asciz \"false\"\n"; 
+            ".boolF:\t.asciz \"false\"\n" +
+            ".float_one:\t.single 0r1\n"; 
 
     //-----------------------------------------------------------------------------
     //      Registers

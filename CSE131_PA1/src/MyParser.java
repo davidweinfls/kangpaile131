@@ -1368,6 +1368,12 @@ class MyParser extends parser
 		return result ;
 	}
 	
+	void DoIncDecOp(STO sto, Operator o, boolean pre)
+	{
+		if(pre) myAsWriter.writePre(sto, o);
+		else myAsWriter.writePost(sto, o);
+	}
+	
 	STO DoUnaryOp(Operator o, STO a)
 	{
 		if(a instanceof ErrorSTO) return a;

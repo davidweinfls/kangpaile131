@@ -978,10 +978,12 @@ Designator ::= T_STAR Designator:_1
                     {:
 						RESULT = ((MyParser) parser).DoTypeCast(_1, _2);
                     :}
+                    //pre increment/decrement
     |               IncDecOp:_1 Designator:_2
                     {:
                     	Operator op = new UnaryOp(_1, true);
 						RESULT = ((MyParser) parser).DoUnaryOp(op, _2);
+						((MyParser) parser).DoIncDecOp(_2, op, true);
                     :}
     |               Designator2:_1 
                     {:
@@ -1013,6 +1015,7 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
                     {:
                         Operator op = new UnaryOp(_2, false);
 						RESULT = ((MyParser) parser).DoUnaryOp(op, _1);
+						((MyParser) parser).DoIncDecOp(_1, op, false);
                     :}
     |               Designator2:_1 T_LPAREN OptExprList:_2 T_RPAREN
                     {:

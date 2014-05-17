@@ -2,14 +2,8 @@
 
 function : void main() 
 {	
-	if(2>1) 
-	{
-		cout << "here" << endl;
-	}
-	else
-	{
-		cout << "else" << endl;
-	}
+	int a = 1;
+	cout << ++a << endl;
 	
 
 }
