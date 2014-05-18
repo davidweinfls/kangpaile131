@@ -579,7 +579,7 @@ public class AssemblyCodeGenerator {
     	
     }
     
-    void writePre(STO sto, Operator o, STO result)
+    STO writePre(STO sto, Operator o, STO result)
     {
     	if(debug) writeDebug("----------in writePre: " + sto.getName());
     	Type stoType = sto.getType();
@@ -601,7 +601,7 @@ public class AssemblyCodeGenerator {
     		}
     		//3. store value in its address
     		if(debug) writeDebug("-----------in writePre, step 3: store value ");
-    		addToBuffer(text_buffer, result.getAddress());
+    		addToBuffer(text_buffer, sto.getAddress());
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
     	}
     	else if(stoType instanceof FloatType)
@@ -619,9 +619,10 @@ public class AssemblyCodeGenerator {
     			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FSUBS_OP, Sparc.F0, Sparc.F2, Sparc.F0);
     		}
     		//3. store value in its address
-    		addToBuffer(text_buffer, result.getAddress());
+    		addToBuffer(text_buffer, sto.getAddress());
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
     	}
+    	return sto;
     }
     
     STO writePost(STO sto, Operator o, STO result)

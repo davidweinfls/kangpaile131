@@ -1,5 +1,5 @@
 ! 
-! Generated Sat May 17 22:21:21 PDT 2014
+! Generated Sat May 17 22:45:23 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,18 +10,28 @@
 .float_one:	.single 0r1
 	.align 4
 
-temp0:	.single 0r1.2
-temp1:	.single 0r0.5
-temp2:	.asciz "d is: "
+temp0:	.asciz "e: "
 	.align 4
-temp3:	.asciz "b is: "
+temp1:	.asciz "a: "
+	.align 4
+temp2:	.asciz "after"
+	.align 4
+temp3:	.asciz "e: "
+	.align 4
+temp4:	.asciz "a: "
 	.align 4
 	.section ".data"
 	.align 4
 
+	.global a
+	
+a:	.word 1
+
 	.section ".text"
 	.align 4
 
+
+! ---------In writeGLobalVariable--------------
 
 ! in writeFuncDec
 ! --main--
@@ -32,106 +42,144 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstValeu: 1.2
-	set	temp0, %l0
-	ld	[%l0], %f0
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%f0, [%l0]
+! ---------in writeLocalVariableW)Init:e
 
-! -------in writeExpr: 1.2: 1.2
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %f0
+! -------writeUnaryExpr: a ++
 
-! ---------in writeLocalVariableWInit:b
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%f0, [%l0]
-
-
-! ------in writeConstValeu: .5
-	set	temp1, %l0
-	ld	[%l0], %f0
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	st	%f0, [%l0]
-
-! -------in writeExpr: .5: 0.5
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %f0
-
-! ---------in writeLocalVariableWInit:d
-	set	-16, %l0
-	add	%fp, %l0, %l0
-	st	%f0, [%l0]
-
-
-! -------writeUnaryExpr: b ++
-
-! ----------writePost: b
+! ----------writePost: a
 
 ! -----------in writePost, step 1: load value to local1
 
-! -------in writeExpr: b: null
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %f0
+! -------in writeExpr: a: null
+	set	a, %l0
+	add	%g0, %l0, %l0
+	ld	[%l0], %l1
 
 ! -----------in writePost, step 1.5: store original value 
-	set	-20, %l0
+	set	-8, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
 ! -----------in writePost, step 2: computation 
-	set	.float_one, %l0
-	ld	[%l0], %f2
+	add	%l1, 1, %l3
 
-! -----------in writePost, step 1.5: store original value 
-	set	-20, %l0
-	add	%fp, %l0, %l0
-	st	%f0, [%l0]
-	fadds	%f0, %f2, %f3
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%f3, [%l0]
+! -----------in writePost, step 3: store value 
+	set	a, %l0
+	add	%g0, %l0, %l0
+	st	%l3, [%l0]
 
-! ----------in writeAssignExpr: d  =  result
+! ----------in writeAssignExpr: e  =  result
 
 ! -------in writeExpr: result: null
-	set	-20, %l0
+	set	-8, %l0
 	add	%fp, %l0, %l0
-	ld	[%l0], %f0
-	set	-16, %l0
+	ld	[%l0], %l1
+	set	-4, %l0
 	add	%fp, %l0, %l0
-	st	%f0, [%l0]
-	set	temp2, %o0
+	st	%l1, [%l0]
+	set	temp0, %o0
 	call	printf
 	nop
 
 
-! -------in writeExpr: d: null
-	set	-16, %l0
+! -------in writeExpr: e: null
+	set	-4, %l0
 	add	%fp, %l0, %l0
-	ld	[%l0], %f0
-	call	printFloat
+	ld	[%l0], %l1
+	set	.intFmt, %o0
+	mov	%l1, %o1
+	call	printf
 	nop
 
 	set	.endl, %o0
 	call	printf
 	nop
 
+	set	temp1, %o0
+	call	printf
+	nop
+
+
+! -------in writeExpr: a: null
+	set	a, %l0
+	add	%g0, %l0, %l0
+	ld	[%l0], %l1
+	set	.intFmt, %o0
+	mov	%l1, %o1
+	call	printf
+	nop
+
+	set	.endl, %o0
+	call	printf
+	nop
+
+	set	temp2, %o0
+	call	printf
+	nop
+
+	set	.endl, %o0
+	call	printf
+	nop
+
+
+! -------writeUnaryExpr: a ++
+
+! ----------in writePre: a
+
+! -----------in writePre, step 1: load value to local1
+
+! -------in writeExpr: a: null
+	set	a, %l0
+	add	%g0, %l0, %l0
+	ld	[%l0], %l1
+
+! -----------in writePre, step 2: computation 
+	add	%l1, 1, %l1
+
+! -----------in writePre, step 3: store value 
+	set	a, %l0
+	add	%g0, %l0, %l0
+	st	%l1, [%l0]
+
+! ----------in writeAssignExpr: e  =  a
+
+! -------in writeExpr: a: null
+	set	a, %l0
+	add	%g0, %l0, %l0
+	ld	[%l0], %l1
+	set	-4, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
 	set	temp3, %o0
 	call	printf
 	nop
 
 
-! -------in writeExpr: b: null
-	set	-8, %l0
+! -------in writeExpr: e: null
+	set	-4, %l0
 	add	%fp, %l0, %l0
-	ld	[%l0], %f0
-	call	printFloat
+	ld	[%l0], %l1
+	set	.intFmt, %o0
+	mov	%l1, %o1
+	call	printf
+	nop
+
+	set	.endl, %o0
+	call	printf
+	nop
+
+	set	temp4, %o0
+	call	printf
+	nop
+
+
+! -------in writeExpr: a: null
+	set	a, %l0
+	add	%g0, %l0, %l0
+	ld	[%l0], %l1
+	set	.intFmt, %o0
+	mov	%l1, %o1
+	call	printf
 	nop
 
 	set	.endl, %o0
@@ -143,5 +191,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 20) & -8
+	SAVE.main = -(92 + 8) & -8
 

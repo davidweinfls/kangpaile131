@@ -1,20 +1,19 @@
-
+int a = 1;
 
 function : void main() 
 {	
-	//float a = 1.5;
-	//float c = 0;
-	//c = a++; //1.5;
-	//cout << c << endl
+	int e;
+	e = a++;
 	
-	float b = 1.2;
-	float d = 0.5;
-	d = b++; //
+	cout << "e: " << e << endl;	// e = 1
+	cout << "a: " << a << endl;	// a = 2
 	
-	//cout << b << endl;
-	cout <<"d is: " << d << endl;
-	cout <<"b is: " << b << endl;
+	cout << "after" << endl;
 	
+	e = ++a;
+	
+	cout << "e: " << e << endl;	// e = 3
+	cout << "a: " << a << endl; // a = 3
 
 	
 

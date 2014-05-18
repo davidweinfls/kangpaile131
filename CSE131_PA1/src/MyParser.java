@@ -1397,8 +1397,7 @@ class MyParser extends parser
         {
         	if(pre)
         	{
-        		myAsWriter.writePre(a, o, result);
-        		return result;
+        		return myAsWriter.writePre(a, o, result);
         	}
 			else
 			{
