@@ -1370,12 +1370,11 @@ class MyParser extends parser
 	
 	void DoIncDecOp(STO sto, Operator o, boolean pre)
 	{
-		if(pre) myAsWriter.writePre(sto, o);
-		else myAsWriter.writePost(sto, o);
+		
 	}
 	
 	//handle ++, --, !
-	STO DoUnaryOp(Operator o, STO a)
+	STO DoUnaryOp(Operator o, STO a, boolean incdec, boolean pre)
 	{
 		if(a instanceof ErrorSTO) return a;
 		
@@ -1388,11 +1387,29 @@ class MyParser extends parser
 		}
 		
 		//m_currOffset -= result.getType().getSize();
-        result.setOffset(m_currOffset);
+        result.setOffset(a.getOffset());
         result.setBase("%%fp");
         
         if (m_symtab.getLevel() != 1)
             myAsWriter.writeUnaryExpr(a, o.getName(), result);
+       
+        if(incdec)
+        {
+        	if(pre)
+        	{
+        		myAsWriter.writePre(a, o, result);
+        		return result;
+        	}
+			else
+			{
+				//post inc/dec, need to return value before inc to doAssignExpr(var, expr)
+				m_currOffset -= result.getType().getSize();
+		        result.setOffset(m_currOffset);
+		        result.setBase("%%fp");
+				return myAsWriter.writePost(a, o, result);
+				//return result;
+			}
+        }
         
 		return result ;	
 	}

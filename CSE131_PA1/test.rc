@@ -2,9 +2,20 @@
 
 function : void main() 
 {	
-	float a = 1.5;
-	a++;
-	cout << a++ << endl;
+	//float a = 1.5;
+	//float c = 0;
+	//c = a++; //1.5;
+	//cout << c << endl
+	
+	float b = 1.2;
+	float d = 0.5;
+	d = b++; //
+	
+	//cout << b << endl;
+	cout <<"d is: " << d << endl;
+	cout <<"b is: " << b << endl;
+	
+
 	
 
 }
