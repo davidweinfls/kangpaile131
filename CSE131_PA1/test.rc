@@ -1,10 +1,20 @@
-int x;
-function : void main()
-{
-	
-	x = x + 7;
-	
-	cout << x << endl;
+int a = 1;
 
+function : void main() 
+{	
+	int e;
+	e = a++;
+	
+	cout << "e: " << e << endl;	// e = 1
+	cout << "a: " << a << endl;	// a = 2
+	
+	cout << "after" << endl;
+	
+	e = ++a;
+	
+	cout << "e: " << e << endl;	// e = 3
+	cout << "a: " << a << endl; // a = 3
+
+	
 
 }

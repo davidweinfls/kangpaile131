@@ -318,7 +318,7 @@ class MyParser extends parser
 						}
 						else
 						{
-							myAsWriter.writeExpr(expr);
+							myAsWriter.getValue(expr);
 							m_currOffset -= t.getSize();
                             var.setOffset(m_currOffset);
                             var.setBase("%%fp");
@@ -858,6 +858,7 @@ class MyParser extends parser
             		ExprType.getName()));
             return new ErrorSTO ("NaN for Exit");
         }
+        myAsWriter.writeExitStmt(expr);
         return expr;
 	}
 
