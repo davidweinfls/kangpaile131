@@ -1,9 +1,10 @@
-int a = 1;
+int x;
+function : void main()
+{
+	
+	x = x + 7;
+	
+	cout << x << endl;
 
-function : bool foo() 
-{	
-	bool t = true;
-	return t;
-		
 
 }

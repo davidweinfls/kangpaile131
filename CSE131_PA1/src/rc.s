@@ -1,5 +1,5 @@
 ! 
-! Generated Sun May 18 02:30:42 PDT 2014
+! Generated Sun May 18 14:05:56 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -13,9 +13,12 @@
 	.section ".data"
 	.align 4
 
-	.global a
+	.section ".bss"
+	.align 4
+
+	.global x
 	
-a:	.word 1
+x:	.skip 4
 
 	.section ".text"
 	.align 4
@@ -24,36 +27,51 @@ a:	.word 1
 ! ---------In writeGLobalVariable--------------
 
 ! in writeFuncDec
-! --foo--
+! --main--
 	.align 4
-	.global foo
-foo:
-	set	SAVE.foo, %g1
+	.global main
+main:
+	set	SAVE.main, %g1
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstValeu: true
-	set	1, %l1
+! ------in writeConstantLiteral: 7
+	set	7, %l1
 	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
-! -------in writeExpr: true: 1.0
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %l1
+! --------in writeBinaryExpr-------
 
-! ---------in writeLocalVariableWInit:t
+! x+7
+
+! ----------in writeAssignExpr: x  =  result
+
+! -------in writeExpr: result: null
 	set	-8, %l0
 	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+	set	x, %l0
+	add	%g0, %l0, %l0
 	st	%l1, [%l0]
 
+! -------in writeExpr: x: null
+	set	x, %l0
+	add	%g0, %l0, %l0
+	ld	[%l0], %l1
+	set	.intFmt, %o0
+	mov	%l1, %o1
+	call	printf
+	nop
 
-! --------in writeReturnStmt---------
+	set	.endl, %o0
+	call	printf
+	nop
+
+
+! --------------in writeFuncClose--------------
 	ret
 	restore
 
-! --------------in writeFuncClose--------------
-
-	SAVE.foo = -(92 + 8) & -8
+	SAVE.main = -(92 + 8) & -8
 

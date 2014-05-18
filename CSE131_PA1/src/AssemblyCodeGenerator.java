@@ -258,7 +258,7 @@ public class AssemblyCodeGenerator {
 	public void writeConstValue(STO sto)
 	{
 		if (debug)
-			writeDebug("------in writeConstValeu: " + sto.getName());
+			writeDebug("------in writeConstantLiteral: " + sto.getName());
 		Type t = sto.getType();
 		
 		if (t instanceof IntType || t instanceof BoolType)
@@ -443,6 +443,7 @@ public class AssemblyCodeGenerator {
 				addToBuffer(text_buffer, result.getAddress());
 				//assign
 				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+				num_of_temp++;
 			}
     		else if(rType instanceof BoolType)
     		{
@@ -541,7 +542,7 @@ public class AssemblyCodeGenerator {
     {
     	if(debug) writeDebug("------------in writeIf------------");
     	
-    	String endIfLabel = ".endIf" + num_of_if++;
+    	String endIfLabel = ".endIf" + num_of_if;
     	if(sto.isConst())
     	{
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(((ConstSTO)sto).getIntValue()), Sparc.L1 ); 
@@ -689,7 +690,9 @@ public class AssemblyCodeGenerator {
         if (ifOrWhile)
         	addToBuffer(text_buffer, ifStack.pop()+":\n");
         else
+        {
             //addToBuffer(text_buffer, whileLabels.pop()+":\n");
+        }
         increaseIndent();
     }
     
@@ -725,6 +728,7 @@ public class AssemblyCodeGenerator {
         this.currFuncName = id;
     }
     
+    // used in doReturnStmt. 
 	public void writeReturnStmt(STO returnExpr, Type funcReturnType,
 			boolean byRef)
 	{
@@ -744,18 +748,22 @@ public class AssemblyCodeGenerator {
 							+ num_of_temp, "single",
 							"0r" + Float.toString(value));
 					increaseIndent();
+					// load return value to %f0
 					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "temp"
 							+ num_of_temp++, Sparc.L0);
 					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "["
 							+ Sparc.L0 + "]", Sparc.F0);
 				} 
+				// return expr is int or bool
 				else
 				{
+					// set return value to %i0
 					if (funcReturnType instanceof IntType
 							|| funcReturnType instanceof FloatType)
 						addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
 								Integer.toString(((ConstSTO) returnExpr)
 										.getIntValue()), Sparc.I0);
+					// load return value to %f0
 					else if (funcReturnType instanceof FloatType)
 					{
 						float value = ((ConstSTO) returnExpr).getFloatValue();
@@ -851,7 +859,7 @@ public class AssemblyCodeGenerator {
 	void writeLocalVariableWOInit(STO var)
 	{
 		if (debug)
-			writeDebug("---------in writeLocalVariableW)Init:" + var.getName());
+			writeDebug("---------in writeLocalVariableWOInit:" + var.getName());
 
 		//not sure what to do
 	}
