@@ -520,8 +520,9 @@ public class AssemblyCodeGenerator {
     	// not constant folding
     	else
     	{
-    		if(debug) writeDebug("--------in writeBinaryExpr: Not const folding-------");
-    		if(debug) writeDebug("--------in writeBinaryExpr: get " + a.getName() + "'s value and " + b.getName() + "'s value");
+    		if(debug) writeDebug("=======in writeBinaryExpr: Not const folding=======");
+    		if(debug) writeDebug("=======in writeBinaryExpr: get " + a.getName() + "'s value and " + b.getName() + "'s value");
+    		
     		//get a and b's value
     		if(aType.isFloatType() || bType.isFloatType())
     		{
@@ -534,9 +535,71 @@ public class AssemblyCodeGenerator {
     		}
     		//two parts. one for comparisonOp: > < >= <= == !=
     		//one for non comparisonOp: +-*/% &|^ && ||
-    		if(o instanceof ComparisonOp)
+    		if(!(o instanceof ComparisonOp))
     		{
-    			
+    			if(debug) writeDebug("=======in writeBinaryExpr, do computation=========");
+    			switch(opName)
+    			{	
+    				case "+":
+    					if(aType.isFloatType() || bType.isFloatType())
+    					{
+    						
+    					}
+    					else
+    					{
+    						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L1, Sparc.L2, Sparc.L1);
+    					}
+    					break;
+    				case "-":
+    					if(aType.isFloatType() || bType.isFloatType())
+    					{
+    						
+    					}
+    					else
+    					{
+    						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L1, Sparc.L2, Sparc.L1);
+    					}
+    					break;
+    				case "*":
+    					if(aType.isFloatType() || bType.isFloatType())
+    					{
+    						
+    					}
+    					else
+    					{
+    						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.MUL, Sparc.L1, Sparc.L2, Sparc.L1);
+    					}
+    					break;
+    				case "/":
+    					if(aType.isFloatType() || bType.isFloatType())
+    					{
+    						
+    					}
+    					else
+    					{
+    						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.DIV, Sparc.L1, Sparc.L2, Sparc.L1);
+    					}
+    					break;
+    				case "%":
+    					break;
+    				case "&":
+    					break;
+    				case "|":
+    					break;
+    				case "^":
+    					break;
+    				case "&&":
+    					break;
+    				case "||":
+    					break;
+    				default:
+    					break;
+    			}
+    			if(debug) writeDebug("=======in writeBinaryExpr, do store result=========");
+    			// get result's address
+    			addToBuffer(text_buffer, result.getAddress());
+    			// store result to register
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
     		}
     		//non comparisonOp
     		else
@@ -676,10 +739,10 @@ public class AssemblyCodeGenerator {
     	if(debug) writeDebug("----------in writePre: " + sto.getName());
     	Type stoType = sto.getType();
     	//1. load value in sto to %l1 or %f1
-    	if(debug) writeDebug("-----------in writePre, step 1: load value to local1");
+    	if(debug) writeDebug("=======in writePre, step 1: load value to local1");
     	getValue(sto);
     	
-    	if(debug) writeDebug("-----------in writePre, step 2: computation ");
+    	if(debug) writeDebug("=======in writePre, step 2: computation ");
     	//2. computation, add one or sub one
     	if(stoType instanceof IntType)
     	{
@@ -699,7 +762,7 @@ public class AssemblyCodeGenerator {
     			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L1, "1", Sparc.L1);
     		}
     		//3. store value in its address
-    		if(debug) writeDebug("-----------in writePre, step 3: store value ");
+    		if(debug) writeDebug("=======in writePre, step 3: store value ");
     		addToBuffer(text_buffer, sto.getAddress());
     		if(localReg == 0)
     		{
@@ -750,15 +813,15 @@ public class AssemblyCodeGenerator {
     	if(debug) writeDebug("----------writePost: " + sto.getName());
     	Type stoType = sto.getType();
     	//1. load value in sto to %l1 or %f1
-    	if(debug) writeDebug("-----------in writePost, step 1: load value to local1");
+    	if(debug) writeDebug("=======in writePost, step 1: load value to local1");
     	getValue(sto);
     	
     	//1.5 store original value to result
-    	if(debug) writeDebug("-----------in writePost, step 1.5: store original value ");
+    	if(debug) writeDebug("=======in writePost, step 1.5: store original value ");
     	addToBuffer(text_buffer, result.getAddress());
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
     	
-    	if(debug) writeDebug("-----------in writePost, step 2: computation ");
+    	if(debug) writeDebug("=======in writePost, step 2: computation ");
     	//2. computation, add one or sub one
     	if(stoType instanceof IntType)
     	{
@@ -785,7 +848,7 @@ public class AssemblyCodeGenerator {
     			}
     		}
     		//3. store value in its address
-    		if(debug) writeDebug("-----------in writePost, step 3: store value ");
+    		if(debug) writeDebug("=======in writePost, step 3: store value ");
     		addToBuffer(text_buffer, sto.getAddress());
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
     	}
@@ -796,7 +859,7 @@ public class AssemblyCodeGenerator {
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F2);
     		
     		//1.5 store original value to result
-        	if(debug) writeDebug("-----------in writePost, step 1.5: store original value ");
+        	if(debug) writeDebug("=======in writePost, step 1.5: store original value ");
         	addToBuffer(text_buffer, result.getAddress());
         	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
         	
