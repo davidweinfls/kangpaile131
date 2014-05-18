@@ -842,7 +842,8 @@ class MyParser extends parser
 				m_errors.print (ErrorMsg.error6b_Return_modlval);
 	            return;
 			}
-		}	
+		}
+		myAsWriter.writeReturnStmt(returnExpr, ret, func.getRef());
 	}
 	
 	/*

@@ -725,6 +725,85 @@ public class AssemblyCodeGenerator {
         this.currFuncName = id;
     }
     
+	public void writeReturnStmt(STO returnExpr, Type funcReturnType,
+			boolean byRef)
+	{
+		if (debug)
+			writeDebug("--------in writeReturnStmt---------");
+		if (returnExpr != null)
+		{
+			if (returnExpr instanceof ConstSTO)
+			{
+				if (returnExpr.getType() instanceof FloatType)
+				{
+					has_rodata = true;
+					float value = ((ConstSTO) returnExpr).getFloatValue();
+					decreaseIndent();
+					// set temp as rodata with value of return expr
+					addToBuffer(rodata_buffer, Sparc.VAR_LABEL, "temp"
+							+ num_of_temp, "single",
+							"0r" + Float.toString(value));
+					increaseIndent();
+					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "temp"
+							+ num_of_temp++, Sparc.L0);
+					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "["
+							+ Sparc.L0 + "]", Sparc.F0);
+				} 
+				else
+				{
+					if (funcReturnType instanceof IntType
+							|| funcReturnType instanceof FloatType)
+						addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
+								Integer.toString(((ConstSTO) returnExpr)
+										.getIntValue()), Sparc.I0);
+					else if (funcReturnType instanceof FloatType)
+					{
+						float value = ((ConstSTO) returnExpr).getFloatValue();
+						has_rodata = true;
+						decreaseIndent();
+						addToBuffer(rodata_buffer, Sparc.VAR_LABEL, "tmp"
+								+ num_of_temp, "single",
+								"0r" + Float.toString(value));
+						increaseIndent();
+						addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
+								"temp" + num_of_temp++, Sparc.L0);
+						addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "["
+								+ Sparc.L0 + "]", Sparc.F0);
+					}
+				}
+
+			} 
+			//return expr not const
+			else
+			{
+
+			}
+		}
+		//write ret and restore to assembly
+		addToBuffer(text_buffer, Sparc.RET);
+		addToBuffer(text_buffer, Sparc.RESTORE);
+	}
+	
+	// in DoWriteExitStmt. 
+	public void writeExitStmt(STO stmt)
+	{
+		if (debug)
+			writeDebug("---------writeExitStmt------------");
+		if (stmt instanceof ConstSTO)
+		{
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
+					Integer.toString(((ConstSTO) stmt).getIntValue()), Sparc.O0);
+		}
+		else
+		{
+			addToBuffer(text_buffer, stmt.getAddress());
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0
+					+ "]", Sparc.O0);
+		}
+		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+		addToBuffer(text_buffer, Sparc.NOP);
+	}
+    
     public void writeFuncClose(String id, int offset, Type returnType) {
         if(debug) writeDebug("--------------in writeFuncClose--------------");
         if (returnType instanceof VoidType) {
