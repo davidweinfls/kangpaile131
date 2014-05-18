@@ -1,5 +1,5 @@
 ! 
-! Generated Sat May 17 19:37:30 PDT 2014
+! Generated Sat May 17 22:21:21 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -91,7 +91,7 @@ main:
 ! -----------in writePost, step 1.5: store original value 
 	set	-20, %l0
 	add	%fp, %l0, %l0
-	st	%f2, [%l0]
+	st	%f0, [%l0]
 	fadds	%f0, %f2, %f3
 	set	-8, %l0
 	add	%fp, %l0, %l0

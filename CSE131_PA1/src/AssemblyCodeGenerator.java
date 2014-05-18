@@ -663,7 +663,7 @@ public class AssemblyCodeGenerator {
     		//1.5 store original value to result
         	if(debug) writeDebug("-----------in writePost, step 1.5: store original value ");
         	addToBuffer(text_buffer, result.getAddress());
-        	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F2, "[" + Sparc.L0 + "]");
+        	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
         	
     		//2. computation
     		if(o.getName() == "++")
