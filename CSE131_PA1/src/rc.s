@@ -1,5 +1,5 @@
 ! 
-! Generated Sun May 18 16:38:15 PDT 2014
+! Generated Sun May 18 17:36:32 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,23 +10,15 @@
 .float_one:	.single 0r1
 	.align 4
 
-temp0:	.asciz "x: "
+temp0:	.single 0r0.5
+temp1:	.asciz "y: "
 	.align 4
 	.section ".data"
 	.align 4
 
-	.section ".bss"
-	.align 4
-
-	.global x
-	
-x:	.skip 4
-
 	.section ".text"
 	.align 4
 
-
-! ---------In writeGLobalVariable--------------
 
 ! in writeFuncDec
 ! --main--
@@ -37,63 +29,120 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 7
-	set	7, %l1
+! ------in writeConstantLiteral: 10
+	set	10, %l1
 	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
-! --------in writeBinaryExpr-------
-
-! x+7
-
-! =======in writeBinaryExpr: Not const folding=======
-
-! =======in writeBinaryExpr: get x's value and 7's value
-
-! -------in getValue: x: null
-	set	x, %l0
-	add	%g0, %l0, %l0
-	ld	[%l0], %l1
-
-! -------in getValue: 7: 7.0
+! -------in getValue: 10: 10.0
 	set	-4, %l0
 	add	%fp, %l0, %l0
-	ld	[%l0], %l2
-
-! =======in writeBinaryExpr, do computation=========
-	add	%l1, %l2, %l1
-
-! =======in writeBinaryExpr, do store result=========
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ----------in writeAssignExpr: x  =  result
-
-! -------in getValue: result: null
-	set	-8, %l0
-	add	%fp, %l0, %l0
 	ld	[%l0], %l1
-	set	x, %l0
-	add	%g0, %l0, %l0
+
+! ---------in writeLocalVariableWInit:x
+	set	-8, %l0
+	add	%fp, %l0, %l0
 	st	%l1, [%l0]
+
+
+! ------in writeConstantLiteral: .5
+	set	temp0, %l0
+	ld	[%l0], %f0
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! -------in getValue: .5: 0.5
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+
+! ---------in writeLocalVariableWInit:y
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
 
 ! ------------in writePrint---------------
-	set	temp0, %o0
+	set	temp1, %o0
 	call	printf
 	nop
 
 
+! --------in writeBinaryExpr-------
+
+! x * y
+
+! =======in writeBinaryExpr: Not const folding=======
+
+! =======in writeBinaryExpr: get x's value and y's value
+
+! ---------intToFloat: x null
+
+! =======in intToFloat: getAddress of x
+	set	-8, %l0
+	add	%fp, %l0, %l0
+
+! =======in intToFloat: load value of x
+	ld	[%l0], %f0
+
+! =======in intToFloat: call itos x
+	fitos	%f0, %f0
+
+! -------in getValue: y: null
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f1
+
+! =======in writeBinaryExpr, do computation=========
+	fmuls	%f0, %f1, %f0
+
+! =======in writeBinaryExpr, do store result=========
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! --------in writeBinaryExpr-------
+
+! x + result
+
+! =======in writeBinaryExpr: Not const folding=======
+
+! =======in writeBinaryExpr: get x's value and result's value
+
+! ---------intToFloat: x null
+
+! =======in intToFloat: getAddress of x
+	set	-8, %l0
+	add	%fp, %l0, %l0
+
+! =======in intToFloat: load value of x
+	ld	[%l0], %f0
+
+! =======in intToFloat: call itos x
+	fitos	%f0, %f0
+
+! -------in getValue: result: null
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f1
+
+! =======in writeBinaryExpr, do computation=========
+	fadds	%f0, %f1, %f0
+
+! =======in writeBinaryExpr, do store result=========
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
 ! ------------in writePrint---------------
 
-! -------in getValue: x: null
-	set	x, %l0
-	add	%g0, %l0, %l0
-	ld	[%l0], %l1
-	set	.intFmt, %o0
-	mov	%l1, %o1
-	call	printf
+! -------in getValue: result: null
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	call	printFloat
 	nop
 
 
@@ -107,5 +156,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 8) & -8
+	SAVE.main = -(92 + 24) & -8
 

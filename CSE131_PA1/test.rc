@@ -1,10 +1,11 @@
-int x;
+
 
 function : void main() 
 {	
-	
-	x = x + 7;
-	cout << "x: " << x << endl;
+	int x = 10;
+	float y = 0.5;
+	//y = x + x * y; //15.0
+	cout << "y: " << x + x * y << endl;
 	
 
 }

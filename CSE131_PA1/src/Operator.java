@@ -22,6 +22,7 @@ abstract class Operator
 	public String
 	getName ()
 	{
+		if(m_OperatorName == "%") return "%%";
 		return m_OperatorName;
 	}
 

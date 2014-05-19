@@ -470,11 +470,42 @@ public class AssemblyCodeGenerator {
 		}
     }
     
+    void intToFloat(STO sto)
+    {
+    	if(debug) writeDebug("---------intToFloat: " + sto.getName() + " " + ((sto instanceof ConstSTO) ? ((ConstSTO)sto).getIntValue() : null) );
+    	Type t = new FloatType(sto.getName(), 4);
+    	
+    	//1. get address
+    	if(debug) writeDebug("=======in intToFloat: getAddress of " + sto.getName());
+    	addToBuffer(text_buffer, sto.getAddress());
+    	
+    	//2. load value to float register
+    	if(debug) writeDebug("=======in intToFloat: load value of " + sto.getName());
+    	if(floatReg == 0)
+    	{
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F0);
+    		
+    		//3. call intofloat
+    		if(debug) writeDebug("=======in intToFloat: call itos " + sto.getName());
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F0, Sparc.F0);
+    		floatReg = 1;
+    	}
+    	else
+    	{
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F1);
+    		
+    		//3. call intofloat
+    		if(debug) writeDebug("=======in intToFloat: call itos " + sto.getName());
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F1, Sparc.F1);
+    		floatReg = 0;
+    	}
+    }
+    
     //used in DoBinaryExpr
     void writeBinaryExpr(STO a, Operator o, STO b, STO result)
     {
     	if(debug) writeDebug("--------in writeBinaryExpr-------");
-    	writeDebug(a.getName() + o.getName() + b.getName());
+    	writeDebug(a.getName() + " " + o.getName() + " " + b.getName());
     	Type aType = a.getType();
     	Type bType = b.getType();
     	Type rType = result.getType();
@@ -527,6 +558,26 @@ public class AssemblyCodeGenerator {
     		if(aType.isFloatType() || bType.isFloatType())
     		{
     			//TODO: int float conversion
+    			// int, float
+    			// float, int
+    			// float, float
+    			if(aType.isIntType() && bType.isFloatType())
+    			{
+    				//convert a to float
+    				intToFloat(a);
+    				getValue(b);
+    			}
+    			else if(aType.isFloatType() && bType.isIntType())
+    			{
+    				//convert b to float
+    				getValue(a);
+    				intToFloat(b);
+    			}
+    			else
+    			{
+    				getValue(a);
+        			getValue(b);
+    			}
     		}
     		else if(opName != "&&" && opName != "||")
     		{
@@ -543,7 +594,7 @@ public class AssemblyCodeGenerator {
     				case "+":
     					if(aType.isFloatType() || bType.isFloatType())
     					{
-    						
+    						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FADDS_OP, Sparc.F0, Sparc.F1, Sparc.F0);
     					}
     					else
     					{
@@ -553,7 +604,7 @@ public class AssemblyCodeGenerator {
     				case "-":
     					if(aType.isFloatType() || bType.isFloatType())
     					{
-    						
+    						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FSUBS_OP, Sparc.F0, Sparc.F1, Sparc.F0);
     					}
     					else
     					{
@@ -563,7 +614,7 @@ public class AssemblyCodeGenerator {
     				case "*":
     					if(aType.isFloatType() || bType.isFloatType())
     					{
-    						
+    						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FMULS_OP, Sparc.F0, Sparc.F1, Sparc.F0);
     					}
     					else
     					{
@@ -573,22 +624,31 @@ public class AssemblyCodeGenerator {
     				case "/":
     					if(aType.isFloatType() || bType.isFloatType())
     					{
-    						
+    						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FDIVS_OP, Sparc.F0, Sparc.F1, Sparc.F0);
     					}
     					else
     					{
     						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.DIV, Sparc.L1, Sparc.L2, Sparc.L1);
     					}
     					break;
-    				case "%":
+    				case "%%":
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, Sparc.O0);
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L2, Sparc.O1);
+    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.REM);
+    					addToBuffer(text_buffer, Sparc.NOP);
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.O0, Sparc.L1);
     					break;
     				case "&":
+    					addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.AND_OP, Sparc.L1, Sparc.L2, Sparc.L1);
     					break;
     				case "|":
+    					addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.OR_OP, Sparc.L1, Sparc.L2, Sparc.L1);
     					break;
     				case "^":
+    					addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.XOR_OP, Sparc.L1, Sparc.L2, Sparc.L1);
     					break;
     				case "&&":
+    					
     					break;
     				case "||":
     					break;
@@ -599,7 +659,10 @@ public class AssemblyCodeGenerator {
     			// get result's address
     			addToBuffer(text_buffer, result.getAddress());
     			// store result to register
-    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    			if(result.getType() instanceof FloatType)
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    			else	
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
     		}
     		//non comparisonOp
     		else

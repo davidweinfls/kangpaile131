@@ -8,7 +8,7 @@ public class ArithmeticOp extends BinaryOp {
 		Type bType = b.getType();
 		
 		// for op: T_MOD
-		if (this.getName() == "%") 
+		if (this.getName() == "%%") 
 		{
 			// if a not int, then return equivalent expected
 			if ( !(aType instanceof IntType) )
