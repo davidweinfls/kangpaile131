@@ -15,6 +15,7 @@ public class AssemblyCodeGenerator {
 	private int num_of_else = 0;
 	private int num_of_and = 0;
 	private int num_of_or = 0;
+	private int num_of_comp = 0;
 	
 	// if localReg = 0, means %l1 is not taken, otherwise if localReg = 1, %l1 is taken, can be used
 	private int localReg = 0;
@@ -24,6 +25,7 @@ public class AssemblyCodeGenerator {
 	private Stack<String> ifStack = new Stack<String>();
 	private Stack<String> andStack = new Stack<String>();
 	private Stack<String> orStack = new Stack<String>();
+	private Stack<String> compStack = new Stack<String>();
 	
 	// 2
     private static final String ERROR_IO_CLOSE = 
@@ -736,15 +738,77 @@ public class AssemblyCodeGenerator {
     		//non comparisonOp
     		else
     		{
-    			
+    			if(debug) writeDebug("=======in writeBinaryExpr, non comparsionOP=========");
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
+    			if(aType instanceof FloatType || bType instanceof FloatType)
+    			{
+    				if(debug) writeDebug("=======in writeBinaryExpr, compare two operands=========");
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FCMPS, Sparc.F0, Sparc.F1);
+    				switch (opName)
+    				{
+	    				case ">":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.FBLE_OP, "compOp" + num_of_comp);
+	    					break;
+	    				case ">=":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.FBL_OP, "compOp" + num_of_comp);
+	    					break;
+	    				case "<":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.FBGE_OP, "compOp" + num_of_comp);
+	    					break;
+	    				case "<=":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.FBG_OP, "compOp" + num_of_comp);
+	    					break;
+	    				case "==":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.FBNE_OP, "compOp" + num_of_comp);
+	    					break;
+	    				case "!=":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.FBE_OP, "compOp" + num_of_comp);
+	    					break;
+	    				default:
+	    					break;
+	    				}			
+    			}
+    			else
+    			{
+    				if(debug) writeDebug("=======in writeBinaryExpr, compare two operands=========");
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.L2);
+    				switch (opName)
+    				{
+	    				case ">":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BLE_OP, "compOp" + num_of_comp);
+	    					break;
+	    				case ">=":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BL_OP, "compOp" + num_of_comp);
+	    					break;
+	    				case "<":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BGE_OP, "compOp" + num_of_comp);
+	    					break;
+	    				case "<=":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BG_OP, "compOp" + num_of_comp);
+	    					break;
+	    				case "==":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, "compOp" + num_of_comp);
+	    					break;
+	    				case "!=":
+	    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, "compOp" + num_of_comp);
+	    					break;
+	    				default:
+	    					break;
+	    				}
+    			}
+    			//
+    			addToBuffer(text_buffer, Sparc.NOP);
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L3);
+                decreaseIndent();
+                addToBuffer(text_buffer, "compOp" + num_of_comp +":\n");
+                increaseIndent();
+                addToBuffer(text_buffer, result.getAddress());
+                addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
+                num_of_comp++;
     		}
-    		
-    		
     	}
     	localReg = 0;
     	floatReg = 0;
-    		
-    	
     }
     
     void writeUnaryExpr(STO sto, String o, STO result)

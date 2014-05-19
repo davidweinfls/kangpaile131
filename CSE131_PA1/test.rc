@@ -2,10 +2,10 @@
 
 function : void main() 
 {	
-	bool x = true;
-	bool y = false;
+	int x = 4;
+	float y = 3.5;
 	bool z = true;
-	cout << "result: " << (x || y) && z << endl;
+	cout << "result: " << (x > y) << endl;
 	//cout << "!y: " << !y << endl;
 	
 
