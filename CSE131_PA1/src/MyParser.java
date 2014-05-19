@@ -191,6 +191,8 @@ class MyParser extends parser
 	{
 		if (t == null) return;
 		
+		myAsWriter.resetReg();
+		
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
 			VariableBox<STO, STO> box = lstIDs.elementAt(i);
@@ -1360,6 +1362,8 @@ class MyParser extends parser
 			m_errors.print (result.getName());
 		}
 		
+		myAsWriter.resetReg();
+		
 		m_currOffset -= result.getType().getSize();
         result.setOffset(m_currOffset);
         result.setBase("%%fp");
@@ -1433,6 +1437,10 @@ class MyParser extends parser
         m_currOffset -= stoDes.getType().getSize();
         stoDes.setOffset(m_currOffset);
         stoDes.setBase("%%fp");
+        myAsWriter.resetReg();
+        
+        //if (!sto.isConst()) 
+        	//myAsWriter.getValue(sto);
         myAsWriter.writeUnaryExpr(sto, sign, stoDes);
 		return stoDes;
 	}

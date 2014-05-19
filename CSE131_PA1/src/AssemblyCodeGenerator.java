@@ -13,6 +13,8 @@ public class AssemblyCodeGenerator {
 	private int num_of_bool = 0;
 	private int num_of_if = 0;
 	private int num_of_else = 0;
+	private int num_of_and = 0;
+	private int num_of_or = 0;
 	
 	// if localReg = 0, means %l1 is not taken, otherwise if localReg = 1, %l1 is taken, can be used
 	private int localReg = 0;
@@ -20,6 +22,8 @@ public class AssemblyCodeGenerator {
 	private int floatReg = 0;
 	
 	private Stack<String> ifStack = new Stack<String>();
+	private Stack<String> andStack = new Stack<String>();
+	private Stack<String> orStack = new Stack<String>();
 	
 	// 2
     private static final String ERROR_IO_CLOSE = 
@@ -92,6 +96,12 @@ public class AssemblyCodeGenerator {
     
     public void increaseIndent() {
         indent_level++;
+    }
+    
+    public void resetReg()
+    {
+    	localReg = 0;
+    	floatReg = 0;
     }
 	
     // write timestamp
@@ -513,6 +523,7 @@ public class AssemblyCodeGenerator {
     	// if constant folding
     	if(result instanceof ConstSTO)
     	{
+    		if(debug) writeDebug("=======in writeBinaryExpr: Const folding=======");
     		if(rType instanceof IntType)
     		{
     			int value = ((ConstSTO) result).getIntValue ();
@@ -552,12 +563,12 @@ public class AssemblyCodeGenerator {
     	else
     	{
     		if(debug) writeDebug("=======in writeBinaryExpr: Not const folding=======");
-    		if(debug) writeDebug("=======in writeBinaryExpr: get " + a.getName() + "'s value and " + b.getName() + "'s value");
     		
     		//get a and b's value
     		if(aType.isFloatType() || bType.isFloatType())
     		{
-    			//TODO: int float conversion
+    			if(debug) writeDebug("=======in writeBinaryExpr: get " + a.getName() + "'s value and " + b.getName() + "'s value");
+    			// int float conversion
     			// int, float
     			// float, int
     			// float, float
@@ -581,6 +592,7 @@ public class AssemblyCodeGenerator {
     		}
     		else if(opName != "&&" && opName != "||")
     		{
+    			if(debug) writeDebug("=======in writeBinaryExpr: get " + a.getName() + "'s value and " + b.getName() + "'s value");
     			getValue(a);
     			getValue(b);
     		}
@@ -648,9 +660,64 @@ public class AssemblyCodeGenerator {
     					addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.XOR_OP, Sparc.L1, Sparc.L2, Sparc.L1);
     					break;
     				case "&&":
-    					
+    					//check first operand
+    					//load a, if equals to 0, branch to endAND
+    					if(debug) writeDebug("=======in writeBinaryExpr, &&, check first operand=========");
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
+    					addToBuffer(text_buffer, a.getAddress());
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
+    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, "endAND" + num_of_and);
+    					addToBuffer(text_buffer, Sparc.NOP);
+    					//push endAND to boolStack. will be used when checking b
+    			        andStack.push("endAND" + num_of_and);
+    			        num_of_and++;
+    			        
+    			        //check second operand
+    					//load b, if equals to 0, branch to endAND
+    			        if(debug) writeDebug("=======in writeBinaryExpr, &&, check second operand=========");
+    			        String endAND = andStack.pop();
+    			        addToBuffer(text_buffer, b.getAddress());
+    			        //addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
+    			        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+    			        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
+    			        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, endAND);
+    			        addToBuffer(text_buffer, Sparc.NOP);
+    			        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L3);
+                        decreaseIndent();
+                        addToBuffer(text_buffer, endAND + ":\n");
+                        increaseIndent();
+                        
     					break;
     				case "||":
+    					//check first operand
+    					//load a, if equals to 0, branch to endAND
+    					if(debug) writeDebug("=======in writeBinaryExpr, ||, check first operand=========");
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L3);
+    					addToBuffer(text_buffer, a.getAddress());
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
+    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, "endOR" + num_of_or);
+    					addToBuffer(text_buffer, Sparc.NOP);
+    					//push endAND to boolStack. will be used when checking b
+    			        orStack.push("endOR" + num_of_or);
+    			        num_of_or++;
+    			        
+    			        //check second operand
+    					//load b, if equals to 0, branch to endAND
+    			        if(debug) writeDebug("=======in writeBinaryExpr, ||, check second operand=========");
+    			        String endOR = orStack.pop();
+    			        addToBuffer(text_buffer, b.getAddress());
+    			        //addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
+    			        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+    			        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
+    			        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, endOR);
+    			        addToBuffer(text_buffer, Sparc.NOP);
+    			        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
+                        decreaseIndent();
+                        addToBuffer(text_buffer, endOR + ":\n");
+                        increaseIndent();
+    					
     					break;
     				default:
     					break;
@@ -661,6 +728,8 @@ public class AssemblyCodeGenerator {
     			// store result to register
     			if(result.getType() instanceof FloatType)
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    			else if(opName == "&&" || opName == "||")
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
     			else	
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
     		}
@@ -724,10 +793,50 @@ public class AssemblyCodeGenerator {
     		}
     	}
     	//not const folding
-    	else 
-    	{
-    		
-    	}
+		else
+		{
+			
+			// 1. computation
+			if (debug)
+				writeDebug("=======in writeUnaryExpr, non-const folding, computation=========");
+			switch (o)
+			{
+				case "+":
+					// 0. get sto's value
+					getValue(sto);
+					break;
+				case "-":
+					// 0. get sto's value
+					getValue(sto);
+					if (result.getType().isFloatType())
+					{
+						addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FNEGS_OP,
+								Sparc.F0, Sparc.F0);
+					} else
+						addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.NEG_OP,
+								Sparc.L1, Sparc.L1);
+					break;
+				case "!":
+					// 0. get sto's value
+					getValue(sto);
+					addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.XOR_OP,
+							Sparc.L1, "1", Sparc.L1);
+					break;
+				default:
+					break;
+			}
+			// 2. get address
+			if (debug)
+				writeDebug("=======in writeUnaryExpr, non-const folding, computation=========");
+			addToBuffer(text_buffer, result.getAddress());
+			// 3. store value
+			if (debug)
+				writeDebug("=======in writeUnaryExpr, non-const folding, store value=========");
+			if (result.getType().isFloatType())
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+			else
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+		}
     }
     
     void writeAssignExpr(STO var, STO expr)
