@@ -1572,6 +1572,9 @@ class MyParser extends parser
             (sto, expr);
             retSTO.setArray (array);		
 		}
+		
+		if(aType.isPointerType())
+			
 			
 		return retSTO;
 	}
@@ -1653,6 +1656,13 @@ class MyParser extends parser
 	{
 		myAsWriter.writePrint(sto);
 	}
+	
+	//P2
+	void DoCin(STO sto)
+	{
+        if (sto.isModLValue())
+            myAsWriter.writeCin(sto);
+    }
 
 
 //----------------------------------------------------------------

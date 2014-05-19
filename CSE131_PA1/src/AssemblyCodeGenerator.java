@@ -1277,6 +1277,30 @@ public class AssemblyCodeGenerator {
         floatReg = 0;
     }
     
+    void writeCin(STO sto)
+    {
+    	Type t = sto.getType();
+    	if(debug) writeDebug("----------in writeCin-------------");
+        if (t instanceof FloatType)
+        {
+        	// call inputFloat
+        	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "inputFloat");
+        	addToBuffer(text_buffer, Sparc.NOP);
+          	addToBuffer(text_buffer, sto.getAddress());
+
+            addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+        }
+        else if (t instanceof IntType)
+        {
+        	// call inputInt
+        	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "inputInt");
+        	addToBuffer(text_buffer, Sparc.NOP);
+           	addToBuffer(text_buffer, sto.getAddress());
+
+            addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
+        }
+    }
+    
     
     
     
