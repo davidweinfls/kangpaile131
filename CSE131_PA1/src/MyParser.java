@@ -292,7 +292,7 @@ class MyParser extends parser
 					var.setGlobalOffset(id);
 					var.setGlobal();
 					//write to assembly
-					
+					myAsWriter.writeArray(var, true);
 				}
 				//local array
 				else
@@ -302,9 +302,8 @@ class MyParser extends parser
 					{
 						var.setGlobalOffset("static_" + m_funcName + "_" + id + (num_of_staticVar++) );
                         var.setBase("%%g0");
-                        String static_name = var.getGlobalOffset();
                         //write to assembly
-                        //myAsWriter.writeStaticVariable(static_name, true, expr, t);
+                        myAsWriter.writeArray(var, false);
 					}
 					else
 					{
@@ -314,7 +313,6 @@ class MyParser extends parser
                         myAsWriter.writeLocalVariableWOInit(var);
 					}
 				}
-				
 				m_symtab.insert (var);
 			}
 			//var with init
@@ -777,7 +775,15 @@ class MyParser extends parser
 				ret = new VarSTO("result", returnType);
 				((VarSTO) ret).setRef();
 			} else
+			{
 				ret = new ExprSTO("result", returnType);
+				m_currOffset -= returnType.getSize();
+			}
+			
+			ret.setBase("%%fp");
+			ret.setOffset(m_currOffset);
+			//write to assembly
+			myAsWriter.writeFuncCall(sto, ret, byRef);
 			return ret;
 		}
 		// function is overloaded

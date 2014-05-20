@@ -357,9 +357,19 @@ public class AssemblyCodeGenerator {
 	}
 	
 	// used in DoVarDecl, array part
-	public void writeGlobalArray(STO sto, Boolean isStatic)
+	public void writeArray(STO sto, Boolean isGlobal)
 	{
-		
+		Type t = sto.getType();
+		int size = t.getSize();
+		if(debug) writeDebug("----------in writeGlobalArray: " + sto.getName() + " is array of  " + t.getName());
+		has_bss = true;
+		decreaseIndent();
+		if(isGlobal)
+			addToBuffer(bss_buffer, Sparc.GLOBAL_VAR, sto.getName());
+    	decreaseIndent();
+    	addToBuffer(bss_buffer, Sparc.BSS_VAR, sto.getName(), Integer.toString(size));
+    	increaseIndent();
+    	addToBuffer(bss_buffer, Sparc.NEW_LINE);
 	}
     
     /*
@@ -892,6 +902,14 @@ public class AssemblyCodeGenerator {
 					addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.XOR_OP,
 							Sparc.L1, "1", Sparc.L1);
 					break;
+				case "++":
+					if (debug)
+						writeDebug("=======in writeUnaryExpr, non-const folding, op is ++, do nothing=========");
+					return;
+				case "--":
+					if (debug)
+						writeDebug("=======in writeUnaryExpr, non-const folding, op is --, do nothing=========");
+					return;
 				default:
 					break;
 			}
@@ -912,6 +930,7 @@ public class AssemblyCodeGenerator {
     void writeAssignExpr(STO var, STO expr)
     {
     	if(debug) writeDebug("----------in writeAssignExpr: " + var.getName() + "  =  " + expr.getName());
+    	resetReg();
     	Type varType = var.getType();
     	Type exprType = expr.getType();
     	if(varType instanceof FloatType)
@@ -1180,6 +1199,41 @@ public class AssemblyCodeGenerator {
         this.currFuncName = id;
     }
     
+    public void writeFuncCall(STO sto, STO retSTO, boolean isRef)
+    {
+    	if(debug) writeDebug("----------writeFuncCall------------");
+    	
+    	Type retType = retSTO.getType();
+        has_rodata = true;
+        
+        //call passed in function
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, sto.getName());
+        addToBuffer(text_buffer, Sparc.NOP);
+        
+        if (retType.isVoidType()) {
+            // Do Nothing
+        }
+        // if returnSTO is not void, store returned value ot retSTO's address
+        if(debug) writeDebug("========writeFuncCall: get address of retSTO, store retValue in it ==========");
+        else  if (retType.isFloatType())
+        {
+        	addToBuffer(text_buffer, retSTO.getAddress());
+        	if (isRef)
+        	{
+        		
+        	}
+        	else
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+        }
+        else
+        {
+        	addToBuffer(text_buffer, retSTO.getAddress());
+        	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
+        } 
+
+
+    }
+    
     // used in doReturnStmt. 
 	public void writeReturnStmt(STO returnExpr, Type funcReturnType,
 			boolean byRef)
@@ -1236,7 +1290,28 @@ public class AssemblyCodeGenerator {
 			//return expr not const
 			else
 			{
-
+				if(funcReturnType instanceof FloatType) {
+/*	                if (sto.isArrayE())  {
+                        writeArrayAddress(sto);
+                    } else if (sto.isStructM()) {
+                        writeStructMem(sto);
+                    } else if (sto.isDeref()) {
+                        writeDeref(sto);
+                    } else*/
+                    addToBuffer(text_buffer, returnExpr.getAddress());
+                    /*if (returnExpr.isVar() && ((VarSTO) returnExpr).isRef())
+                        appendString(sb_text, TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
+                    if (!byRef) {
+	                   appendString(sb_text, TWO_PARAM, LD_OP, "["+LOC0+"]", FLT0);
+                    } else {*/
+                    addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
+                    //}
+	                //if(sto.getType().isInt())
+	                	//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ITOF_OP, Sparc.F0, Sparc.F0);
+	            } else {
+	            	addToBuffer(text_buffer, returnExpr.getAddress());
+                    addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
+	            }
 			}
 		}
 		//write ret and restore to assembly
