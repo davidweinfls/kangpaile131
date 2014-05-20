@@ -251,7 +251,7 @@ public class AssemblyCodeGenerator {
 
  		Type varType = var.getType();
  		Type exprType = expr.getType();
- 		if (varType instanceof FloatType && exprType instanceof FloatType)
+ 		if (varType instanceof FloatType/* && exprType instanceof FloatType*/)
  		{
  			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "["
  					+ Sparc.L0 + "]");
@@ -354,6 +354,12 @@ public class AssemblyCodeGenerator {
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "["
 					+ Sparc.L0 + "]");
 		}
+	}
+	
+	// used in DoVarDecl, array part
+	public void writeGlobalArray(STO sto, Boolean isStatic)
+	{
+		
 	}
     
     /*

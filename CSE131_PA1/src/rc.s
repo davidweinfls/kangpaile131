@@ -1,5 +1,5 @@
 ! 
-! Generated Mon May 19 01:22:46 PDT 2014
+! Generated Mon May 19 20:45:50 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,10 +10,11 @@
 .float_one:	.single 0r1
 	.align 4
 
-temp0:	.asciz "Please enter an integer value: "
+temp0:	.asciz "a: "
 	.align 4
-temp1:	.asciz "The value you entered is "
+temp1:	.asciz "b: "
 	.align 4
+temp2:	.single 0r3.31
 	.section ".data"
 	.align 4
 
@@ -30,7 +31,36 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ---------in writeLocalVariableWOInit:i
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-4, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ---------intToFloat: 1 1
+
+! =======in intToFloat: getAddress of 1
+	set	-4, %l0
+	add	%fp, %l0, %l0
+
+! =======in intToFloat: load value of 1
+	ld	[%l0], %f0
+
+! =======in intToFloat: call itos 1
+	fitos	%f0, %f0
+
+! -------in getValue: 1: 1.0
+	set	-4, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+
+! ---------in writeLocalVariableWInit:a
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+
+! ---------in writeLocalVariableWOInit:b
 
 ! ------------in writePrint---------------
 	set	temp0, %o0
@@ -38,13 +68,21 @@ main:
 	nop
 
 
-! ----------in writeCin-------------
-	call	inputInt
+! ------------in writePrint---------------
+
+! -------in getValue: a: null
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	call	printFloat
 	nop
 
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%o0, [%l0]
+
+! ------------in writePrint---------------
+	set	.endl, %o0
+	call	printf
+	nop
+
 
 ! ------------in writePrint---------------
 	set	temp1, %o0
@@ -54,28 +92,76 @@ main:
 
 ! ------------in writePrint---------------
 
-! -------in getValue: i: null
-	set	-4, %l0
+! -------in getValue: b: null
+	set	-12, %l0
 	add	%fp, %l0, %l0
-	ld	[%l0], %l1
-	set	.intFmt, %o0
-	mov	%l1, %o1
+	ld	[%l0], %f0
+	call	printFloat
+	nop
+
+
+! ------------in writePrint---------------
+	set	.endl, %o0
 	call	printf
 	nop
 
 
-! ------in writeConstantLiteral: 0
-	set	0, %l1
+! ------in writeConstantLiteral: 3.31
+	set	temp2, %l0
+	ld	[%l0], %f0
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! --------in writeBinaryExpr-------
+
+! a + 3.31
+
+! =======in writeBinaryExpr: Not const folding=======
+
+! =======in writeBinaryExpr: get a's value and 3.31's value
+
+! -------in getValue: a: null
 	set	-8, %l0
 	add	%fp, %l0, %l0
-	st	%l1, [%l0]
+	ld	[%l0], %f0
 
-! --------in writeReturnStmt---------
-	set	0, %i0
+! -------in getValue: 3.31: 3.31
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f1
+
+! =======in writeBinaryExpr, do computation=========
+	fadds	%f0, %f1, %f0
+
+! =======in writeBinaryExpr, do store result=========
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! ----------in writeAssignExpr: b  =  result
+
+! -------in getValue: result: null
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! ------------in writePrint---------------
+
+! -------in getValue: b: null
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	call	printFloat
+	nop
+
+
+! --------------in writeFuncClose--------------
 	ret
 	restore
 
-! --------------in writeFuncClose--------------
-
-	SAVE.main = -(92 + 8) & -8
+	SAVE.main = -(92 + 20) & -8
 

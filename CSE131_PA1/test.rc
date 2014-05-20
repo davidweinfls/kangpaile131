@@ -1,8 +1,12 @@
-function: int main ()
-{
-  int i;
-  cout << "Please enter an integer value: ";
-  cin >> i;
-  cout << "The value you entered is " << i;
-  return 0;
+function : void main(){
+	float a = 1;
+	float b;
+	
+	cout << "a: " << a << endl;
+	cout << "b: " << b << endl;
+	
+	b = a + 3.31;
+	cout << b;
+	
+
 }

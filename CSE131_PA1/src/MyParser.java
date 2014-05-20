@@ -284,6 +284,37 @@ class MyParser extends parser
 				Type arrType = new ArrayType("Array", 1, 
 						((ArrayType) varType).getArraySize(), t);
 				var = new VarSTO(id, arrType, true, false);
+				
+				//if global array
+				if(m_symtab.getLevel() == 1)
+				{
+					var.setBase("%%g0");
+					var.setGlobalOffset(id);
+					var.setGlobal();
+					//write to assembly
+					
+				}
+				//local array
+				else
+				{
+					//check if static or not
+					if(m_static)
+					{
+						var.setGlobalOffset("static_" + m_funcName + "_" + id + (num_of_staticVar++) );
+                        var.setBase("%%g0");
+                        String static_name = var.getGlobalOffset();
+                        //write to assembly
+                        //myAsWriter.writeStaticVariable(static_name, true, expr, t);
+					}
+					else
+					{
+						m_currOffset -= arrType.getSize();
+                        var.setOffset(m_currOffset);
+                        var.setBase("%%fp");
+                        myAsWriter.writeLocalVariableWOInit(var);
+					}
+				}
+				
 				m_symtab.insert (var);
 			}
 			//var with init
@@ -320,6 +351,8 @@ class MyParser extends parser
 						}
 						else
 						{
+							if(t.isFloatType() && exprType.isIntType())
+								myAsWriter.intToFloat(expr);
 							myAsWriter.getValue(expr);
 							m_currOffset -= t.getSize();
                             var.setOffset(m_currOffset);
@@ -1554,7 +1587,7 @@ class MyParser extends parser
                 	retSTO = new VarSTO (sto.getName(), t, true, false);
                 else 
                 	retSTO = new VarSTO (sto.getName(), t);
-                //retSTO.setIsArrayE();
+                
                 VariableBox<STO, STO> array = new VariableBox<STO, STO>
                 (sto, expr);
                 retSTO.setArray (array);
@@ -1567,14 +1600,16 @@ class MyParser extends parser
             	retSTO = new VarSTO (sto.getName(), t, true, false);
             else 
             	retSTO = new VarSTO (sto.getName(), t);
-            //retSTO.setIsArrayE();
+            
             VariableBox<STO, STO> array = new VariableBox<STO, STO>
             (sto, expr);
             retSTO.setArray (array);		
 		}
 		
 		if(aType.isPointerType())
+		{
 			
+		}
 			
 		return retSTO;
 	}
