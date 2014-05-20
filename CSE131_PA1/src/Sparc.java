@@ -291,7 +291,7 @@ class Sparc
     public static final String RO_DEFINE     = "%s:" + SEPARATOR + "%s" + SEPARATOR + "%s\n";
     public static final String GLOBAL_DEFINE = "%s:" + SEPARATOR + "%s" + SEPARATOR + "%s\n";
     
-    public static final String FUNC_COMMENT = "! --%s--\n";
+    public static final String FUNC_COMMENT = "! <<<<<<<<<<<<<<<<<<<%s>>>>>>>>>>>>>>>>>\n";
     public static final String FUNC_LABEL = "%s:\n";
     
     public static final String ELSE = "else";

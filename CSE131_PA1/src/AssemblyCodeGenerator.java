@@ -648,7 +648,11 @@ public class AssemblyCodeGenerator {
     					}
     					else
     					{
-    						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.MUL, Sparc.L1, Sparc.L2, Sparc.L1);
+    						addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, Sparc.O0);
+        					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L2, Sparc.O1);
+        					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.MUL);
+        					addToBuffer(text_buffer, Sparc.NOP);
+        					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.O0, Sparc.L1);
     					}
     					break;
     				case "/":
@@ -658,7 +662,11 @@ public class AssemblyCodeGenerator {
     					}
     					else
     					{
-    						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.DIV, Sparc.L1, Sparc.L2, Sparc.L1);
+    						addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, Sparc.O0);
+        					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L2, Sparc.O1);
+        					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.DIV);
+        					addToBuffer(text_buffer, Sparc.NOP);
+        					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.O0, Sparc.L1);
     					}
     					break;
     				case "%%":
@@ -1210,11 +1218,11 @@ public class AssemblyCodeGenerator {
         addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, sto.getName());
         addToBuffer(text_buffer, Sparc.NOP);
         
+        if(debug) writeDebug("========writeFuncCall: get address of retSTO, store retValue in it ==========");
         if (retType.isVoidType()) {
             // Do Nothing
         }
         // if returnSTO is not void, store returned value ot retSTO's address
-        if(debug) writeDebug("========writeFuncCall: get address of retSTO, store retValue in it ==========");
         else  if (retType.isFloatType())
         {
         	addToBuffer(text_buffer, retSTO.getAddress());

@@ -1,18 +1,19 @@
+int x;
+int y;
+int z;
 
-function : void main(){
-	int a = 1;
-	int b;
-	
-	b = a++;// a = 2, b = 1
-	 
-	cout << "b = a++: "<< b << endl;
-	cout << "a is: " << a << endl;
-	
-	//cout << "b = a++: "<< b << endl;
-	
-	b++;//b = 2
-	
-	cout << "b++ is: " << b << endl;
-	
-
+function : void main()
+{
+    int localX = 3;
+    int localY = 6;
+    int localZ = 9;
+    int localA = 12;
+    
+    x = localX * localY * localZ;
+    y = localY + (localZ /localX);
+    z = x * (((y - localZ) - localA * y) + x);
+    
+    cout << x << endl; // 162
+    cout << y << endl; // 9
+    cout << z << endl; // 8748
 }
