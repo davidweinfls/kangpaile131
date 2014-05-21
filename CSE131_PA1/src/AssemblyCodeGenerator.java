@@ -1099,7 +1099,7 @@ public class AssemblyCodeGenerator {
     		{
     			if(localReg == 0)
     			{
-    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L2, "1", Sparc.L1);
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L2, "1", Sparc.L2);
     			}
     			else 
     			{
@@ -1110,7 +1110,7 @@ public class AssemblyCodeGenerator {
     		{
     			if(localReg == 0)
     			{
-    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L2, "1", Sparc.L1);
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L2, "1", Sparc.L2);
     			}
     			else 
     			{
@@ -1139,7 +1139,7 @@ public class AssemblyCodeGenerator {
     		{
     			if(floatReg == 0)
     			{
-    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FADDS_OP, Sparc.F1, Sparc.F2, Sparc.F0);
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FADDS_OP, Sparc.F1, Sparc.F2, Sparc.F1);
     			}
     			else
     			{
@@ -1148,7 +1148,14 @@ public class AssemblyCodeGenerator {
     		}
     		else
     		{
-    			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FSUBS_OP, Sparc.F0, Sparc.F2, Sparc.F0);
+    			if(floatReg == 0)
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FSUBS_OP, Sparc.F1, Sparc.F2, Sparc.F1);
+    			}
+    			else
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FSUBS_OP, Sparc.F0, Sparc.F2, Sparc.F0);
+    			}
     		}
     		//3. store value in its address
     		addToBuffer(text_buffer, sto.getAddress());

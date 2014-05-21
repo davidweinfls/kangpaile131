@@ -1,5 +1,5 @@
 ! 
-! Generated Wed May 21 03:00:03 PDT 2014
+! Generated Wed May 21 03:18:10 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,173 +10,17 @@
 .float_one:	.single 0r1
 	.align 4
 
-temp0:	.asciz "recursive foo call "
+temp0:	.asciz "a is: "
 	.align 4
-temp1:	.asciz "breaking out of foo recursive call"
+temp1:	.asciz "b is: "
 	.align 4
-temp2:	.asciz "rec, in the end, is: "
+temp2:	.asciz "c is: "
 	.align 4
 	.section ".data"
 	.align 4
 
-	.section ".bss"
-	.align 4
-
-	.global rec
-	
-rec:	.skip 4
-
 	.section ".text"
 	.align 4
-
-
-! ---------In writeGLobalVariable--------------
-
-! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<foo>>>>>>>>>>>>>>>>>
-	.align 4
-	.global foo
-foo:
-	set	SAVE.foo, %g1
-	save	%sp, %g1, %sp
-
-
-! -------writeUnaryExpr: rec ++
-
-! =======in writeUnaryExpr, non-const folding, computation=========
-
-! =======in writeUnaryExpr, non-const folding, op is ++, do nothing=========
-
-! ----------writePost: rec
-
-! =======in writePost, step 1: load value to local1
-
-! -------in getValue: rec: null
-	set	rec, %l0
-	add	%g0, %l0, %l0
-	ld	[%l0], %l1
-
-! =======in writePost, step 1.5: store original value 
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! =======in writePost, step 2: computation 
-	add	%l1, 1, %l3
-
-! =======in writePost, step 3: store value 
-	set	rec, %l0
-	add	%g0, %l0, %l0
-	st	%l3, [%l0]
-
-! ------------in writePrint---------------
-	set	temp0, %o0
-	call	printf
-	nop
-
-
-! ------------in writePrint---------------
-
-! -------in getValue: rec: null
-	set	rec, %l0
-	add	%g0, %l0, %l0
-	ld	[%l0], %l1
-	set	.intFmt, %o0
-	mov	%l1, %o1
-	call	printf
-	nop
-
-
-! ------------in writePrint---------------
-	set	.endl, %o0
-	call	printf
-	nop
-
-
-! ------in writeConstantLiteral: 10
-	set	10, %l1
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! --------in writeBinaryExpr-------
-
-! rec > 10
-
-! =======in writeBinaryExpr: Not const folding=======
-
-! =======in writeBinaryExpr: get rec's value and 10's value
-
-! -------in getValue: rec: null
-	set	rec, %l0
-	add	%g0, %l0, %l0
-	ld	[%l0], %l1
-
-! -------in getValue: 10: 10.0
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %l2
-
-! =======in writeBinaryExpr, non comparsionOP=========
-	set	0, %l3
-
-! =======in writeBinaryExpr, compare two operands=========
-	cmp	%l1, %l2
-	ble	compOp0
-	nop
-
-	set	1, %l3
-compOp0:
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	st	%l3, [%l0]
-
-! ------------in writeIf: result
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %l1
-	cmp	%l1, %g0
-	be	else0
-	nop
-
-
-! ------------in writePrint---------------
-	set	temp1, %o0
-	call	printf
-	nop
-
-
-! ------------in writePrint---------------
-	set	.endl, %o0
-	call	printf
-	nop
-
-
-! --------in writeReturnStmt---------
-	ret
-	restore
-
-! ---------in writeElse---------
-	ba	.endIf0
-	nop
-
-else0:
-
-! ----------in writeCloseBlock-----------
-.endIf0:
-
-! ----------writeFuncCall------------
-	call	foo
-	nop
-
-
-! ========writeFuncCall: get address of retSTO, store retValue in it ==========
-
-! --------------in writeFuncClose--------------
-	ret
-	restore
-
-	SAVE.foo = -(92 + 12) & -8
 
 
 ! in writeFuncDec
@@ -188,28 +32,371 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 1
-	set	1, %l1
-	set	-16, %l0
+! ------in writeConstantLiteral: 5
+	set	5, %l1
+	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
-! ----------in writeAssignExpr: rec  =  1
+! ---------intToFloat: 5 5
 
-! -------in getValue: 1: 1.0
-	set	-16, %l0
+! =======in intToFloat: getAddress of 5
+	set	-4, %l0
+	add	%fp, %l0, %l0
+
+! =======in intToFloat: load value of 5
+	ld	[%l0], %f0
+
+! =======in intToFloat: call itos 5
+	fitos	%f0, %f0
+
+! -------in getValue: 5: 5.0
+	set	-4, %l0
 	add	%fp, %l0, %l0
 	ld	[%l0], %l1
-	set	rec, %l0
-	add	%g0, %l0, %l0
+
+! ---------in writeLocalVariableWInit:a
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+
+! ------in writeConstantLiteral: 6
+	set	6, %l1
+	set	-12, %l0
+	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
-! ----------writeFuncCall------------
-	call	foo
+! ---------intToFloat: 6 6
+
+! =======in intToFloat: getAddress of 6
+	set	-12, %l0
+	add	%fp, %l0, %l0
+
+! =======in intToFloat: load value of 6
+	ld	[%l0], %f0
+
+! =======in intToFloat: call itos 6
+	fitos	%f0, %f0
+
+! -------in getValue: 6: 6.0
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+
+! ---------in writeLocalVariableWInit:b
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+
+! ------in writeConstantLiteral: 7
+	set	7, %l1
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ---------intToFloat: 7 7
+
+! =======in intToFloat: getAddress of 7
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! =======in intToFloat: load value of 7
+	ld	[%l0], %f0
+
+! =======in intToFloat: call itos 7
+	fitos	%f0, %f0
+
+! -------in getValue: 7: 7.0
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+
+! ---------in writeLocalVariableWInit:c
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+
+! -------writeUnaryExpr: b ++
+
+! =======in writeUnaryExpr, non-const folding, computation=========
+
+! =======in writeUnaryExpr, non-const folding, op is ++, do nothing=========
+
+! ----------in writePre: b
+
+! =======in writePre, step 1: load value to local1
+
+! -------in getValue: b: null
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+
+! =======in writePre, step 2: computation 
+	set	.float_one, %l0
+	ld	[%l0], %f2
+	fadds	%f0, %f2, %f0
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! --------in writeBinaryExpr-------
+
+! b + c
+
+! =======in writeBinaryExpr: Not const folding=======
+
+! =======in writeBinaryExpr: get b's value and c's value
+
+! -------in getValue: b: null
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+
+! -------in getValue: c: null
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f1
+
+! =======in writeBinaryExpr, do computation=========
+	fadds	%f0, %f1, %f0
+
+! =======in writeBinaryExpr, do store result=========
+	set	-28, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! ----------in writeAssignExpr: a  =  result
+
+! =======in writeAssignExpr, varType is float=======
+
+! =======in writeAssignExpr, convert right side int to float=======
+
+! -------in getValue: result: null
+	set	-28, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! -------writeUnaryExpr: a ++
+
+! =======in writeUnaryExpr, non-const folding, computation=========
+
+! =======in writeUnaryExpr, non-const folding, op is ++, do nothing=========
+
+! ----------in writePre: a
+
+! =======in writePre, step 1: load value to local1
+
+! -------in getValue: a: null
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f1
+
+! =======in writePre, step 2: computation 
+	set	.float_one, %l0
+	ld	[%l0], %f2
+	fadds	%f1, %f2, %f1
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	st	%f1, [%l0]
+
+! -------writeUnaryExpr: c ++
+
+! =======in writeUnaryExpr, non-const folding, computation=========
+
+! =======in writeUnaryExpr, non-const folding, op is ++, do nothing=========
+
+! ----------in writePre: c
+
+! =======in writePre, step 1: load value to local1
+
+! -------in getValue: c: null
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+
+! =======in writePre, step 2: computation 
+	set	.float_one, %l0
+	ld	[%l0], %f2
+	fadds	%f0, %f2, %f0
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! --------in writeBinaryExpr-------
+
+! a + c
+
+! =======in writeBinaryExpr: Not const folding=======
+
+! =======in writeBinaryExpr: get a's value and c's value
+
+! -------in getValue: a: null
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+
+! -------in getValue: c: null
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f1
+
+! =======in writeBinaryExpr, do computation=========
+	fadds	%f0, %f1, %f0
+
+! =======in writeBinaryExpr, do store result=========
+	set	-32, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! ----------in writeAssignExpr: b  =  result
+
+! =======in writeAssignExpr, varType is float=======
+
+! =======in writeAssignExpr, convert right side int to float=======
+
+! -------in getValue: result: null
+	set	-32, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! -------writeUnaryExpr: a ++
+
+! =======in writeUnaryExpr, non-const folding, computation=========
+
+! =======in writeUnaryExpr, non-const folding, op is ++, do nothing=========
+
+! ----------in writePre: a
+
+! =======in writePre, step 1: load value to local1
+
+! -------in getValue: a: null
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f1
+
+! =======in writePre, step 2: computation 
+	set	.float_one, %l0
+	ld	[%l0], %f2
+	fadds	%f1, %f2, %f1
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	st	%f1, [%l0]
+
+! -------writeUnaryExpr: b --
+
+! =======in writeUnaryExpr, non-const folding, computation=========
+
+! =======in writeUnaryExpr, non-const folding, op is --, do nothing=========
+
+! ----------in writePre: b
+
+! =======in writePre, step 1: load value to local1
+
+! -------in getValue: b: null
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+
+! =======in writePre, step 2: computation 
+	set	.float_one, %l0
+	ld	[%l0], %f2
+	fsubs	%f0, %f2, %f0
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! --------in writeBinaryExpr-------
+
+! a - b
+
+! =======in writeBinaryExpr: Not const folding=======
+
+! =======in writeBinaryExpr: get a's value and b's value
+
+! -------in getValue: a: null
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+
+! -------in getValue: b: null
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f1
+
+! =======in writeBinaryExpr, do computation=========
+	fsubs	%f0, %f1, %f0
+
+! =======in writeBinaryExpr, do store result=========
+	set	-36, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! ----------in writeAssignExpr: c  =  result
+
+! =======in writeAssignExpr, varType is float=======
+
+! =======in writeAssignExpr, convert right side int to float=======
+
+! -------in getValue: result: null
+	set	-36, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! ------------in writePrint---------------
+	set	temp0, %o0
+	call	printf
 	nop
 
 
-! ========writeFuncCall: get address of retSTO, store retValue in it ==========
+! ------------in writePrint---------------
+
+! -------in getValue: a: null
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	call	printFloat
+	nop
+
+
+! ------------in writePrint---------------
+	set	.endl, %o0
+	call	printf
+	nop
+
+
+! ------------in writePrint---------------
+	set	temp1, %o0
+	call	printf
+	nop
+
+
+! ------------in writePrint---------------
+
+! -------in getValue: b: null
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	call	printFloat
+	nop
+
+
+! ------------in writePrint---------------
+	set	.endl, %o0
+	call	printf
+	nop
+
 
 ! ------------in writePrint---------------
 	set	temp2, %o0
@@ -219,13 +406,11 @@ main:
 
 ! ------------in writePrint---------------
 
-! -------in getValue: rec: null
-	set	rec, %l0
-	add	%g0, %l0, %l0
-	ld	[%l0], %l1
-	set	.intFmt, %o0
-	mov	%l1, %o1
-	call	printf
+! -------in getValue: c: null
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %f0
+	call	printFloat
 	nop
 
 
@@ -239,5 +424,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 16) & -8
+	SAVE.main = -(92 + 36) & -8
 
