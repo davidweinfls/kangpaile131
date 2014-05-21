@@ -945,6 +945,13 @@ public class AssemblyCodeGenerator {
     	Type exprType = expr.getType();
     	if(varType instanceof FloatType)
     	{
+    		if(debug) writeDebug("=======in writeAssignExpr, varType is float=======");
+    		
+    		//need to convert expr register to f0 if trying to assign int to float
+    		if(debug) writeDebug("=======in writeAssignExpr, convert right side int to float=======");
+    		if(exprType.isIntType())
+    			intToFloat(expr);
+    		
     		//load expr value
     		getValue(expr);
     		//get var address

@@ -1,20 +1,7 @@
-function : int foo() {
-	return 123;
-}
-
-function : bool foo2() {
-	return false;
-}
-
 function: void main() {
-	
-	int a = foo();
-	
-	cout << "foo2 return: " << foo2() << endl;
-	
-	bool b = foo2();
 
-	cout << "a: " << a << endl;
-	cout << "b: " << b << endl;
+	float c;
+	c = 5;
+	cout<<c;
 
 }
