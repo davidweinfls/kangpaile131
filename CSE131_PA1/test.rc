@@ -1,12 +1,12 @@
-function : void main(){
-	int x = 1;
-	
-	while(x < 5)
-	{
-		cout << "x: " << x << endl;
-		x++;
-		continue;
-		cout << "here" << endl;
-		
-	}	
-} 
+float x = 1.22;
+
+function : float foo ()
+{
+	cout << "foo" << endl;
+	return x;
+}
+
+function : void main() {
+
+	cout << foo() <<endl;
+}

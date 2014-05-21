@@ -1381,15 +1381,15 @@ public class AssemblyCodeGenerator {
                         writeDeref(sto);
                     } else*/
                     addToBuffer(text_buffer, returnExpr.getAddress());
-                    /*if (returnExpr.isVar() && ((VarSTO) returnExpr).isRef())
-                        appendString(sb_text, TWO_PARAM, LD_OP, "["+LOC0+"]", LOC0);
+                    if (returnExpr.isVar() && ((VarSTO) returnExpr).isRef())
+                        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
                     if (!byRef) {
-	                   appendString(sb_text, TWO_PARAM, LD_OP, "["+LOC0+"]", FLT0);
-                    } else {*/
-                    addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
-                    //}
-	                //if(sto.getType().isInt())
-	                	//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ITOF_OP, Sparc.F0, Sparc.F0);
+                    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F0);
+                    } else {
+                    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
+                    }
+	                if(returnExpr.getType().isIntType())
+	                	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F0, Sparc.F0);
 	            } else {
 	            	addToBuffer(text_buffer, returnExpr.getAddress());
 	            	if(returnExpr.isVar() && ((VarSTO)returnExpr).isRef())
