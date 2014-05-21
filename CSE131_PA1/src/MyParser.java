@@ -1034,6 +1034,7 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error12_Continue);
         }
+        myAsWriter.writeContinue();
     }
 	
 	/*
@@ -1046,6 +1047,7 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error12_Break);
         }
+        myAsWriter.writeBreak();
     }
 
 	//----------------------------------------------------------------

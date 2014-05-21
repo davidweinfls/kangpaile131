@@ -1067,14 +1067,20 @@ public class AssemblyCodeGenerator {
         increaseIndent();
     }
     
-    void writeBreak(STO sto)
+    void writeBreak()
     {
-    	
+    	if(debug) writeDebug("---------in writeBreak----------");
+    	String temp = whileStack.pop();
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BA_OP, whileStack.peek());
+    	whileStack.push(temp);
     }
     
-    void writeContinue(STO sto)
+    void writeContinue()
     {
-    	
+    	if(debug) writeDebug("---------in writeContinue----------");
+    	//get the latest whileStart in whileStack
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BA_OP, whileStack.peek());
+    	addToBuffer(text_buffer, Sparc.NOP);
     }
     
     STO writePre(STO sto, Operator o, STO result)
