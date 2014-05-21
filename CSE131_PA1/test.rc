@@ -1,7 +1,7 @@
 function: void main() {
 
-	float c;
-	c = 5;
-	cout<<c;
+	const float r1 = 420.25;
+
+	cout << sizeof(int) << endl; 	// outputs 4
 
 }

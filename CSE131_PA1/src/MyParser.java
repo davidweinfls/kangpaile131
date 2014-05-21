@@ -1280,6 +1280,12 @@ class MyParser extends parser
             sto =  new ErrorSTO ("Not a type or is not Addressable");
     	}
     	
+    	m_currOffset -= 4;
+    	sto.setBase("%%fp");
+    	sto.setOffset(m_currOffset);
+    	
+    	myAsWriter.writeSizeof(sto, ((ConstSTO)sto).getIntValue() );
+    	
     	return sto;
     }
     

@@ -1442,6 +1442,15 @@ public class AssemblyCodeGenerator {
         }
     }
     
+    void writeSizeof(STO sto, int size)
+    {
+    	if(debug) writeDebug("---------in writeSizeof--------");
+    	addToBuffer(text_buffer, sto.getAddress());
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(size), Sparc.L1 );
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1,"[" + Sparc.L0 + "]" );
+    	
+    }
+    
     
     
     
