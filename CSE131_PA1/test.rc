@@ -1,12 +1,20 @@
+function : int foo() {
+	return 123;
+}
 
-function : void main()
-{
-	int x = 1;
+function : bool foo2() {
+	return false;
+}
+
+function: void main() {
 	
-	while(x < 5)
-	{
-		cout << "x : " << x << endl;
-		x++;
-	}	
+	int a = foo();
 	
+	cout << "foo2 return: " << foo2() << endl;
+	
+	bool b = foo2();
+
+	cout << "a: " << a << endl;
+	cout << "b: " << b << endl;
+
 }

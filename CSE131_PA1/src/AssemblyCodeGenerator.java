@@ -1318,7 +1318,7 @@ public class AssemblyCodeGenerator {
 				{
 					// set return value to %i0
 					if (funcReturnType instanceof IntType
-							|| funcReturnType instanceof FloatType)
+							|| funcReturnType instanceof BoolType)
 						addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
 								Integer.toString(((ConstSTO) returnExpr)
 										.getIntValue()), Sparc.I0);
