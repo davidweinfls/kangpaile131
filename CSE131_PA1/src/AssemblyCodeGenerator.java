@@ -1067,6 +1067,16 @@ public class AssemblyCodeGenerator {
         increaseIndent();
     }
     
+    void writeBreak(STO sto)
+    {
+    	
+    }
+    
+    void writeContinue(STO sto)
+    {
+    	
+    }
+    
     STO writePre(STO sto, Operator o, STO result)
     {
     	if(debug) writeDebug("----------in writePre: " + sto.getName());
@@ -1092,7 +1102,14 @@ public class AssemblyCodeGenerator {
     		}
     		else
     		{
-    			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L1, "1", Sparc.L1);
+    			if(localReg == 0)
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L2, "1", Sparc.L1);
+    			}
+    			else 
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L1, "1", Sparc.L1);
+    			}
     		}
     		//3. store value in its address
     		if(debug) writeDebug("=======in writePre, step 3: store value ");
@@ -1173,11 +1190,11 @@ public class AssemblyCodeGenerator {
     		{
     			if(localReg == 0)
     			{
-    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L2, "1", Sparc.L3);
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L2, "1", Sparc.L3);
     			}
     			else
     			{
-    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L1, "1", Sparc.L3);
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L1, "1", Sparc.L3);
     			}
     		}
     		//3. store value in its address
