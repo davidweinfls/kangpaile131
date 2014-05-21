@@ -16,6 +16,7 @@ public class AssemblyCodeGenerator {
 	private int num_of_and = 0;
 	private int num_of_or = 0;
 	private int num_of_comp = 0;
+	private int num_of_while = 0;
 	
 	// if localReg = 0, means %l1 is not taken, otherwise if localReg = 1, %l1 is taken, can be used
 	private int localReg = 0;
@@ -26,6 +27,7 @@ public class AssemblyCodeGenerator {
 	private Stack<String> andStack = new Stack<String>();
 	private Stack<String> orStack = new Stack<String>();
 	private Stack<String> compStack = new Stack<String>();
+	private Stack<String> whileStack = new Stack<String>();
 	
 	// 2
     private static final String ERROR_IO_CLOSE = 
@@ -963,7 +965,7 @@ public class AssemblyCodeGenerator {
     
     void writeIf(STO sto)
     {
-    	if(debug) writeDebug("------------in writeIf------------");
+    	if(debug) writeDebug("------------in writeIf: " + ((sto.getName() != null) ? sto.getName() : null) );
     	
     	String endIfLabel = ".endIf" + num_of_if;
     	if(sto.isConst())
@@ -976,7 +978,7 @@ public class AssemblyCodeGenerator {
     		addToBuffer(text_buffer, sto.getAddress());
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
     	}
-    	//compare %l0 with 0
+    	//compare %l1 with 0
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
     	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, Sparc.ELSE + num_of_if);
     	addToBuffer(text_buffer, Sparc.NOP);
@@ -989,7 +991,7 @@ public class AssemblyCodeGenerator {
     
     void writeElse()
     {
-    	if(debug) writeDebug("---------writeElse---------");
+    	if(debug) writeDebug("---------in writeElse---------");
         String label = ifStack.pop();
         addToBuffer(text_buffer, Sparc.ONE_PARAM, "ba", ifStack.peek());
         addToBuffer(text_buffer, Sparc.NOP);
@@ -998,9 +1000,65 @@ public class AssemblyCodeGenerator {
         increaseIndent();
     }
     
+    //called in IncWhile() in MyParser
+    //insert whileStart label at the beginning of while loop
+    //in case to get the latest while expr value
+    void writeWhileStart()
+    {
+    	if(debug) writeDebug("-------in writeWhileStart---------");
+    	decreaseIndent();
+    	String whileLabel = "whileStart" + ++num_of_while + ":\n";
+    	addToBuffer(text_buffer, whileLabel);
+    	increaseIndent();
+    	//num_of_while++;
+    }
+    
+    //called in OutWhile() in MyParser
+    //write whileEnd label at the end of while loop
+    void writeWhileEnd()
+    {
+    	if(debug) writeDebug("-------in writeWhileEnd------------");
+    	// branch always to whileStart
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BA_OP, whileStack.pop() );
+    	addToBuffer(text_buffer, Sparc.NOP);
+    }
+    
     void writeWhile(STO sto)
     {
+    	if(debug) writeDebug("---------in writeWhile: " + ((sto.getName() != null) ? sto.getName() : null) );
     	
+    	if(sto.isConst())
+    	{
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(((ConstSTO)sto).getIntValue()), Sparc.L1 ); 
+    		
+    	}
+    	else
+    	{
+    		addToBuffer(text_buffer, sto.getAddress());
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+    	}
+    	//compare %l1 with 0
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, "whileEnd" + num_of_while);
+    	addToBuffer(text_buffer, Sparc.NOP);
+    	
+    	//add label to whileStack
+    	whileStack.push("whileEnd" + num_of_while);
+    	whileStack.push("whileStart" + num_of_while);
+    	
+    }
+    
+    public void writeCloseBlock (boolean ifOrWhile)
+    {
+        if(debug) writeDebug("----------in writeCloseBlock-----------");
+        decreaseIndent();
+        if (ifOrWhile)
+        	addToBuffer(text_buffer, ifStack.pop()+":\n");
+        else
+        {
+            addToBuffer(text_buffer, whileStack.pop()+":\n");
+        }
+        increaseIndent();
     }
     
     STO writePre(STO sto, Operator o, STO result)
@@ -1160,19 +1218,6 @@ public class AssemblyCodeGenerator {
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F3, "[" + Sparc.L0 + "]");
     	}
     	return result;
-    }
-    
-    public void writeCloseBlock (boolean ifOrWhile)
-    {
-        if(debug) writeDebug("----------in writeCloseBlock-----------");
-        decreaseIndent();
-        if (ifOrWhile)
-        	addToBuffer(text_buffer, ifStack.pop()+":\n");
-        else
-        {
-            //addToBuffer(text_buffer, whileLabels.pop()+":\n");
-        }
-        increaseIndent();
     }
     
     public void writeFuncDec(String id) {

@@ -1102,12 +1102,14 @@ class MyParser extends parser
 	void InWhile()
 	{
         m_while++;
+        myAsWriter.writeWhileStart();
     }
 
 	// for check12
     void OutWhile()
     {
         m_while--;
+        myAsWriter.writeWhileEnd();
     }
     
     /*
