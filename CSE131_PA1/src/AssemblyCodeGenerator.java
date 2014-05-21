@@ -365,7 +365,6 @@ public class AssemblyCodeGenerator {
 		int size = t.getSize();
 		if(debug) writeDebug("----------in writeGlobalArray: " + sto.getName() + " is array of  " + t.getName());
 		has_bss = true;
-		decreaseIndent();
 		if(isGlobal)
 			addToBuffer(bss_buffer, Sparc.GLOBAL_VAR, sto.getName());
     	decreaseIndent();
@@ -1370,7 +1369,18 @@ public class AssemblyCodeGenerator {
 	                	//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ITOF_OP, Sparc.F0, Sparc.F0);
 	            } else {
 	            	addToBuffer(text_buffer, returnExpr.getAddress());
-                    addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
+	            	if(returnExpr.isVar() && ((VarSTO)returnExpr).isRef())
+	            	{
+	            		
+	            	}
+	            	else if(!byRef)
+	            	{
+	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.I0);
+	            	}
+	            	else
+	            	{
+	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
+	            	}
 	            }
 			}
 		}

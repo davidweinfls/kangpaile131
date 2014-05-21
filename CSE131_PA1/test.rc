@@ -1,7 +1,9 @@
-function: void main() {
-
-	const float r1 = 420.25;
-
-	cout << sizeof(int) << endl; 	// outputs 4
-
+function : int foo(){
+	int x = 5;
+	cout << "x: " << x << endl;
+	return x;
+}
+function : void main()
+{
+	cout << "foo()" << foo() << endl;
 }
