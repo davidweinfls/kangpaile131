@@ -825,6 +825,7 @@ class MyParser extends parser
 		else if(ret instanceof VoidType && returnExpr == null)
 		{
 			//Do nothing
+			myAsWriter.writeReturnStmt(returnExpr, ret, func.getRef());
 			return;
 		}
 		//if function return type is void and return expression is not null

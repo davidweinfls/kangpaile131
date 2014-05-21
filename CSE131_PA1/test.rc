@@ -1,12 +1,23 @@
-float x = 1.22;
+int rec;
 
-function : float foo ()
+function : void foo()
 {
-	cout << "foo" << endl;
-	return x;
+	rec++;
+	cout << "recursive foo call " << rec << endl;
+	if (rec > 10)
+	{
+		cout << "breaking out of foo recursive call" << endl;
+		return;
+	}
+	
+	foo();
 }
 
-function : void main() {
-
-	cout << foo() <<endl;
+function : void main()
+{
+	rec = 1;
+	
+	foo();
+	
+	cout << "rec, in the end, is: " << rec << endl;
 }
