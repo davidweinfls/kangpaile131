@@ -249,6 +249,8 @@ public class AssemblyCodeGenerator {
  	{
  		if (debug)
  			writeDebug("---------in writeLocalVariableWInit:" + var.getName());
+ 		
+ 		//get left hand side variable address
  		addToBuffer(text_buffer, var.getAddress());
 
  		Type varType = var.getType();
@@ -356,6 +358,9 @@ public class AssemblyCodeGenerator {
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "["
 					+ Sparc.L0 + "]");
 		}
+		
+		if (debug)
+			writeDebug("------end of writeConstantLiteral-------");
 	}
 	
 	// used in DoVarDecl, array part
@@ -371,6 +376,55 @@ public class AssemblyCodeGenerator {
     	addToBuffer(bss_buffer, Sparc.BSS_VAR, sto.getName(), Integer.toString(size));
     	increaseIndent();
     	addToBuffer(bss_buffer, Sparc.NEW_LINE);
+	}
+	
+	// used in a lot of place. Basically used when trying to access elements in array
+	public void writeArrayAddress(STO sto)
+	{
+		if(debug) writeDebug("----------in writeArrayAddress: " + sto.getName());
+		//get var and its size
+		VariableBox<STO, STO> box = sto.getArray();
+		STO var = box.getVariable();
+		STO expr = box.getExpr();
+		Type stoType = sto.getType();
+		//Type varType = var.getType();
+		int index = ((ConstSTO)expr).getIntValue();
+		
+		
+		//1. get address of var, store it in %l4
+		//if recursive, need to check type of var and call corresponding write**Address methods.
+		//so use getAddressHelper()
+		if(debug) writeDebug("=======in writeArrayAddress, get address of var :" + var.getName() + 
+				" and store in l4");
+		getAddressHelper(var);
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.L4);
+		
+		//2. get value of expr, %l5
+		if(debug) writeDebug("=======in writeArrayAddress, get value of index: " + expr.getName());
+		// optionA:
+		//getAddressHelper(expr);
+		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
+				
+		// optionB:
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(index), Sparc.L5);
+		
+		//3. if basicType, %l5 * 4 to get the scaled offset, %l5
+		if(debug) writeDebug("=======in writeArrayAddress, scale the offset");
+		if(stoType.isBasicType() || stoType.isPointerType())
+		{
+			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SLL_OP, Sparc.L5, "2", Sparc.L5);
+		}
+		//TODO:
+		else
+		{
+			
+		}
+	
+		//4. base + offset, add %l4 and %l5 to get the result address 
+		if(debug) writeDebug("=======in writeArrayAddress, base + offset");
+		addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L4, Sparc.L5, Sparc.L0);
+		
+		if(debug) writeDebug("---------end of writeArrayAddress--------");
 	}
     
     /*
@@ -464,13 +518,16 @@ public class AssemblyCodeGenerator {
 			return;
 		}
 		
+		//get basetype of sto
 		Type t = sto.getType();
 		
 		if(t instanceof FloatType)
 		{
 			// set	-4, %l0
 			// add	%fp, %l0, %l0
-			addToBuffer(text_buffer, sto.getAddress());
+			// not sure the type of sto, use getAddressHelper to get address of sto
+			getAddressHelper(sto);
+
 			if(floatReg == 0)
 			{
 				// ld	[%l0], %f0
@@ -485,7 +542,9 @@ public class AssemblyCodeGenerator {
 		}
 		else if(t instanceof IntType || t instanceof BoolType)
 		{
-			addToBuffer(text_buffer, sto.getAddress());
+			// not sure the type of sto, use getAddressHelper to get address of sto
+			getAddressHelper(sto);
+			
 			if(localReg == 0)
 			{
 				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
@@ -499,6 +558,32 @@ public class AssemblyCodeGenerator {
 		}
     }
     
+    //helper method. used in various methods.
+    //get address of stos, when the sto is not only a basicType. 
+    //needs to check the type of sto to call different write**Address method
+    void getAddressHelper(STO sto)
+    {
+    	if(debug) writeDebug("--------in getAddressHelper: " + sto.getName());
+    	//if array type, allocate space in stack for it
+		if(sto.getIsArray())
+		{
+			writeArrayAddress(sto);
+		}
+		else if(sto.getIsDeref())
+		{
+			
+		}
+		else if(sto.getIsStruct())
+		{
+			
+		}
+		else
+		{
+			addToBuffer(text_buffer, sto.getAddress());
+		}
+		if(debug) writeDebug("--------end of getAddressHelper------------ ");
+    }
+    
     void intToFloat(STO sto)
     {
     	if(debug) writeDebug("---------intToFloat: " + sto.getName() + " " + ((sto instanceof ConstSTO) ? ((ConstSTO)sto).getIntValue() : null) );
@@ -506,7 +591,7 @@ public class AssemblyCodeGenerator {
     	
     	//1. get address
     	if(debug) writeDebug("=======in intToFloat: getAddress of " + sto.getName());
-    	addToBuffer(text_buffer, sto.getAddress());
+    	getAddressHelper(sto);
     	
     	//2. load value to float register
     	if(debug) writeDebug("=======in intToFloat: load value of " + sto.getName());
@@ -960,13 +1045,32 @@ public class AssemblyCodeGenerator {
     	}
     	else
     	{
-    		//load expr value
+    		//1. load expr value
     		getValue(expr);
-    		//get var address
-    		addToBuffer(text_buffer, var.getAddress());
-    		//store expr value (%f0) to var address [%l0]
+    		
+    		//2. get var address
+    		//if array type, allocate space in stack for it
+    		if(var.getIsArray())
+    		{
+    			writeArrayAddress(var);
+    		}
+    		else if(var.getIsDeref())
+    		{
+    			
+    		}
+    		else if(var.getIsStruct())
+    		{
+    			
+    		}
+    		else
+    		{
+    			addToBuffer(text_buffer, var.getAddress());
+    		}
+    		
+    		//3. store expr value (%f0) to var address [%l0]
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]" ); 
     	}
+    	if(debug) writeDebug("----------end of writeAssignExpr--------");
     }
     
     void writeIf(STO sto)

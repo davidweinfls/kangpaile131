@@ -223,7 +223,6 @@ class MyParser extends parser
 				else
 					var = new VarSTO (id, t);
 				
-				
 				//P2: 
 				if(m_symtab.getLevel() == 1)
 				{
@@ -350,7 +349,9 @@ class MyParser extends parser
 						else
 						{
 							if(t.isFloatType() && exprType.isIntType())
+							{
 								myAsWriter.intToFloat(expr);
+							}
 							myAsWriter.getValue(expr);
 							m_currOffset -= t.getSize();
                             var.setOffset(m_currOffset);
@@ -1570,10 +1571,12 @@ class MyParser extends parser
              aType.getName()));
             return new ErrorSTO ("Check11 error. Illegal Array Usage");
 		}
+		//TODO: if left is a pointer Type
 		else if(aType instanceof PointerType)
 		{
 			Type t = ((PointerType) aType).getBaseType();
 			retSTO = new VarSTO(aType.getName(), t);
+			//TODO:
 		}
 		//check b
 		else if(!(bType instanceof IntType))
@@ -1605,9 +1608,12 @@ class MyParser extends parser
                 else 
                 	retSTO = new VarSTO (sto.getName(), t);
                 
+                //if int x[3], sto is x, expr is 3
                 VariableBox<STO, STO> array = new VariableBox<STO, STO>
                 (sto, expr);
                 retSTO.setArray (array);
+                //for project2 easiness, turn array flag on
+                retSTO.setIsArray();
 			}
 		}
 		else
@@ -1620,10 +1626,12 @@ class MyParser extends parser
             
             VariableBox<STO, STO> array = new VariableBox<STO, STO>
             (sto, expr);
-            retSTO.setArray (array);		
+            retSTO.setArray (array);	
+            //for project2 easiness, turn array flag on
+            retSTO.setIsArray();
 		}
 		
-		if(aType.isPointerType())
+		if(!(aType.isPointerType()))
 		{
 			
 		}

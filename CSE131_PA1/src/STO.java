@@ -125,7 +125,12 @@ abstract class STO
         return m_global;
     }
     
-    public void setArray (VariableBox v) 
+    public VariableBox<STO, STO> getArray()
+    {
+    	return m_array;
+    }
+    
+    public void setArray (VariableBox<STO, STO> v) 
     {
         m_array = v;
     }
@@ -175,6 +180,38 @@ abstract class STO
 		return s.toString();
 	}
 
+	//for project2:
+	public boolean getIsArray()
+	{
+		return isArray;
+	}
+	
+	public void setIsArray()
+	{
+		isArray = true;
+	}
+	
+	//for project2:
+	public boolean getIsStruct()
+	{
+		return isStruct;
+	}
+		
+	public void setIsStruct()
+	{
+		isStruct = true;
+	}
+	
+	//for project2:
+	public boolean getIsDeref()
+	{
+		return isDeref;
+	}
+	
+	public void setIsDeref()
+	{
+		isDeref = true;
+	}
 
 	//----------------------------------------------------------------
 	//	It will be helpful to ask a STO what specific STO it is.
@@ -198,8 +235,13 @@ abstract class STO
 	private boolean		m_isAddressable;
 	private boolean		m_isModifiable;
 	private boolean 	m_global = false;
-	private VariableBox	m_array;
+	private VariableBox<STO, STO>	m_array;
 	private String		m_base;
 	private int			m_offset;
 	private String 		m_global_offset = "";
+	
+	//for project2: 
+	private boolean		isArray = false;
+	private boolean 	isStruct = false;
+	private boolean 	isDeref = false;
 }
