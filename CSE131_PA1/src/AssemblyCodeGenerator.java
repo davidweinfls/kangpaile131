@@ -401,7 +401,7 @@ public class AssemblyCodeGenerator {
 		STO expr = box.getExpr();
 		Type stoType = sto.getType();
 		//Type varType = var.getType();
-		int index = sto.getType().getSize();
+		//int index = sto.getType().getSize();
 		
 		
 		//1. get address of var, store it in %l4
@@ -415,11 +415,11 @@ public class AssemblyCodeGenerator {
 		//2. get value of expr, %l5
 		if(debug) writeDebug("=======in writeArrayAddress, get value of index: " + expr.getName());
 		// optionA:
-		//getAddressHelper(expr);
-		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
+		getAddressHelper(expr);
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
 				
-		// optionB:
-		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(index), Sparc.L5);
+		// optionB: actually sometimes it doesnt work. since a VarSTO expr doesn't have a value at compile time
+		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(index), Sparc.L5);
 		
 		//3. if basicType, %l5 * 4 to get the scaled offset, %l5
 		if(debug) writeDebug("=======in writeArrayAddress, scale the offset");

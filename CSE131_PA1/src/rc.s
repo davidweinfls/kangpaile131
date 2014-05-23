@@ -1,5 +1,5 @@
 ! 
-! Generated Fri May 23 00:55:17 PDT 2014
+! Generated Fri May 23 01:16:37 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,98 +10,11 @@
 .float_one:	.single 0r1
 	.align 4
 
-temp0:	.asciz "i: "
-	.align 4
 	.section ".data"
 	.align 4
 
 	.section ".text"
 	.align 4
-
-
-! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<bar>>>>>>>>>>>>>>>>>
-	.align 4
-	.global bar
-bar:
-	set	SAVE.bar, %g1
-	save	%sp, %g1, %sp
-
-
-! -------in writeParameter: b param num: 0
-	set	68, %l0
-	add	%fp, %l0, %l0
-	st	%i0, [%l0]
-
-! ------in writeConstantLiteral: 777
-	set	777, %l1
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! ----------in writeAssignExpr: b  =  777
-
-! -------in getValue: 777: 777.0
-
-! --------in getAddressHelper: 777
-	set	-4, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-	set	68, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %l0
-	st	%l1, [%l0]
-
-! ----------end of writeAssignExpr--------
-
-! --------------in writeFuncClose--------------
-	ret
-	restore
-
-	SAVE.bar = -(92 + 4) & -8
-
-
-! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<foo>>>>>>>>>>>>>>>>>
-	.align 4
-	.global foo
-foo:
-	set	SAVE.foo, %g1
-	save	%sp, %g1, %sp
-
-
-! -------in writeParameter: a param num: 0
-	set	68, %l0
-	add	%fp, %l0, %l0
-	st	%i0, [%l0]
-
-! -------in writePassParameter--------
-
-! --------in getAddressHelper: a
-	set	68, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	mov	%l0, %o0
-
-! ----------writeFuncCall------------
-	call	bar
-	nop
-
-
-! ========writeFuncCall: get address of retSTO, store retValue in it ==========
-
-! --------------in writeFuncClose--------------
-	ret
-	restore
-
-	SAVE.foo = -(92 + 4) & -8
 
 
 ! in writeFuncDec
@@ -113,18 +26,38 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 5
-	set	5, %l1
-	set	-8, %l0
+! ------in writeConstantLiteral: 3
+	set	3, %l1
+	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
+! ---------in writeLocalVariableWOInit:x
+
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ------in writeConstantLiteral: 5
+	set	5, %l1
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ----------in writeAssignExpr: x  =  5
+
 ! -------in getValue: 5: 5.0
 
 ! --------in getAddressHelper: 5
-	set	-8, %l0
+	set	-24, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -132,41 +65,196 @@ main:
 
 ! -------end of getValue------------
 
-! ---------in writeLocalVariableWInit:i
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
+! ----------in writeArrayAddress: x
 
+! =======in writeArrayAddress, get address of var :x and store in l4
 
-! -------in writePassParameter--------
-
-! --------in getAddressHelper: i
-	set	-12, %l0
+! --------in getAddressHelper: x
+	set	-16, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	mov	%l0, %o0
+	mov	%l0, %l4
 
-! ----------writeFuncCall------------
-	call	foo
-	nop
+! =======in writeArrayAddress, get value of index: 1
 
+! --------in getAddressHelper: 1
+	set	-20, %l0
+	add	%fp, %l0, %l0
 
-! ========writeFuncCall: get address of retSTO, store retValue in it ==========
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+	st	%l1, [%l0]
+
+! ----------end of writeAssignExpr--------
+
+! ------in writeConstantLiteral: 0
+	set	0, %l1
+	set	-28, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ------in writeConstantLiteral: 6
+	set	6, %l1
+	set	-32, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ----------in writeAssignExpr: x  =  6
+
+! -------in getValue: 6: 6.0
+
+! --------in getAddressHelper: 6
+	set	-32, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+
+! ----------in writeArrayAddress: x
+
+! =======in writeArrayAddress, get address of var :x and store in l4
+
+! --------in getAddressHelper: x
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, get value of index: 0
+
+! --------in getAddressHelper: 0
+	set	-28, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+	st	%l1, [%l0]
+
+! ----------end of writeAssignExpr--------
+
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-36, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
 
 ! ------------in writePrint---------------
-	set	temp0, %o0
+
+! -------in getValue: x: null
+
+! --------in getAddressHelper: x
+
+! ----------in writeArrayAddress: x
+
+! =======in writeArrayAddress, get address of var :x and store in l4
+
+! --------in getAddressHelper: x
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, get value of index: 1
+
+! --------in getAddressHelper: 1
+	set	-36, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+	set	.intFmt, %o0
+	mov	%l1, %o1
 	call	printf
 	nop
 
 
 ! ------------in writePrint---------------
+	set	.endl, %o0
+	call	printf
+	nop
 
-! -------in getValue: i: null
 
-! --------in getAddressHelper: i
-	set	-12, %l0
+! ------in writeConstantLiteral: 0
+	set	0, %l1
+	set	-40, %l0
 	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ------------in writePrint---------------
+
+! -------in getValue: x: null
+
+! --------in getAddressHelper: x
+
+! ----------in writeArrayAddress: x
+
+! =======in writeArrayAddress, get address of var :x and store in l4
+
+! --------in getAddressHelper: x
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, get value of index: 0
+
+! --------in getAddressHelper: 0
+	set	-40, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l1
@@ -188,5 +276,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 12) & -8
+	SAVE.main = -(92 + 40) & -8
 

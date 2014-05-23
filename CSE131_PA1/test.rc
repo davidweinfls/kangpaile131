@@ -1,18 +1,8 @@
-function: void bar( int &b)
+function : void main()
 {
-      b = 777; 
-     
-}
-function: void foo(int &a)
-{
-      bar(a);
-}
-function: void main()
-{
-
-   int i = 5;
-
-   foo(i);  //i is 5
-   
-   cout << "i: " << i << endl; //777
+   int[3] x;
+   x[1] = 5;
+   x[0] = 6;
+   cout << x[1] << endl; //5  
+   cout << x[0] << endl; //6
 }
