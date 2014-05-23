@@ -1246,6 +1246,7 @@ public class AssemblyCodeGenerator {
     	if(debug) writeDebug("---------in writeBreak----------");
     	String temp = whileStack.pop();
     	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BA_OP, whileStack.peek());
+    	addToBuffer(text_buffer, Sparc.NOP);
     	whileStack.push(temp);
     }
     
