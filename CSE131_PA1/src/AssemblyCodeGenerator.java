@@ -439,6 +439,14 @@ public class AssemblyCodeGenerator {
 		
 		if(debug) writeDebug("---------end of writeArrayAddress--------");
 	}
+	
+	// used to get struct address
+	void writeStructAddress(STO sto)
+    {
+    	if(debug) writeDebug("-------in writeStructAddress: " + sto.getName());
+    	
+    }
+	
     
     /*
      * write print statement, for cout
@@ -541,9 +549,16 @@ public class AssemblyCodeGenerator {
 			// not sure the type of sto, use getAddressHelper to get address of sto
 			getAddressHelper(sto);
 
+			//if passed by ref, load value in address
+			if(sto.isVar() && ((VarSTO)sto).isRef())
+			{
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+			}
+			
 			if(floatReg == 0)
 			{
 				// ld	[%l0], %f0
+				
 				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F0);
 				floatReg = 1;
 			}
@@ -557,6 +572,12 @@ public class AssemblyCodeGenerator {
 		{
 			// not sure the type of sto, use getAddressHelper to get address of sto
 			getAddressHelper(sto);
+			
+			//if passed by ref, load value in address
+			if(sto.isVar() && ((VarSTO)sto).isRef())
+			{
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+			}
 			
 			if(localReg == 0)
 			{
@@ -1438,6 +1459,8 @@ public class AssemblyCodeGenerator {
     	if(byRef)
     	{
     		getAddressHelper(param);
+    		if (param.isVar() && ((VarSTO) param).isRef())
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, "%o" + index);
     	}
     	else
@@ -1648,30 +1671,6 @@ public class AssemblyCodeGenerator {
     }
     
     
-    
-    
-	/**
-	 * @param args
-	 */
-	/*public static void main(String[] args) {
-		AssemblyCodeGenerator myAsWriter = new AssemblyCodeGenerator("C:\\Users\\David Wei\\git\\Project1\\CSE131_PA1\\src\\rc.s");
-
-		System.out.println("here");
-		
-        myAsWriter.increaseIndent();
-        myAsWriter.writeAssembly(Sparc.TWO_PARAM, Sparc.SET_OP, String.valueOf(4095), "%l0");
-        myAsWriter.increaseIndent();
-        myAsWriter.writeAssembly(Sparc.TWO_PARAM, Sparc.SET_OP, String.valueOf(1024), "%l1");
-        myAsWriter.decreaseIndent();
-        
-        myAsWriter.writeAssembly(Sparc.TWO_PARAM, Sparc.SET_OP, String.valueOf(512), "%l2");
-        
-        myAsWriter.decreaseIndent();
-        
-
-	} //end of main
-*/
-	
 	
 	
 	

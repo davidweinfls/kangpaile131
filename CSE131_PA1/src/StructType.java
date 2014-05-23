@@ -54,5 +54,10 @@ public class StructType extends CompositeType{
     	m_size = size;
     }
     
+    public int getSize()
+    {
+    	return m_size;
+    }
+    
     private Vector<STO> fieldList;
 }
