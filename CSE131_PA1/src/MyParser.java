@@ -645,6 +645,7 @@ class MyParser extends parser
 		// insert parameters here
 		if(params != null)
 		{
+			int paramOffset = 68;
 			//check if function is overloaded
 			if(!(m_symtab.getFunc().isOverloaded()))
 			{
@@ -655,7 +656,7 @@ class MyParser extends parser
             {             
             	//call funcSTO.setOverloadedParams to handle overload func
                 boolean check = sto.setOverloadedParams (params);
-                if(!check) 
+                if(!check)
                 {
                     m_nNumErrors++;
                     m_errors.print (Formatter.toString(ErrorMsg.error22_Decl,
@@ -664,7 +665,7 @@ class MyParser extends parser
                     		//dont insert param to symtab
                 }
             }
-			//FuncSTO sto = m_symtab.getFunc ();
+			//FuncSTO sto = m_symtab.getFunc();
 			for(int i = 0; i < params.size(); i++)
 			{
 				VarSTO var = params.get(i);
@@ -675,11 +676,28 @@ class MyParser extends parser
 				{
 					var.setRef();
                 }
+				
+				//for P2:
+				var.setBase("%%fp");
+				var.setOffset(paramOffset);
+				
+				//update offset
+				if(!(var.isRef()))
+				{
+					paramOffset += var.getType().getSize();
+				}
+				else
+				{
+					
+				}
+				
+				//write to assembly
+				myAsWriter.writeParameter(var, i);
+				
 				m_symtab.insert(var);
 				
 			}
 		}
-		
 	}
 	
 	// ----------------------------------------------------------------
@@ -722,7 +740,8 @@ class MyParser extends parser
 				return (new ErrorSTO(sto.getName()));
 			}
 
-			for (int i = 0; i < params.size(); i++) {
+			for (int i = 0; i < params.size(); i++)
+			{
 				STO arg = (STO) args.get(i);
 				if (arg instanceof ErrorSTO)
 					return arg;
@@ -735,7 +754,8 @@ class MyParser extends parser
 				 * (default) and the corresponding argument's type is not
 				 * assignable to the parameter type
 				 */
-				if (!(parameter.isRef()) && !(aType.isAssignable(bType))) {
+				if (!(parameter.isRef()) && !(aType.isAssignable(bType)))
+				{
 					m_nNumErrors++;
 					m_errors.print(Formatter.toString(ErrorMsg.error5a_Call,
 							aType.getName(), parameter.getName(),
@@ -749,9 +769,11 @@ class MyParser extends parser
 				 * no.4: A parameter is declared as pass-by-reference and the
 				 * corresponding argument is not a modifiable L-value.
 				 */
-				else if (parameter.isRef()) {
+				else if (parameter.isRef())
+				{
 					// no.3
-					if (!(aType.isEquivalent(bType))) {
+					if (!(aType.isEquivalent(bType)))
+					{
 						m_nNumErrors++;
 						m_errors.print(Formatter.toString(
 								ErrorMsg.error5r_Call, aType.getName(),
@@ -759,7 +781,8 @@ class MyParser extends parser
 						error = true;
 					}
 					// no.4
-					else if (!arg.isModLValue() && !aType.isArrayType()) {
+					else if (!arg.isModLValue() && !aType.isArrayType())
+					{
 						m_nNumErrors++;
 						m_errors.print(Formatter.toString(
 								ErrorMsg.error5c_Call, parameter.getName(),
@@ -767,15 +790,26 @@ class MyParser extends parser
 						error = true;
 					}
 				}
+				
+				//pass parameters in %i0~i5
+				if(i < 6 && !error)
+				{
+					myAsWriter.writePassParameter(arg, parameter.isRef(), i);
+				}
+				else
+				{
+					
+				}
 			}
 			if (error)
 				return new ErrorSTO(sto.getName());
-
+			
 			STO ret;
 			if (byRef) {
 				ret = new VarSTO("result", returnType);
 				((VarSTO) ret).setRef();
-			} else
+			}
+			else
 			{
 				ret = new ExprSTO("result", returnType);
 				m_currOffset -= returnType.getSize();

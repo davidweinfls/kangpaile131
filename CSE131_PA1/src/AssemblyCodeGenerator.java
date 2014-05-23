@@ -1392,6 +1392,33 @@ public class AssemblyCodeGenerator {
         this.currFuncName = id;
     }
     
+    //P2: used in DoFormalParam() in MyParser. 
+    public void writeParameter(STO sto, int index)
+    {
+    	if(debug) writeDebug("-------in writeParameter: " + sto.getName() + " param no: " + index);
+    	addToBuffer(text_buffer, sto.getAddress());
+    	//within available local registers
+    	if(index < 6)
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, "%i" + index, "[" + Sparc.L0 + "]");
+    }
+    
+    //P2: used in DoFuncCall(). Pass in parameters into %o0 ~ %o5 before function call 
+    public void writePassParameter(STO param, boolean byRef, int index)
+    {
+    	if(debug) writeDebug("-------in writePassParameter--------");
+    	
+    	if(byRef)
+    	{
+    		
+    	}
+    	else
+    	{
+    		addToBuffer(text_buffer, param.getAddress());
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, "%o" + index);
+    	}
+    }
+    
     public void writeFuncCall(STO sto, STO retSTO, boolean isRef)
     {
     	if(debug) writeDebug("----------writeFuncCall------------");
@@ -1404,11 +1431,12 @@ public class AssemblyCodeGenerator {
         addToBuffer(text_buffer, Sparc.NOP);
         
         if(debug) writeDebug("========writeFuncCall: get address of retSTO, store retValue in it ==========");
-        if (retType.isVoidType()) {
+        if (retType.isVoidType())
+        {
             // Do Nothing
         }
         // if returnSTO is not void, store returned value ot retSTO's address
-        else  if (retType.isFloatType())
+        else if (retType.isFloatType())
         {
         	addToBuffer(text_buffer, retSTO.getAddress());
         	if (isRef)
