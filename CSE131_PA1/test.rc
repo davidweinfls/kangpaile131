@@ -1,8 +1,13 @@
+int a = 5;
 
+function: int foo(int &x)
+{
+	x = 3;
+	return x;
+}
 
 function : void main()
 {
-	int[4] y;
-	y[3] = 3;
-	cout << y[3] << endl;
+	cout << "foo(): " << foo(a) << endl;
+	cout << "a: " << a << endl;
 }

@@ -556,6 +556,7 @@ public class AssemblyCodeGenerator {
 				localReg = 0;
 			}
 		}
+		if(debug) writeDebug("-------end of getValue------------");
     }
     
     //helper method. used in various methods.
@@ -1042,6 +1043,13 @@ public class AssemblyCodeGenerator {
     		getValue(expr);
     		//get var address
     		getAddressHelper(var);
+    		
+    		//check if var is pass-by-reference
+    		if (var instanceof VarSTO && ((VarSTO)var).isRef())
+    		{
+    			//load value stored in its address, which is the addresss of the real variable
+            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		}
     		//store expr value (%f0) to var address [%l0]
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]" ); 
     	}
@@ -1069,6 +1077,12 @@ public class AssemblyCodeGenerator {
     			addToBuffer(text_buffer, var.getAddress());
     		}
     		
+    		//check if var is pass-by-reference
+    		if (var instanceof VarSTO && ((VarSTO)var).isRef())
+    		{
+    			//load value stored in its address, which is the addresss of the real variable
+            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		}
     		//3. store expr value (%f0) to var address [%l0]
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]" ); 
     	}
@@ -1515,14 +1529,7 @@ public class AssemblyCodeGenerator {
 			else
 			{
 				if(funcReturnType instanceof FloatType) {
-/*	                if (sto.isArrayE())  {
-                        writeArrayAddress(sto);
-                    } else if (sto.isStructM()) {
-                        writeStructMem(sto);
-                    } else if (sto.isDeref()) {
-                        writeDeref(sto);
-                    } else*/
-                    addToBuffer(text_buffer, returnExpr.getAddress());
+	                getAddressHelper(returnExpr);
                     if (returnExpr.isVar() && ((VarSTO) returnExpr).isRef())
                         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
                     if (!byRef) {
@@ -1533,12 +1540,14 @@ public class AssemblyCodeGenerator {
 	                if(returnExpr.getType().isIntType())
 	                	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F0, Sparc.F0);
 	            } else {
-	            	addToBuffer(text_buffer, returnExpr.getAddress());
+	            	getAddressHelper(returnExpr);
+	            	//if return expr is by ref
 	            	if(returnExpr.isVar() && ((VarSTO)returnExpr).isRef())
 	            	{
-	            		
+	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
 	            	}
-	            	else if(!byRef)
+	            	//if function return by ref
+	            	if(!byRef)
 	            	{
 	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.I0);
 	            	}
