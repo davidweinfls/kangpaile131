@@ -688,7 +688,7 @@ class MyParser extends parser
 				}
 				else
 				{
-					
+					paramOffset += 4;
 				}
 				
 				//write to assembly

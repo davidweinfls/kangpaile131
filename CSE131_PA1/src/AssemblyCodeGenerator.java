@@ -1031,15 +1031,17 @@ public class AssemblyCodeGenerator {
     	{
     		if(debug) writeDebug("=======in writeAssignExpr, varType is float=======");
     		
-    		//need to convert expr register to f0 if trying to assign int to float
-    		if(debug) writeDebug("=======in writeAssignExpr, convert right side int to float=======");
-    		if(exprType.isIntType())
-    			intToFloat(expr);
     		
+    		if(exprType.isIntType())
+    		{
+    			//need to convert expr register to f0 if trying to assign int to float
+        		if(debug) writeDebug("=======in writeAssignExpr, convert right side int to float=======");
+    			intToFloat(expr);
+    		}
     		//load expr value
     		getValue(expr);
     		//get var address
-    		addToBuffer(text_buffer, var.getAddress());
+    		getAddressHelper(var);
     		//store expr value (%f0) to var address [%l0]
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]" ); 
     	}
@@ -1395,7 +1397,7 @@ public class AssemblyCodeGenerator {
     //P2: used in DoFormalParam() in MyParser. 
     public void writeParameter(STO sto, int index)
     {
-    	if(debug) writeDebug("-------in writeParameter: " + sto.getName() + " param no: " + index);
+    	if(debug) writeDebug("-------in writeParameter: " + sto.getName() + " param num: " + index);
     	addToBuffer(text_buffer, sto.getAddress());
     	//within available local registers
     	if(index < 6)
@@ -1409,7 +1411,8 @@ public class AssemblyCodeGenerator {
     	
     	if(byRef)
     	{
-    		
+    		getAddressHelper(param);
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, "%o" + index);
     	}
     	else
     	{
