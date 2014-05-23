@@ -1,5 +1,5 @@
 ! 
-! Generated Thu May 22 23:51:14 PDT 2014
+! Generated Fri May 23 00:34:55 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,14 +10,10 @@
 .float_one:	.single 0r1
 	.align 4
 
+temp0:	.single 0r1.0
 	.section ".data"
 	.align 4
 
-	.section ".bss"
-	.align 4
-
-static_main_x0:	.skip 20
-	
 	.section ".text"
 	.align 4
 
@@ -31,123 +27,62 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 5
-	set	5, %l1
+! ------in writeConstantLiteral: 2
+	set	2, %l1
 	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
-! ----------in writeGlobalArray: x is array of  int[5]
+! ---------in writeLocalVariableWOInit:y
 
-! ------in writeConstantLiteral: 0
-	set	0, %l1
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! -------in getValue: 0: 0.0
-
-! --------in getAddressHelper: 0
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! ---------in writeLocalVariableWInit:i
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-
-! -------in writeWhileStart---------
-whileStart1:
-
-! ------in writeConstantLiteral: 5
-	set	5, %l1
+! ------in writeConstantLiteral: 1
+	set	1, %l1
 	set	-16, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
-! --------in writeBinaryExpr-------
+! ------in writeConstantLiteral: 1.0
+	set	temp0, %l0
+	ld	[%l0], %f0
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
 
-! i < 5
+! ------end of writeConstantLiteral-------
 
-! =======in writeBinaryExpr: Not const folding=======
+! ----------in writeAssignExpr: y  =  1.0
 
-! =======in writeBinaryExpr: get i's value and 5's value
+! =======in writeAssignExpr, varType is float=======
 
-! -------in getValue: i: null
+! -------in getValue: 1.0: 1.0
 
-! --------in getAddressHelper: i
+! --------in getAddressHelper: 1.0
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %f0
+
+! -------end of getValue------------
+
+! --------in getAddressHelper: y
+
+! ----------in writeArrayAddress: y
+
+! =======in writeArrayAddress, get address of var :y and store in l4
+
+! --------in getAddressHelper: y
 	set	-12, %l0
 	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! -------in getValue: 5: 5.0
-
-! --------in getAddressHelper: 5
-	set	-16, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l2
-
-! -------end of getValue------------
-
-! =======in writeBinaryExpr, non comparsionOP=========
-	set	0, %l3
-
-! =======in writeBinaryExpr, compare two operands=========
-	cmp	%l1, %l2
-	bge	compOp0
-	nop
-
-	set	1, %l3
-compOp0:
-	set	-20, %l0
-	add	%fp, %l0, %l0
-	st	%l3, [%l0]
-
-! ---------in writeWhile: result
-	set	-20, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %l1
-	cmp	%l1, %g0
-	be	whileEnd1
-	nop
-
-
-! ------------in writePrint---------------
-
-! -------in getValue: x: null
-
-! --------in getAddressHelper: x
-
-! ----------in writeArrayAddress: x
-
-! =======in writeArrayAddress, get address of var :x and store in l4
-
-! --------in getAddressHelper: x
-	set	static_main_x0, %l0
-	add	%g0, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
 	mov	%l0, %l4
 
-! =======in writeArrayAddress, get value of index: i
+! =======in writeArrayAddress, get value of index: 1
 	set	4, %l5
 
 ! =======in writeArrayAddress, scale the offset
@@ -159,12 +94,140 @@ compOp0:
 ! ---------end of writeArrayAddress--------
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
+	st	%f0, [%l0]
+
+! ----------end of writeAssignExpr--------
+
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! -------writeUnaryExpr: y ++
+
+! =======in writeUnaryExpr, non-const folding, computation=========
+
+! =======in writeUnaryExpr, non-const folding, op is ++, do nothing=========
+
+! ----------writePost: y
+
+! =======in writePost, step 1: load value to local1
+
+! -------in getValue: y: null
+
+! --------in getAddressHelper: y
+
+! ----------in writeArrayAddress: y
+
+! =======in writeArrayAddress, get address of var :y and store in l4
+
+! --------in getAddressHelper: y
+	set	-12, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, get value of index: 1
+	set	4, %l5
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %f1
 
 ! -------end of getValue------------
-	set	.intFmt, %o0
-	mov	%l1, %o1
-	call	printf
+
+! =======in writePost, step 1.5: store original value 
+	set	-28, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! =======in writePost, step 2: computation 
+	set	.float_one, %l0
+	ld	[%l0], %f2
+	set	-28, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+	fadds	%f1, %f2, %f3
+
+! --------in getAddressHelper: y
+
+! ----------in writeArrayAddress: y
+
+! =======in writeArrayAddress, get address of var :y and store in l4
+
+! --------in getAddressHelper: y
+	set	-12, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, get value of index: 1
+	set	4, %l5
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	st	%f3, [%l0]
+
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-32, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ------------in writePrint---------------
+
+! -------in getValue: y: null
+
+! --------in getAddressHelper: y
+
+! ----------in writeArrayAddress: y
+
+! =======in writeArrayAddress, get address of var :y and store in l4
+
+! --------in getAddressHelper: y
+	set	-12, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, get value of index: 1
+	set	4, %l5
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %f0
+
+! -------end of getValue------------
+	call	printFloat
 	nop
 
 
@@ -174,51 +237,9 @@ compOp0:
 	nop
 
 
-! -------writeUnaryExpr: i ++
-
-! =======in writeUnaryExpr, non-const folding, computation=========
-
-! =======in writeUnaryExpr, non-const folding, op is ++, do nothing=========
-
-! ----------writePost: i
-
-! =======in writePost, step 1: load value to local1
-
-! -------in getValue: i: null
-
-! --------in getAddressHelper: i
-	set	-12, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! =======in writePost, step 1.5: store original value 
-	set	-24, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! =======in writePost, step 2: computation 
-	add	%l1, 1, %l3
-
-! =======in writePost, step 3: store value 
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	st	%l3, [%l0]
-
-! -------in writeWhileEnd------------
-	ba	whileStart1
-	nop
-
-
-! ----------in writeCloseBlock-----------
-whileEnd1:
-
 ! --------------in writeFuncClose--------------
 	ret
 	restore
 
-	SAVE.main = -(92 + 24) & -8
+	SAVE.main = -(92 + 32) & -8
 

@@ -1252,7 +1252,7 @@ public class AssemblyCodeGenerator {
     		}
     		//3. store value in its address
     		if(debug) writeDebug("=======in writePre, step 3: store value ");
-    		addToBuffer(text_buffer, sto.getAddress());
+    		getAddressHelper(sto);
     		if(localReg == 0)
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L2, "[" + Sparc.L0 + "]");
@@ -1291,7 +1291,7 @@ public class AssemblyCodeGenerator {
     			}
     		}
     		//3. store value in its address
-    		addToBuffer(text_buffer, sto.getAddress());
+    		getAddressHelper(sto);
     		if(floatReg == 0)
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
@@ -1345,7 +1345,7 @@ public class AssemblyCodeGenerator {
     		}
     		//3. store value in its address
     		if(debug) writeDebug("=======in writePost, step 3: store value ");
-    		addToBuffer(text_buffer, sto.getAddress());
+    		getAddressHelper(sto);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
     	}
     	else if(stoType instanceof FloatType)
@@ -1355,7 +1355,6 @@ public class AssemblyCodeGenerator {
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F2);
     		
     		//1.5 store original value to result
-        	if(debug) writeDebug("=======in writePost, step 1.5: store original value ");
         	addToBuffer(text_buffer, result.getAddress());
         	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
         	
@@ -1383,7 +1382,7 @@ public class AssemblyCodeGenerator {
     			}
     		}
     		//3. store value in its address
-    		addToBuffer(text_buffer, sto.getAddress());
+    		getAddressHelper(sto);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F3, "[" + Sparc.L0 + "]");
     	}
     	return result;
