@@ -232,7 +232,10 @@ class MyParser extends parser
 					{
 						var.setGlobal();
 					}
-					myAsWriter.writeGlobalVariable(id, false, expr, t);
+					if(t.isStructType())
+						myAsWriter.writeGlobalStruct(id, false, expr, t, m_static);
+					else
+						myAsWriter.writeGlobalVariable(id, false, expr, t);
 				}
 				else
 				{
@@ -797,7 +800,7 @@ class MyParser extends parser
 				//pass parameters in %i0~i5
 				if(i < 6 && !error)
 				{
-					myAsWriter.writePassParameter(arg, parameter.isRef(), i);
+					myAsWriter.writePassParameter(arg, parameter, parameter.isRef(), i);
 				}
 				else
 				{

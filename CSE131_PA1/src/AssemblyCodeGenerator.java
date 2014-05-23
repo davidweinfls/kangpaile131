@@ -213,6 +213,25 @@ public class AssemblyCodeGenerator {
    	
     }
     
+    //P2
+	public void writeGlobalStruct(String id, boolean init, STO sto, Type t,
+			boolean isStatic)
+	{
+		if (debug)
+			writeDebug("--------in writeGlobalStruct--------");
+		has_bss = true;
+		if (!isStatic)
+			addToBuffer(bss_buffer, Sparc.GLOBAL_VAR, id);
+		decreaseIndent();
+		if (!init)
+		{
+			addToBuffer(bss_buffer, Sparc.BSS_VAR, id,
+					Integer.toString(t.getSize()));
+		}
+		increaseIndent();
+		addToBuffer(bss_buffer, Sparc.NEW_LINE);
+	}
+    
     public void writeStaticVariable(String id, boolean init, STO sto, Type t )
     {
     	if(debug) writeDebug("---------In writeStaticVariable--------------");
@@ -444,6 +463,7 @@ public class AssemblyCodeGenerator {
 	void writeStructAddress(STO sto)
     {
     	if(debug) writeDebug("-------in writeStructAddress: " + sto.getName());
+    	//TODO: struct of struct stuff
     	
     }
 	
@@ -1395,11 +1415,11 @@ public class AssemblyCodeGenerator {
     		{
     			if(floatReg == 0)
     			{
-    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FADDS_OP, Sparc.F1, Sparc.F2, Sparc.F3);
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FSUBS_OP, Sparc.F1, Sparc.F2, Sparc.F3);
     			}
     			else
     			{
-    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FADDS_OP, Sparc.F0, Sparc.F2, Sparc.F3);
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.FSUBS_OP, Sparc.F0, Sparc.F2, Sparc.F3);
     			}
     		}
     		//3. store value in its address
@@ -1452,22 +1472,40 @@ public class AssemblyCodeGenerator {
     }
     
     //P2: used in DoFuncCall(). Pass in parameters into %o0 ~ %o5 before function call 
-    public void writePassParameter(STO param, boolean byRef, int index)
+    public void writePassParameter(STO arg, STO param, boolean byRef, int index)
     {
     	if(debug) writeDebug("-------in writePassParameter--------");
     	
     	if(byRef)
     	{
-    		getAddressHelper(param);
-    		if (param.isVar() && ((VarSTO) param).isRef())
+    		getAddressHelper(arg);
+    		if (arg.isVar() && ((VarSTO) arg).isRef())
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, "%o" + index);
     	}
     	else
     	{
-    		addToBuffer(text_buffer, param.getAddress());
-    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
-    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, "%o" + index);
+    		if (param.getType().isFloatType())
+    		{
+    			if(arg.getType().isIntType())
+    			{
+    				resetReg();
+    				intToFloat(arg);
+    				addToBuffer(text_buffer, arg.getAddress());
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    				resetReg();
+    			}
+    			getValue(arg);
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, "%o" + index);
+    			//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    			//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
+            }
+    		else
+    		{
+    			addToBuffer(text_buffer, arg.getAddress());
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, "%o" + index);
+    		}
     	}
     }
     
