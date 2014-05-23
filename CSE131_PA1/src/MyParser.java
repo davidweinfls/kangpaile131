@@ -1561,16 +1561,18 @@ class MyParser extends parser
 		// check14b
 		boolean found = false;
         STO field = new ErrorSTO("Field not found");
+        int offset = 0;
         Vector<STO> fieldList = ((StructType)type).getFieldList();
         for(int i = 0; i < fieldList.size(); i++) 
         {
             field = fieldList.get(i);
-            //if there is a field 
+            //if there is a field
             if(strID.equals(field.getName())) 
             {
                 found = true;
                 break;
             }
+            offset += field.getType().getSize();
         }
         if(found == false) {
             m_nNumErrors++;

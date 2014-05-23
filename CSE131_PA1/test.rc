@@ -1,13 +1,10 @@
-int x = 0;
-	
-function : void main()
-{
+structdef FOO {
+    float a, b, c;
+};
 
-  while(x < 5)
-  {
-    x = x + 1;
-    cout <<"x: " << x << endl;
-    break;
-  }
-  cout << x << endl;
+static FOO a;
+
+function: void main()
+{
+	
 }

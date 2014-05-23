@@ -212,6 +212,15 @@ abstract class STO
 	{
 		isDeref = true;
 	}
+	
+	//for project2:
+	//used in DoDesignator_Dot()
+	public STO copy()
+	{
+		STO retSTO;
+		
+		return retSTO;
+	}
 
 	//----------------------------------------------------------------
 	//	It will be helpful to ask a STO what specific STO it is.
