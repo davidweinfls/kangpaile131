@@ -1,11 +1,18 @@
-function : void main()
+function: void bar( int &b)
 {
-   float[2] y;
+      b = 777; 
+     
+}
+function: void foo(int &a)
+{
+      bar(a);
+}
+function: void main()
+{
 
-   y[1] = 1.0;
+   int i = 5;
 
-   y[1]++;
-
-   cout << y[1] << endl; //2
-
+   foo(i);  //i is 5
+   
+   cout << "i: " << i << endl; //777
 }
