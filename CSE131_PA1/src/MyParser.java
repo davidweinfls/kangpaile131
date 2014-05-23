@@ -291,7 +291,10 @@ class MyParser extends parser
 					var.setGlobalOffset(id);
 					var.setGlobal();
 					//write to assembly
-					myAsWriter.writeArray(var, true);
+					if(m_static)
+						myAsWriter.writeGlobalArray(var, true);
+					else
+						myAsWriter.writeGlobalArray(var, false);
 				}
 				//local array
 				else
@@ -302,7 +305,7 @@ class MyParser extends parser
 						var.setGlobalOffset("static_" + m_funcName + "_" + id + (num_of_staticVar++) );
                         var.setBase("%%g0");
                         //write to assembly
-                        myAsWriter.writeArray(var, false);
+                        myAsWriter.writeStaticArray(var);
 					}
 					else
 					{

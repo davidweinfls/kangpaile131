@@ -1,5 +1,5 @@
 ! 
-! Generated Thu May 22 23:20:58 PDT 2014
+! Generated Thu May 22 23:51:14 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,79 +10,16 @@
 .float_one:	.single 0r1
 	.align 4
 
-temp0:	.asciz "foo(): "
-	.align 4
-temp1:	.asciz "a: "
-	.align 4
 	.section ".data"
 	.align 4
 
-	.global a
-	
-a:	.word 5
+	.section ".bss"
+	.align 4
 
+static_main_x0:	.skip 20
+	
 	.section ".text"
 	.align 4
-
-
-! ---------In writeGLobalVariable--------------
-
-! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<foo>>>>>>>>>>>>>>>>>
-	.align 4
-	.global foo
-foo:
-	set	SAVE.foo, %g1
-	save	%sp, %g1, %sp
-
-
-! -------in writeParameter: x param num: 0
-	set	68, %l0
-	add	%fp, %l0, %l0
-	st	%i0, [%l0]
-
-! ------in writeConstantLiteral: 3
-	set	3, %l1
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! ----------in writeAssignExpr: x  =  3
-
-! -------in getValue: 3: 3.0
-
-! --------in getAddressHelper: 3
-	set	-4, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-	set	68, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %l0
-	st	%l1, [%l0]
-
-! ----------end of writeAssignExpr--------
-
-! --------in writeReturnStmt---------
-
-! --------in getAddressHelper: x
-	set	68, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-	ld	[%l0], %i0
-	ret
-	restore
-
-! --------------in writeFuncClose--------------
-
-	SAVE.foo = -(92 + 4) & -8
 
 
 ! in writeFuncDec
@@ -94,38 +31,132 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------------in writePrint---------------
-	set	temp0, %o0
-	call	printf
+! ------in writeConstantLiteral: 5
+	set	5, %l1
+	set	-4, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ----------in writeGlobalArray: x is array of  int[5]
+
+! ------in writeConstantLiteral: 0
+	set	0, %l1
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! -------in getValue: 0: 0.0
+
+! --------in getAddressHelper: 0
+	set	-8, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+
+! ---------in writeLocalVariableWInit:i
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+
+! -------in writeWhileStart---------
+whileStart1:
+
+! ------in writeConstantLiteral: 5
+	set	5, %l1
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! --------in writeBinaryExpr-------
+
+! i < 5
+
+! =======in writeBinaryExpr: Not const folding=======
+
+! =======in writeBinaryExpr: get i's value and 5's value
+
+! -------in getValue: i: null
+
+! --------in getAddressHelper: i
+	set	-12, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+
+! -------in getValue: 5: 5.0
+
+! --------in getAddressHelper: 5
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l2
+
+! -------end of getValue------------
+
+! =======in writeBinaryExpr, non comparsionOP=========
+	set	0, %l3
+
+! =======in writeBinaryExpr, compare two operands=========
+	cmp	%l1, %l2
+	bge	compOp0
+	nop
+
+	set	1, %l3
+compOp0:
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	st	%l3, [%l0]
+
+! ---------in writeWhile: result
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+	cmp	%l1, %g0
+	be	whileEnd1
 	nop
 
 
-! -------in writePassParameter--------
+! ------------in writePrint---------------
 
-! --------in getAddressHelper: a
-	set	a, %l0
+! -------in getValue: x: null
+
+! --------in getAddressHelper: x
+
+! ----------in writeArrayAddress: x
+
+! =======in writeArrayAddress, get address of var :x and store in l4
+
+! --------in getAddressHelper: x
+	set	static_main_x0, %l0
 	add	%g0, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	mov	%l0, %o0
+	mov	%l0, %l4
 
-! ----------writeFuncCall------------
-	call	foo
-	nop
+! =======in writeArrayAddress, get value of index: i
+	set	4, %l5
 
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
 
-! ========writeFuncCall: get address of retSTO, store retValue in it ==========
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%o0, [%l0]
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
 
-! ------------in writePrint---------------
-
-! -------in getValue: result: null
-
-! --------in getAddressHelper: result
-	set	-8, %l0
-	add	%fp, %l0, %l0
+! ---------end of writeArrayAddress--------
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l1
@@ -143,39 +174,51 @@ main:
 	nop
 
 
-! ------------in writePrint---------------
-	set	temp1, %o0
-	call	printf
-	nop
+! -------writeUnaryExpr: i ++
 
+! =======in writeUnaryExpr, non-const folding, computation=========
 
-! ------------in writePrint---------------
+! =======in writeUnaryExpr, non-const folding, op is ++, do nothing=========
 
-! -------in getValue: a: null
+! ----------writePost: i
 
-! --------in getAddressHelper: a
-	set	a, %l0
-	add	%g0, %l0, %l0
+! =======in writePost, step 1: load value to local1
+
+! -------in getValue: i: null
+
+! --------in getAddressHelper: i
+	set	-12, %l0
+	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l1
 
 ! -------end of getValue------------
-	set	.intFmt, %o0
-	mov	%l1, %o1
-	call	printf
+
+! =======in writePost, step 1.5: store original value 
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! =======in writePost, step 2: computation 
+	add	%l1, 1, %l3
+
+! =======in writePost, step 3: store value 
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	st	%l3, [%l0]
+
+! -------in writeWhileEnd------------
+	ba	whileStart1
 	nop
 
 
-! ------------in writePrint---------------
-	set	.endl, %o0
-	call	printf
-	nop
-
+! ----------in writeCloseBlock-----------
+whileEnd1:
 
 ! --------------in writeFuncClose--------------
 	ret
 	restore
 
-	SAVE.main = -(92 + 8) & -8
+	SAVE.main = -(92 + 24) & -8
 

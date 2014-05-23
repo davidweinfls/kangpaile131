@@ -364,18 +364,31 @@ public class AssemblyCodeGenerator {
 	}
 	
 	// used in DoVarDecl, array part
-	public void writeArray(STO sto, Boolean isGlobal)
+	public void writeGlobalArray(STO sto, Boolean isStatic)
 	{
 		Type t = sto.getType();
 		int size = t.getSize();
 		if(debug) writeDebug("----------in writeGlobalArray: " + sto.getName() + " is array of  " + t.getName());
 		has_bss = true;
-		if(isGlobal)
+		if(isStatic)
 			addToBuffer(bss_buffer, Sparc.GLOBAL_VAR, sto.getName());
     	decreaseIndent();
     	addToBuffer(bss_buffer, Sparc.BSS_VAR, sto.getName(), Integer.toString(size));
     	increaseIndent();
     	addToBuffer(bss_buffer, Sparc.NEW_LINE);
+	}
+	
+	// used in DoVarDecl, array part
+	public void writeStaticArray(STO sto)
+	{
+		Type t = sto.getType();
+		int size = t.getSize();
+		if(debug) writeDebug("----------in writeGlobalArray: " + sto.getName() + " is array of  " + t.getName());
+		has_bss = true;
+	   	decreaseIndent();
+	   	addToBuffer(bss_buffer, Sparc.BSS_VAR, sto.getGlobalOffset(), Integer.toString(size));
+	   	increaseIndent();
+	   	addToBuffer(bss_buffer, Sparc.NEW_LINE);
 	}
 	
 	// used in a lot of place. Basically used when trying to access elements in array
@@ -388,7 +401,7 @@ public class AssemblyCodeGenerator {
 		STO expr = box.getExpr();
 		Type stoType = sto.getType();
 		//Type varType = var.getType();
-		int index = ((ConstSTO)expr).getIntValue();
+		int index = sto.getType().getSize();
 		
 		
 		//1. get address of var, store it in %l4

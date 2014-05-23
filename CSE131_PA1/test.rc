@@ -1,13 +1,12 @@
-int a = 5;
 
-function: int foo(int &x)
-{
-	x = 3;
-	return x;
-}
 
-function : void main()
+function: void main()
 {
-	cout << "foo(): " << foo(a) << endl;
-	cout << "a: " << a << endl;
+	static int[5] x;
+	int i = 0;
+	while(i < 5)
+	{
+		cout<< x[i] << endl;
+		i++;
+	}
 }
