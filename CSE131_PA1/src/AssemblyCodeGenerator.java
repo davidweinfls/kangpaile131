@@ -729,6 +729,38 @@ public class AssemblyCodeGenerator {
     	if(debug) writeDebug("---------intToFloat---------");
     }
     
+    void writeOr(STO a)
+    {
+    	//check first operand
+		//load a, if equals to 0, branch to endAND
+		if(debug) writeDebug("=======in writeOr, ||, check first operand=========");
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L3);
+		addToBuffer(text_buffer, a.getAddress());
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
+		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, "endOR" + num_of_or);
+		addToBuffer(text_buffer, Sparc.NOP);
+		//push endAND to boolStack. will be used when checking b
+        orStack.push("endOR" + num_of_or);
+        num_of_or++;
+    }
+    
+    void writeAnd(STO a)
+    {
+    	//check first operand
+		//load a, if equals to 0, branch to endAND
+		if(debug) writeDebug("=======in writeAnd, &&, check first operand=========");
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
+		addToBuffer(text_buffer, a.getAddress());
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
+		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, "endAND" + num_of_and);
+		addToBuffer(text_buffer, Sparc.NOP);
+		//push endAND to boolStack. will be used when checking b
+        andStack.push("endAND" + num_of_and);
+        num_of_and++;
+    }
+    
     //used in DoBinaryExpr
     void writeBinaryExpr(STO a, Operator o, STO b, STO result)
     {
@@ -886,19 +918,6 @@ public class AssemblyCodeGenerator {
     					addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.XOR_OP, Sparc.L1, Sparc.L2, Sparc.L1);
     					break;
     				case "&&":
-    					//check first operand
-    					//load a, if equals to 0, branch to endAND
-    					if(debug) writeDebug("=======in writeBinaryExpr, &&, check first operand=========");
-    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
-    					addToBuffer(text_buffer, a.getAddress());
-    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
-    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
-    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, "endAND" + num_of_and);
-    					addToBuffer(text_buffer, Sparc.NOP);
-    					//push endAND to boolStack. will be used when checking b
-    			        andStack.push("endAND" + num_of_and);
-    			        num_of_and++;
-    			        
     			        //check second operand
     					//load b, if equals to 0, branch to endAND
     			        if(debug) writeDebug("=======in writeBinaryExpr, &&, check second operand=========");
@@ -916,19 +935,6 @@ public class AssemblyCodeGenerator {
                         
     					break;
     				case "||":
-    					//check first operand
-    					//load a, if equals to 0, branch to endAND
-    					if(debug) writeDebug("=======in writeBinaryExpr, ||, check first operand=========");
-    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L3);
-    					addToBuffer(text_buffer, a.getAddress());
-    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
-    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
-    					addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, "endOR" + num_of_or);
-    					addToBuffer(text_buffer, Sparc.NOP);
-    					//push endAND to boolStack. will be used when checking b
-    			        orStack.push("endOR" + num_of_or);
-    			        num_of_or++;
-    			        
     			        //check second operand
     					//load b, if equals to 0, branch to endAND
     			        if(debug) writeDebug("=======in writeBinaryExpr, ||, check second operand=========");

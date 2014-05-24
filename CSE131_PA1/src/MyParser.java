@@ -1775,6 +1775,19 @@ class MyParser extends parser
         if (sto.isModLValue())
             myAsWriter.writeCin(sto);
     }
+	
+	//P2
+	void DoShortCircuit(STO sto, String op)
+	{
+		if(op.equals("&&"))
+		{
+			myAsWriter.writeAnd(sto);
+		}
+		else
+		{
+			myAsWriter.writeOr(sto);
+		}
+	}
 
 
 //----------------------------------------------------------------

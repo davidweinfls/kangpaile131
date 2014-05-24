@@ -755,7 +755,11 @@ Expr ::=         Designator:_1 T_ASSIGN Expr:_2
     ;
 
 
-Expr0 ::=        Expr0:_1 T_OR:_2 Expr1:_3
+Expr0 ::=        Expr0:_1 T_OR:_2
+				 {: 
+				 	((MyParser) parser).DoShortCircuit(_1, "||");
+				 :} 
+				 Expr1:_3
                     {:
 						Operator op = new BooleanOp("||");
                         if ( (_1 instanceof ErrorSTO) || (_3 instanceof ErrorSTO) )
@@ -770,7 +774,11 @@ Expr0 ::=        Expr0:_1 T_OR:_2 Expr1:_3
     ;
 
 
-Expr1 ::=        Expr1:_1 T_AND:_2 Expr2:_3
+Expr1 ::=        Expr1:_1 T_AND:_2
+				 {:
+				 	((MyParser) parser).DoShortCircuit(_1, "&&");
+				 :} 
+				 Expr2:_3
                     {:
 						Operator op = new BooleanOp("&&");
                         if ( (_1 instanceof ErrorSTO) || (_3 instanceof ErrorSTO) )

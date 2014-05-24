@@ -1,5 +1,5 @@
 ! 
-! Generated Sat May 24 02:38:58 PDT 2014
+! Generated Sat May 24 03:21:36 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,73 +10,13 @@
 .float_one:	.single 0r1
 	.align 4
 
-temp0:	.asciz "b is: "
-	.align 4
-temp1:	.asciz "c is: "
+temp0:	.asciz "y's value: "
 	.align 4
 	.section ".data"
 	.align 4
 
 	.section ".text"
 	.align 4
-
-
-! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<foo>>>>>>>>>>>>>>>>>
-	.align 4
-	.global foo
-foo:
-	set	SAVE.foo, %g1
-	save	%sp, %g1, %sp
-
-
-! -------in writeParameter: b param num: 0
-	set	68, %l0
-	add	%fp, %l0, %l0
-	st	%i0, [%l0]
-
-! ------------in writePrint---------------
-	set	temp0, %o0
-	call	printf
-	nop
-
-
-! ------------in writePrint---------------
-
-! -------in getValue: b: null
-
-! --------in getAddressHelper: b
-	set	68, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %f0
-
-! -------end of getValue------------
-	call	printFloat
-	nop
-
-
-! ------------in writePrint---------------
-	set	.endl, %o0
-	call	printf
-	nop
-
-
-! --------in writeReturnStmt---------
-
-! --------in getAddressHelper: b
-	set	68, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %f0
-	ret
-	restore
-
-! --------------in writeFuncClose--------------
-
-	SAVE.foo = -(92 + 0) & -8
 
 
 ! in writeFuncDec
@@ -88,40 +28,17 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 9
-	set	9, %l1
+! ------in writeConstantLiteral: false
+	set	0, %l1
 	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
-! -------in writePassParameter--------
+! -------in getValue: false: 0.0
 
-! ---------intToFloat: 9 9
-
-! =======in intToFloat: getAddress of 9
-
-! --------in getAddressHelper: 9
-	set	-4, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-
-! =======in intToFloat: load value of 9
-	ld	[%l0], %f0
-
-! =======in intToFloat: call itos 9
-	fitos	%f0, %f0
-
-! ---------intToFloat---------
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%f0, [%l0]
-
-! -------in getValue: 9: 9.0
-
-! --------in getAddressHelper: 9
+! --------in getAddressHelper: false
 	set	-4, %l0
 	add	%fp, %l0, %l0
 
@@ -129,55 +46,121 @@ main:
 	ld	[%l0], %l1
 
 ! -------end of getValue------------
-	st	%l1, [%l0]
-	ld	[%l0], %o0
 
-! ----------writeFuncCall------------
-	call	foo
+! ---------in writeLocalVariableWInit:y
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+
+! ------in writeConstantLiteral: true
+	set	1, %l1
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! =======in writeOr, ||, check first operand=========
+	set	1, %l3
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+	cmp	%l1, %g0
+	bne	endOR0
 	nop
 
 
-! ========writeFuncCall: get address of retSTO, store retValue in it ==========
-	set	-8, %l0
+! ------in writeConstantLiteral: true
+	set	1, %l1
+	set	-16, %l0
 	add	%fp, %l0, %l0
-	st	%f0, [%l0]
+	st	%l1, [%l0]
 
-! -------in getValue: result: null
+! ------end of writeConstantLiteral-------
 
-! --------in getAddressHelper: result
+! ----------in writeAssignExpr: y  =  true
+
+! -------in getValue: true: 1.0
+
+! --------in getAddressHelper: true
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+
+! --------in getAddressHelper: y
 	set	-8, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %f0
+	st	%l1, [%l0]
 
-! -------end of getValue------------
+! ----------end of writeAssignExpr--------
 
-! ---------in writeLocalVariableWInit:c
-	set	-12, %l0
+! --------in writeBinaryExpr-------
+
+! true || y
+
+! =======in writeBinaryExpr: Not const folding=======
+
+! =======in writeBinaryExpr, do computation=========
+
+! =======in writeBinaryExpr, ||, check second operand=========
+	set	-8, %l0
 	add	%fp, %l0, %l0
-	st	%f0, [%l0]
+	ld	[%l0], %l1
+	cmp	%l1, %g0
+	bne	endOR0
+	nop
+
+	set	0, %l3
+endOR0:
+
+! =======in writeBinaryExpr, do store result=========
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	st	%l3, [%l0]
+
+! ------------in writeIf: result
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+	cmp	%l1, %g0
+	be	else0
+	nop
 
 
 ! ------------in writePrint---------------
-	set	temp1, %o0
+	set	temp0, %o0
 	call	printf
 	nop
 
 
 ! ------------in writePrint---------------
 
-! -------in getValue: c: null
+! -------in getValue: y: null
 
-! --------in getAddressHelper: c
-	set	-12, %l0
+! --------in getAddressHelper: y
+	set	-8, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %f0
+	ld	[%l0], %l1
 
 ! -------end of getValue------------
-	call	printFloat
+	set	.boolF, %o0
+	cmp	%l1, %g0
+	be	.printBool0
+	nop
+
+	set	.boolT, %o0
+
+.printBool0:
+	call	printf
 	nop
 
 
@@ -187,9 +170,18 @@ main:
 	nop
 
 
+! ---------in writeElse---------
+	ba	.endIf0
+	nop
+
+else0:
+
+! ----------in writeCloseBlock-----------
+.endIf0:
+
 ! --------------in writeFuncClose--------------
 	ret
 	restore
 
-	SAVE.main = -(92 + 12) & -8
+	SAVE.main = -(92 + 20) & -8
 

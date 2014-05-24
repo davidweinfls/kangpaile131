@@ -1,12 +1,8 @@
-function : float foo(float b)
-{
-    cout << "b is: " << b << endl;
-    return b;
-}
-
 function : void main()
 {
-    float c = foo(9);
-
-    cout << "c is: " << c << endl;
+	bool y = false;
+	if ( true || (y = true))
+	{
+		cout << "y's value: " << y << endl; // y's value: false
+	}
 }
