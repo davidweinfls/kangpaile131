@@ -726,6 +726,7 @@ public class AssemblyCodeGenerator {
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F1, Sparc.F1);
     		floatReg = 0;
     	}
+    	if(debug) writeDebug("---------intToFloat---------");
     }
     
     //used in DoBinaryExpr
@@ -1609,6 +1610,10 @@ public class AssemblyCodeGenerator {
     				addToBuffer(text_buffer, arg.getAddress());
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
     				resetReg();
+    				getValue(arg);
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
+    				return;
     			}
     			getValue(arg);
     			
@@ -1629,6 +1634,7 @@ public class AssemblyCodeGenerator {
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, "%o" + index);
     		}
     	}
+    	if(debug) writeDebug("-------end of writePassParameter--------");
     }
     
     public void writeFuncCall(STO sto, STO retSTO, boolean isRef)

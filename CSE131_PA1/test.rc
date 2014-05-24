@@ -1,7 +1,12 @@
+function : float foo(float b)
+{
+    cout << "b is: " << b << endl;
+    return b;
+}
+
 function : void main()
 {
-	float x = 3.5;
-	x++;//4
-	cout << x-- << endl;//4
-	//cout << x<<endl;
+    float c = foo(9);
+
+    cout << "c is: " << c << endl;
 }
