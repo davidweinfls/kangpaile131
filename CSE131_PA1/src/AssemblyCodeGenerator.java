@@ -802,6 +802,21 @@ public class AssemblyCodeGenerator {
 			}
     		else if(rType instanceof BoolType)
     		{
+    			if(o.getName().equals("&&")) 
+    			{
+    				String endAND = andStack.pop();
+    				decreaseIndent();
+                    addToBuffer(text_buffer, endAND + ":\n");
+                    increaseIndent();
+    				
+    			}
+    			else if ( o.getName().equals("||"))
+    			{
+    				String endOR = orStack.pop();
+    				decreaseIndent();
+                    addToBuffer(text_buffer, endOR + ":\n");
+                    increaseIndent();
+    			}
     			int value = ((ConstSTO) result).getIntValue ();
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
                     Integer.toString(value), Sparc.L1);
@@ -940,7 +955,7 @@ public class AssemblyCodeGenerator {
     			        if(debug) writeDebug("=======in writeBinaryExpr, ||, check second operand=========");
     			        String endOR = orStack.pop();
     			        addToBuffer(text_buffer, b.getAddress());
-    			        //addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
+    			        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L3);
     			        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
     			        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
     			        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, endOR);
