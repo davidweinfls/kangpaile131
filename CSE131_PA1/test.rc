@@ -1,15 +1,10 @@
-structdef MYS {
-  int a;
-  int b;
-};
- 
-function : void main() {
-  MYS struct1;
-  struct1.a = 5;
-  struct1.b = 10;
-  MYS struct2 = struct1;
- 
- 
-  cout << struct2.a << endl; // gets the expected value 5
-  cout << struct2.b << endl; // gets garbage??? <---- this should be 10
+int[100] j;
+
+function: void main() {
+	int[20] i;
+	i[0] = 19;
+
+	cout << i[0] << endl;
+	cout << j[0] << endl; //0
+	cout << i [ j[0] ] <<endl; //i[0] = 19
 }

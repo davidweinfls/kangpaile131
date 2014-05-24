@@ -451,6 +451,12 @@ public class AssemblyCodeGenerator {
 		//Type varType = var.getType();
 		//int index = sto.getType().getSize();
 		
+		// THIS ORDER IS VERY IMPORTANTQ!!! NEED TO GET L5 FIRST, THEN L4. eg, i[j[0]]
+		//2. get value of expr, %l5
+		if(debug) writeDebug("=======in writeArrayAddress, get value of index: " + expr.getName());
+		// optionA:
+		getAddressHelper(expr);
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
 		
 		//1. get address of var, store it in %l4
 		//if recursive, need to check type of var and call corresponding write**Address methods.
@@ -459,13 +465,7 @@ public class AssemblyCodeGenerator {
 				" and store in l4");
 		getAddressHelper(var);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.L4);
-		
-		//2. get value of expr, %l5
-		if(debug) writeDebug("=======in writeArrayAddress, get value of index: " + expr.getName());
-		// optionA:
-		getAddressHelper(expr);
-		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
-				
+
 		// optionB: actually sometimes it doesnt work. since a VarSTO expr doesn't have a value at compile time
 		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(index), Sparc.L5);
 		
