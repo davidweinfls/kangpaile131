@@ -278,7 +278,36 @@ public class AssemblyCodeGenerator {
  		{
  			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "["
  					+ Sparc.L0 + "]");
- 		} else
+ 		} 
+ 		else if(varType instanceof StructType && exprType instanceof StructType)
+    	{
+    		if(debug) writeDebug("=======in writeAssignExpr, struct assign=======");
+    		
+    		//1. get var address, store in out0
+    		if(debug) writeDebug("=======in writeAssignExpr, get var address, store in out0=======");
+    		getAddressHelper(var);
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.O0);
+    		
+    		//2. get expr address, store in out1
+    		if(debug) writeDebug("=======in writeAssignExpr, get expr address, store in out1=======");
+    		getAddressHelper(expr);
+    		//if expr is pass-by-ref
+    		if(expr.isVar() && ((VarSTO)expr).isRef())
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		}
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.O1);
+    		
+    		//3. get exprType.size, store in out2
+    		if(debug) writeDebug("=======in writeAssignExpr, get exprType.size, store in out2=======");
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(exprType.getSize()), Sparc.O2);
+    		
+    		//4. call memmove
+    		if(debug) writeDebug("=======in writeAssignExpr, call memmove=======");
+    		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "memmove, 0");
+    		addToBuffer(text_buffer, Sparc.NOP);
+    	}
+ 		else
  		{
  			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "["
  					+ Sparc.L0 + "]");

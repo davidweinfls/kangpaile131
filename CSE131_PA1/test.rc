@@ -1,8 +1,15 @@
-function : void foo(float x)
-{
-  cout << x << endl;
-}
-function : void main()
-{
-  foo(5.0);
+structdef MYS {
+  int a;
+  int b;
+};
+ 
+function : void main() {
+  MYS struct1;
+  struct1.a = 5;
+  struct1.b = 10;
+  MYS struct2 = struct1;
+ 
+ 
+  cout << struct2.a << endl; // gets the expected value 5
+  cout << struct2.b << endl; // gets garbage??? <---- this should be 10
 }
