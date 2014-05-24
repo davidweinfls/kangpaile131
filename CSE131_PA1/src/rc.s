@@ -1,5 +1,5 @@
 ! 
-! Generated Sat May 24 02:04:57 PDT 2014
+! Generated Sat May 24 02:26:01 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,6 +10,7 @@
 .float_one:	.single 0r1
 	.align 4
 
+temp0:	.single 0r3.5
 	.section ".data"
 	.align 4
 
@@ -26,124 +27,121 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: false
-	set	0, %l1
+! ------in writeConstantLiteral: 3.5
+	set	temp0, %l0
+	ld	[%l0], %f0
 	set	-4, %l0
 	add	%fp, %l0, %l0
-	st	%l1, [%l0]
+	st	%f0, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
-! -------in getValue: false: 0.0
+! -------in getValue: 3.5: 3.5
 
-! --------in getAddressHelper: false
+! --------in getAddressHelper: 3.5
 	set	-4, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
+	ld	[%l0], %f0
 
 ! -------end of getValue------------
 
-! ---------in writeLocalVariableWInit:f
+! ---------in writeLocalVariableWInit:x
 	set	-8, %l0
 	add	%fp, %l0, %l0
-	st	%l1, [%l0]
+	st	%f0, [%l0]
 
 
-! -------writeUnaryExpr: f !
+! -------writeUnaryExpr: x ++
 
 ! =======in writeUnaryExpr, non-const folding, computation=========
 
-! -------in getValue: f: null
+! =======in writeUnaryExpr, non-const folding, op is ++, do nothing=========
 
-! --------in getAddressHelper: f
+! ----------writePost: x
+
+! =======in writePost, step 1: load value to local1
+
+! -------in getValue: x: null
+
+! --------in getAddressHelper: x
 	set	-8, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
+	ld	[%l0], %f0
 
 ! -------end of getValue------------
-	xor	%l1, 1, %l1
+	set	.float_one, %l0
+	ld	[%l0], %f2
 
-! =======in writeUnaryExpr, result get address=========
-	set	-12, %l0
+! =======in writePost, step 1.5: store original value 
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+	fadds	%f0, %f2, %f3
+
+! =======in writePost, step 3: store value 
+
+! --------in getAddressHelper: x
+	set	-8, %l0
 	add	%fp, %l0, %l0
 
-! =======in writeUnaryExpr, non-const folding, store value=========
-	st	%l1, [%l0]
+! --------end of getAddressHelper------------ 
+	st	%f3, [%l0]
 
-! ---------end of writeUnary----------
+! -------writeUnaryExpr: x --
+
+! =======in writeUnaryExpr, non-const folding, computation=========
+
+! =======in writeUnaryExpr, non-const folding, op is --, do nothing=========
+
+! ----------writePost: x
+
+! =======in writePost, step 1: load value to local1
+
+! -------in getValue: x: null
+
+! --------in getAddressHelper: x
+	set	-8, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %f1
+
+! -------end of getValue------------
+	set	.float_one, %l0
+	ld	[%l0], %f2
+
+! =======in writePost, step 1.5: store original value 
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%f1, [%l0]
+	fsubs	%f1, %f2, %f3
+
+! =======in writePost, step 3: store value 
+
+! --------in getAddressHelper: x
+	set	-8, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	st	%f3, [%l0]
+
+! ------------in writePrint---------------
 
 ! -------in getValue: result: null
 
 ! --------in getAddressHelper: result
-	set	-12, %l0
+	set	-24, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
+	ld	[%l0], %f0
 
 ! -------end of getValue------------
-
-! ---------in writeLocalVariableWInit:t
-	set	-16, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-
-! ------------in writePrint---------------
-
-! -------in getValue: f: null
-
-! --------in getAddressHelper: f
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-	set	.boolF, %o0
-	cmp	%l1, %g0
-	be	.printBool0
-	nop
-
-	set	.boolT, %o0
-
-.printBool0:
-	call	printf
-	nop
-
-
-! ------------in writePrint---------------
-	set	.endl, %o0
-	call	printf
-	nop
-
-
-! ------------in writePrint---------------
-
-! -------in getValue: t: null
-
-! --------in getAddressHelper: t
-	set	-16, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-	set	.boolF, %o0
-	cmp	%l1, %g0
-	be	.printBool1
-	nop
-
-	set	.boolT, %o0
-
-.printBool1:
-	call	printf
+	call	printFloat
 	nop
 
 
@@ -157,5 +155,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 16) & -8
+	SAVE.main = -(92 + 24) & -8
 

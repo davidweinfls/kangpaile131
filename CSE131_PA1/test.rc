@@ -1,8 +1,7 @@
-function: void main() {
-	bool f = false;
-	bool t = !f;
-		
-	cout<<f<<endl;
-	cout<<t<< endl;
-		
+function : void main()
+{
+	float x = 3.5;
+	x++;//4
+	cout << x-- << endl;//4
+	//cout << x<<endl;
 }

@@ -1446,16 +1446,24 @@ public class AssemblyCodeGenerator {
     	//1. load value in sto to %l1 or %f1
     	if(debug) writeDebug("=======in writePost, step 1: load value to local1");
     	getValue(sto);
-    	
-    	//1.5 store original value to result
-    	if(debug) writeDebug("=======in writePost, step 1.5: store original value ");
-    	addToBuffer(text_buffer, result.getAddress());
-    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
-    	
-    	if(debug) writeDebug("=======in writePost, step 2: computation ");
+    		
     	//2. computation, add one or sub one
     	if(stoType instanceof IntType)
     	{
+    		//1.5 store original value to result
+        	if(debug) writeDebug("=======in writePost, step 1.5: store original value ");
+        	addToBuffer(text_buffer, result.getAddress());
+
+    	    if(localReg == 0)
+    		{
+    	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L2, "[" + Sparc.L0 + "]");
+    		}
+    		else
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    		}
+    		
+    	    if(debug) writeDebug("=======in writePost, step 2: computation ");
     		if(o.getName() == "++")
     		{
     			if(localReg == 0)
@@ -1494,8 +1502,12 @@ public class AssemblyCodeGenerator {
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F2);
     		
     		//1.5 store original value to result
+    		if(debug) writeDebug("=======in writePost, step 1.5: store original value ");
         	addToBuffer(text_buffer, result.getAddress());
-        	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+        	if(floatReg == 0)
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
+        	else
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
         	
     		//2. computation
     		if(o.getName() == "++")
