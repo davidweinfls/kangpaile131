@@ -1,11 +1,12 @@
 structdef FOO {
-    int a, b, c;
+    float a, b;
 };
 
 static FOO x;
 
 function: void main()
 {
-	x.a = 3;
-	cout << x.a << endl;
+	FOO[3] f;
+	f[2].a = 3.5;
+	cout << f[2].a << endl;
 }

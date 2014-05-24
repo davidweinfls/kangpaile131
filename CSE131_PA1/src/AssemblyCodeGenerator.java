@@ -449,7 +449,12 @@ public class AssemblyCodeGenerator {
 		//TODO:
 		else
 		{
-			
+			//if array elts are struct, or array or etc, need to do index * sizeof(object)
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L5, Sparc.O0);
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(stoType.getSize()), Sparc.O1);
+			addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, ".mul");
+			addToBuffer(text_buffer, Sparc.NOP);
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.O0, Sparc.L5);
 		}
 	
 		//4. base + offset, add %l4 and %l5 to get the result address 
@@ -467,11 +472,11 @@ public class AssemblyCodeGenerator {
     	//need to do recursive check. since a struct field can be of type struct, array, pointer...
     	if(sto.getStruct().getIsArray())
     	{
-    		
+    		writeArrayAddress(sto.getStruct());
     	}
     	else if(sto.getStruct().getIsStructField())
     	{
-    		
+    		writeStructAddress(sto.getStruct());
     	}
     	else if(sto.getStruct().getIsDeref())
     	{
