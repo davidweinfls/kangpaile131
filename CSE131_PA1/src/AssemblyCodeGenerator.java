@@ -1577,8 +1577,15 @@ public class AssemblyCodeGenerator {
     				resetReg();
     			}
     			getValue(arg);
-    			//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, "%o" + index);
-    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    			
+    			if(floatReg == 1)
+    			{
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    			}
+    			else
+    			{
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
+    			}
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
             }
     		else
@@ -1667,7 +1674,7 @@ public class AssemblyCodeGenerator {
 						float value = ((ConstSTO) returnExpr).getFloatValue();
 						has_rodata = true;
 						decreaseIndent();
-						addToBuffer(rodata_buffer, Sparc.VAR_LABEL, "tmp"
+						addToBuffer(rodata_buffer, Sparc.VAR_LABEL, "temp"
 								+ num_of_temp, "single",
 								"0r" + Float.toString(value));
 						increaseIndent();
