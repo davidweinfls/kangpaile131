@@ -1375,6 +1375,10 @@ public class AssemblyCodeGenerator {
     		//3. store value in its address
     		if(debug) writeDebug("=======in writePre, step 3: store value ");
     		getAddressHelper(sto);
+    		if(sto.isVar() && ((VarSTO)sto).isRef())
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		}
     		if(localReg == 0)
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L2, "[" + Sparc.L0 + "]");
@@ -1414,6 +1418,10 @@ public class AssemblyCodeGenerator {
     		}
     		//3. store value in its address
     		getAddressHelper(sto);
+    		if(sto.isVar() && ((VarSTO)sto).isRef())
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		}
     		if(floatReg == 0)
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
@@ -1468,6 +1476,10 @@ public class AssemblyCodeGenerator {
     		//3. store value in its address
     		if(debug) writeDebug("=======in writePost, step 3: store value ");
     		getAddressHelper(sto);
+    		if(sto.isVar() && ((VarSTO)sto).isRef())
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		}
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
     	}
     	else if(stoType instanceof FloatType)
@@ -1504,7 +1516,12 @@ public class AssemblyCodeGenerator {
     			}
     		}
     		//3. store value in its address
+    		if(debug) writeDebug("=======in writePost, step 3: store value ");
     		getAddressHelper(sto);
+    		if(sto.isVar() && ((VarSTO)sto).isRef())
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		}
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F3, "[" + Sparc.L0 + "]");
     	}
     	return result;

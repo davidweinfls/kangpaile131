@@ -1,12 +1,9 @@
-function : void foo(float x, float y, float z)
-{
-  cout << x << endl;
-  cout << y << endl;
-  cout << z << endl;
+float x = 1.55;
+function: void foo (float & x) {
+	--x;
 }
-
-function : void main()
-{
-  foo(5.0, 6.0, 7.0);
-
+function: void main() {
+	cout << x << endl;//1.55
+	foo(x);
+	cout << x << endl;//2.55
 }
