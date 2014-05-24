@@ -1158,6 +1158,7 @@ public class AssemblyCodeGenerator {
 			else
 				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
 		}
+    	resetReg();
     	if(debug) writeDebug("---------end of writeUnary----------");
     }
     

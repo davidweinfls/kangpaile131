@@ -1,12 +1,11 @@
-structdef BAR {
-    bool barC;
-};
-BAR bed;
-function : void main()
+bool b = false;
+
+function: void main()
 {
-	BAR cyclops = bed;
-	bed.barC = true;
-	cout<<bed.barC<<endl;
-	cyclops.barC = bed.barC && false;	
-	cout << cyclops.barC<<endl;
+	//cout << b << endl;	//false
+	//cout <<!b << endl;	//true
+	//cout << b << endl;	//false
+
+	cout << !b && !b << endl;//true
+  
 }

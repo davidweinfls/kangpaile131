@@ -1,5 +1,5 @@
 ! 
-! Generated Sat May 24 16:35:31 PDT 2014
+! Generated Sat May 24 16:56:44 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -13,17 +13,15 @@
 	.section ".data"
 	.align 4
 
-	.section ".bss"
-	.align 4
-
-	.global bed
-bed:	.skip 4
+	.global b
 	
+b:	.word 0
+
 	.section ".text"
 	.align 4
 
 
-! --------in writeGlobalStruct--------
+! ---------In writeGLobalVariable--------------
 
 ! in writeFuncDec
 ! <<<<<<<<<<<<<<<<<<<main>>>>>>>>>>>>>>>>>
@@ -34,86 +32,101 @@ main:
 	save	%sp, %g1, %sp
 
 
-! -------in getValue: bed: null
+! -------writeUnaryExpr: b !
 
-! -------end of getValue------------
+! =======in writeUnaryExpr, non-const folding, computation=========
 
-! ---------in writeLocalVariableWInit:cyclops
-	set	-4, %l0
-	add	%fp, %l0, %l0
+! -------in getValue: b: null
 
-! =======in writeAssignExpr, struct assign=======
-
-! =======in writeAssignExpr, get var address, store in out0=======
-
-! --------in getAddressHelper: cyclops
-	set	-4, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	mov	%l0, %o0
-
-! =======in writeAssignExpr, get expr address, store in out1=======
-
-! --------in getAddressHelper: bed
-	set	bed, %l0
+! --------in getAddressHelper: b
+	set	b, %l0
 	add	%g0, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	mov	%l0, %o1
-
-! =======in writeAssignExpr, get exprType.size, store in out2=======
-	set	4, %o2
-
-! =======in writeAssignExpr, call memmove=======
-	call	memmove, 0
-	nop
-
-
-
-! ------in writeConstantLiteral: true
-	set	1, %l1
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! ----------in writeAssignExpr: barC  =  true
-
-! -------in getValue: true: 1.0
-
-! --------in getAddressHelper: true
-	set	-8, %l0
-	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l1
 
 ! -------end of getValue------------
+	xor	%l1, 1, %l1
 
-! --------in getAddressHelper: barC
+! =======in writeUnaryExpr, result get address=========
+	set	-4, %l0
+	add	%fp, %l0, %l0
 
-! -------in writeStructAddress: barC
-	set	bed, %l0
-	add	%g0, %l0, %l0
-	add	%l0, 0, %l0
-
-! --------end of getAddressHelper------------ 
+! =======in writeUnaryExpr, non-const folding, store value=========
 	st	%l1, [%l0]
 
-! ----------end of writeAssignExpr--------
+! ---------end of writeUnary----------
+
+! =======in writeAnd, &&, check first operand=========
+	set	0, %l3
+
+! --------in getAddressHelper: result
+	set	-4, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+	cmp	%l1, %g0
+	be	endAND0
+	nop
+
+
+! -------writeUnaryExpr: b !
+
+! =======in writeUnaryExpr, non-const folding, computation=========
+
+! -------in getValue: b: null
+
+! --------in getAddressHelper: b
+	set	b, %l0
+	add	%g0, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+	xor	%l1, 1, %l1
+
+! =======in writeUnaryExpr, result get address=========
+	set	-8, %l0
+	add	%fp, %l0, %l0
+
+! =======in writeUnaryExpr, non-const folding, store value=========
+	st	%l1, [%l0]
+
+! ---------end of writeUnary----------
+
+! --------in writeBinaryExpr-------
+
+! result && result
+
+! =======in writeBinaryExpr: Not const folding=======
+
+! =======in writeBinaryExpr, do computation=========
+
+! =======in writeBinaryExpr, &&, check second operand=========
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+	cmp	%l1, %g0
+	be	endAND0
+	nop
+
+	set	1, %l3
+endAND0:
+
+! =======in writeBinaryExpr, do store result=========
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	st	%l3, [%l0]
 
 ! ------------in writePrint---------------
 
-! -------in getValue: barC: null
+! -------in getValue: result: null
 
-! --------in getAddressHelper: barC
-
-! -------in writeStructAddress: barC
-	set	bed, %l0
-	add	%g0, %l0, %l0
-	add	%l0, 0, %l0
+! --------in getAddressHelper: result
+	set	-12, %l0
+	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l1
@@ -137,116 +150,9 @@ main:
 	nop
 
 
-! =======in writeAnd, &&, check first operand=========
-	set	0, %l3
-
-! --------in getAddressHelper: barC
-
-! -------in writeStructAddress: barC
-	set	bed, %l0
-	add	%g0, %l0, %l0
-	add	%l0, 0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-	cmp	%l1, %g0
-	be	endAND0
-	nop
-
-
-! ------in writeConstantLiteral: false
-	set	0, %l1
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! --------in writeBinaryExpr-------
-
-! barC && false
-
-! =======in writeBinaryExpr: Not const folding=======
-
-! =======in writeBinaryExpr, do computation=========
-
-! =======in writeBinaryExpr, &&, check second operand=========
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	ld	[%l0], %l1
-	cmp	%l1, %g0
-	be	endAND0
-	nop
-
-	set	1, %l3
-endAND0:
-
-! =======in writeBinaryExpr, do store result=========
-	set	-16, %l0
-	add	%fp, %l0, %l0
-	st	%l3, [%l0]
-
-! ----------in writeAssignExpr: barC  =  result
-
-! -------in getValue: result: null
-
-! --------in getAddressHelper: result
-	set	-16, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! --------in getAddressHelper: barC
-
-! -------in writeStructAddress: barC
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	add	%l0, 0, %l0
-
-! --------end of getAddressHelper------------ 
-	st	%l1, [%l0]
-
-! ----------end of writeAssignExpr--------
-
-! ------------in writePrint---------------
-
-! -------in getValue: barC: null
-
-! --------in getAddressHelper: barC
-
-! -------in writeStructAddress: barC
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	add	%l0, 0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-	set	.boolF, %o0
-	cmp	%l1, %g0
-	be	.printBool1
-	nop
-
-	set	.boolT, %o0
-
-.printBool1:
-	call	printf
-	nop
-
-
-! ------------in writePrint---------------
-	set	.endl, %o0
-	call	printf
-	nop
-
-
 ! --------------in writeFuncClose--------------
 	ret
 	restore
 
-	SAVE.main = -(92 + 16) & -8
+	SAVE.main = -(92 + 12) & -8
 
