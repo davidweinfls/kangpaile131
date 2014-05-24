@@ -1121,9 +1121,13 @@ public class AssemblyCodeGenerator {
 					break;
 			}
 			// 2. get address
-			if (debug)
-				writeDebug("=======in writeUnaryExpr, non-const folding, computation=========");
+			if (debug) writeDebug("=======in writeUnaryExpr, result get address=========");
 			addToBuffer(text_buffer, result.getAddress());
+			if (result instanceof VarSTO && ((VarSTO)result).isRef())
+    		{
+    			//load value stored in its address, which is the addresss of the real variable
+            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		}
 			// 3. store value
 			if (debug)
 				writeDebug("=======in writeUnaryExpr, non-const folding, store value=========");
@@ -1132,6 +1136,7 @@ public class AssemblyCodeGenerator {
 			else
 				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
 		}
+    	if(debug) writeDebug("---------end of writeUnary----------");
     }
     
     void writeAssignExpr(STO var, STO expr)

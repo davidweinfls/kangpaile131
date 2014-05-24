@@ -1,9 +1,10 @@
-float x = 1.55;
-function: void foo (float & x) {
-	--x;
-}
 function: void main() {
-	cout << x << endl;//1.55
-	foo(x);
-	cout << x << endl;//2.55
+	bool f = false;
+	bool t = !f;
+	
+	int x = 3;
+	int y = x++;
+		
+	cout<<f<<endl;
+		
 }
