@@ -1,12 +1,8 @@
-structdef FOO {
-    float a, b;
-};
-
-static FOO x;
-
-function: void main()
+function : void foo(float x)
 {
-	FOO[3] f;
-	f[2].a = 3.5;
-	cout << f[2].a << endl;
+  cout << x << endl;
+}
+function : void main()
+{
+  foo(5.0);
 }

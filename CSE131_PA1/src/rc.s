@@ -1,5 +1,5 @@
 ! 
-! Generated Fri May 23 22:44:54 PDT 2014
+! Generated Fri May 23 23:51:35 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -10,164 +10,35 @@
 .float_one:	.single 0r1
 	.align 4
 
-temp0:	.single 0r3.5
+temp0:	.single 0r5.0
 	.section ".data"
 	.align 4
 
-	.section ".bss"
-	.align 4
-
-x:	.skip 8
-	
 	.section ".text"
 	.align 4
 
 
-! --------in writeGlobalStruct--------
-
 ! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<main>>>>>>>>>>>>>>>>>
+! <<<<<<<<<<<<<<<<<<<foo>>>>>>>>>>>>>>>>>
 	.align 4
-	.global main
-main:
-	set	SAVE.main, %g1
+	.global foo
+foo:
+	set	SAVE.foo, %g1
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 3
-	set	3, %l1
-	set	-4, %l0
+! -------in writeParameter: x param num: 0
+	set	68, %l0
 	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! ---------in writeLocalVariableWOInit:f
-
-! ------in writeConstantLiteral: 2
-	set	2, %l1
-	set	-32, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! ------in writeConstantLiteral: 3.5
-	set	temp0, %l0
-	ld	[%l0], %f0
-	set	-36, %l0
-	add	%fp, %l0, %l0
-	st	%f0, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! ----------in writeAssignExpr: a  =  3.5
-
-! =======in writeAssignExpr, varType is float=======
-
-! -------in getValue: 3.5: 3.5
-
-! --------in getAddressHelper: 3.5
-	set	-36, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %f0
-
-! -------end of getValue------------
-
-! --------in getAddressHelper: a
-
-! -------in writeStructAddress: a
-
-! ----------in writeArrayAddress: f
-
-! =======in writeArrayAddress, get address of var :f and store in l4
-
-! --------in getAddressHelper: f
-	set	-28, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	mov	%l0, %l4
-
-! =======in writeArrayAddress, get value of index: 2
-
-! --------in getAddressHelper: 2
-	set	-32, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
-
-! =======in writeArrayAddress, scale the offset
-	mov	%l5, %o0
-	set	8, %o1
-	call	.mul
-	nop
-
-	mov	%o0, %l5
-
-! =======in writeArrayAddress, base + offset
-	add	%l4, %l5, %l0
-
-! ---------end of writeArrayAddress--------
-	add	%l0, 0, %l0
-
-! --------end of getAddressHelper------------ 
-	st	%f0, [%l0]
-
-! ----------end of writeAssignExpr--------
-
-! ------in writeConstantLiteral: 2
-	set	2, %l1
-	set	-40, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
+	st	%i0, [%l0]
 
 ! ------------in writePrint---------------
 
-! -------in getValue: a: null
+! -------in getValue: x: null
 
-! --------in getAddressHelper: a
-
-! -------in writeStructAddress: a
-
-! ----------in writeArrayAddress: f
-
-! =======in writeArrayAddress, get address of var :f and store in l4
-
-! --------in getAddressHelper: f
-	set	-28, %l0
+! --------in getAddressHelper: x
+	set	68, %l0
 	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	mov	%l0, %l4
-
-! =======in writeArrayAddress, get value of index: 2
-
-! --------in getAddressHelper: 2
-	set	-40, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
-
-! =======in writeArrayAddress, scale the offset
-	mov	%l5, %o0
-	set	8, %o1
-	call	.mul
-	nop
-
-	mov	%o0, %l5
-
-! =======in writeArrayAddress, base + offset
-	add	%l4, %l5, %l0
-
-! ---------end of writeArrayAddress--------
-	add	%l0, 0, %l0
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %f0
@@ -187,5 +58,52 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 40) & -8
+	SAVE.foo = -(92 + 0) & -8
+
+
+! in writeFuncDec
+! <<<<<<<<<<<<<<<<<<<main>>>>>>>>>>>>>>>>>
+	.align 4
+	.global main
+main:
+	set	SAVE.main, %g1
+	save	%sp, %g1, %sp
+
+
+! ------in writeConstantLiteral: 5.0
+	set	temp0, %l0
+	ld	[%l0], %f0
+	set	-4, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! -------in writePassParameter--------
+
+! -------in getValue: 5.0: 5.0
+
+! --------in getAddressHelper: 5.0
+	set	-4, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %f0
+
+! -------end of getValue------------
+	st	%f0, [%l0]
+	ld	[%l0], %o0
+
+! ----------writeFuncCall------------
+	call	foo
+	nop
+
+
+! ========writeFuncCall: get address of retSTO, store retValue in it ==========
+
+! --------------in writeFuncClose--------------
+	ret
+	restore
+
+	SAVE.main = -(92 + 4) & -8
 
