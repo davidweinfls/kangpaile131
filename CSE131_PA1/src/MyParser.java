@@ -1580,7 +1580,16 @@ class MyParser extends parser
             		strID, type.getName()));
             return new ErrorSTO("Illegal Struct Usage - no such field");
         }
-		return field;
+        
+        //instead of return the field, need to create a new sto to return
+        //update its base, offset, struct type
+        STO retSTO = field.copy();
+        retSTO.setBase(sto.getBase());
+        retSTO.setFieldOffset(offset);
+        retSTO.setIsStructField();
+        retSTO.setStruct(sto.copy());
+        
+		return retSTO;
 	}
 
 

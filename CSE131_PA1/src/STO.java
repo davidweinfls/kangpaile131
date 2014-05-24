@@ -192,14 +192,14 @@ abstract class STO
 	}
 	
 	//for project2:
-	public boolean getIsStruct()
+	public boolean getIsStructField()
 	{
-		return isStruct;
+		return isStructField;
 	}
 		
-	public void setIsStruct()
+	public void setIsStructField()
 	{
-		isStruct = true;
+		isStructField = true;
 	}
 	
 	//for project2:
@@ -214,11 +214,92 @@ abstract class STO
 	}
 	
 	//for project2:
+	public boolean getIsTypeDef()
+	{
+		return isTypeDef;
+	}
+	
+	public void setIsTypeDef()
+	{
+		isTypeDef = true;
+	}
+	
+	//for project2:
+	public STO getPointer()
+	{
+		return m_pointer;
+	}
+	
+	public void setPointer(STO ptr)
+	{
+		m_pointer = ptr;
+	}
+	
+	//for project2:
+	public STO getStruct()
+	{
+		return m_struct;
+	}
+		
+	public void setStruct(STO s)
+	{
+		m_struct = s;
+	}
+	
+	//for project2:
+	public int getFieldOffset()
+	{
+		return m_field_offset;
+	}
+	
+	public void setFieldOffset(int s)
+	{
+		m_field_offset = s;
+	}
+	
+	
+	//for project2:
 	//used in DoDesignator_Dot()
 	public STO copy()
 	{
-		STO retSTO;
+		VarSTO retSTO = new VarSTO(this.getName(), this.getType());
 		
+		retSTO.setBase(getBase());
+		retSTO.setGlobalOffset(getGlobalOffset());
+		retSTO.setOffset(getOffset());
+		
+		if(getGlobal())
+		{
+			retSTO.setGlobal();
+		}
+		
+		if(getIsArray()) 
+		{
+			retSTO.setIsArray();
+			retSTO.setArray(getArray());
+		}
+		
+		if(getIsStructField())
+		{
+			retSTO.setIsStructField();
+			retSTO.setFieldOffset(getFieldOffset());
+			//TODO: set struct retSTO.setStruct(getStruct());
+		}
+		
+		if(getIsDeref())
+		{
+			retSTO.setIsDeref();
+		}
+		
+		if(getPointer() != null)
+		{
+			retSTO.setPointer(getPointer());
+		}
+		
+		if(this.isVar() && ((VarSTO)this).isRef())
+		{
+			retSTO.setRef();
+		}
 		return retSTO;
 	}
 
@@ -251,6 +332,10 @@ abstract class STO
 	
 	//for project2: 
 	private boolean		isArray = false;
-	private boolean 	isStruct = false;
+	private boolean 	isStructField = false;
 	private boolean 	isDeref = false;
+	private boolean		isTypeDef = false;
+	private STO			m_pointer;
+	private STO			m_struct;
+	private int 		m_field_offset;
 }

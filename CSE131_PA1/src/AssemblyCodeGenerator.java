@@ -464,6 +464,7 @@ public class AssemblyCodeGenerator {
     {
     	if(debug) writeDebug("-------in writeStructAddress: " + sto.getName());
     	//TODO: struct of struct stuff
+    	//need to do recursive check. since a struct field can be of type struct, array, pointer...
     	
     }
 	
@@ -628,7 +629,7 @@ public class AssemblyCodeGenerator {
 		{
 			
 		}
-		else if(sto.getIsStruct())
+		else if(sto.getIsStructField())
 		{
 			
 		}
@@ -1114,22 +1115,7 @@ public class AssemblyCodeGenerator {
     		
     		//2. get var address
     		//if array type, allocate space in stack for it
-    		if(var.getIsArray())
-    		{
-    			writeArrayAddress(var);
-    		}
-    		else if(var.getIsDeref())
-    		{
-    			
-    		}
-    		else if(var.getIsStruct())
-    		{
-    			
-    		}
-    		else
-    		{
-    			addToBuffer(text_buffer, var.getAddress());
-    		}
+    		getAddressHelper(var);
     		
     		//check if var is pass-by-reference
     		if (var instanceof VarSTO && ((VarSTO)var).isRef())
@@ -1497,9 +1483,9 @@ public class AssemblyCodeGenerator {
     				resetReg();
     			}
     			getValue(arg);
-    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, "%o" + index);
-    			//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
-    			//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
+    			//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, "%o" + index);
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
             }
     		else
     		{
