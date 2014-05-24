@@ -1483,10 +1483,19 @@ class MyParser extends parser
 			m_errors.print (result.getName());
 		}
 		
-		m_currOffset -= result.getType().getSize();
-		result.setOffset(m_currOffset);
-        //result.setOffset(a.getOffset());
-        result.setBase("%%fp");
+		
+		
+		if(o.getName() == "!")
+		{
+			m_currOffset -= result.getType().getSize();
+			result.setOffset(m_currOffset);
+			result.setBase("%%fp");
+		}
+		else
+		{
+			result.setOffset(a.getOffset());
+			result.setBase("%%fp");
+		}
         
         if (m_symtab.getLevel() != 1)
             myAsWriter.writeUnaryExpr(a, o.getName(), result);

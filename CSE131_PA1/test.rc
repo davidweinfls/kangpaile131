@@ -1,10 +1,8 @@
 function: void main() {
 	bool f = false;
 	bool t = !f;
-	
-	int x = 3;
-	int y = x++;
 		
 	cout<<f<<endl;
+	cout<<t<< endl;
 		
 }
