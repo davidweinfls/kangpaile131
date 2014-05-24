@@ -1,10 +1,11 @@
-function : void foo(float x, float y)
-{
-  cout << x << y<<endl;
-}
+structdef FOO {
+    int a, b, c;
+};
 
-function : void main()
-{	
-  int a = 2;
-  foo(777, a);
+static FOO x;
+
+function: void main()
+{
+	x.a = 3;
+	cout << x.a << endl;
 }

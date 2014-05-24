@@ -235,12 +235,13 @@ abstract class STO
 		m_pointer = ptr;
 	}
 	
-	//for project2:
+	//for project2: 
 	public STO getStruct()
 	{
 		return m_struct;
 	}
 		
+	//store struct sto into a struct field. in order to check recursive types
 	public void setStruct(STO s)
 	{
 		m_struct = s;

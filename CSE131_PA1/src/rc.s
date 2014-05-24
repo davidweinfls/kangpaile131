@@ -1,5 +1,5 @@
 ! 
-! Generated Fri May 23 21:47:06 PDT 2014
+! Generated Fri May 23 22:08:09 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -13,58 +13,77 @@
 	.section ".data"
 	.align 4
 
+	.section ".bss"
+	.align 4
+
+x:	.skip 12
+	
 	.section ".text"
 	.align 4
 
 
+! --------in writeGlobalStruct--------
+
 ! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<foo>>>>>>>>>>>>>>>>>
+! <<<<<<<<<<<<<<<<<<<main>>>>>>>>>>>>>>>>>
 	.align 4
-	.global foo
-foo:
-	set	SAVE.foo, %g1
+	.global main
+main:
+	set	SAVE.main, %g1
 	save	%sp, %g1, %sp
 
 
-! -------in writeParameter: x param num: 0
-	set	68, %l0
+! ------in writeConstantLiteral: 3
+	set	3, %l1
+	set	-4, %l0
 	add	%fp, %l0, %l0
-	st	%i0, [%l0]
+	st	%l1, [%l0]
 
-! -------in writeParameter: y param num: 1
-	set	72, %l0
-	add	%fp, %l0, %l0
-	st	%i1, [%l0]
+! ------end of writeConstantLiteral-------
 
-! ------------in writePrint---------------
+! ----------in writeAssignExpr: a  =  3
 
-! -------in getValue: x: null
+! -------in getValue: 3: 3.0
 
-! --------in getAddressHelper: x
-	set	68, %l0
+! --------in getAddressHelper: 3
+	set	-4, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %f0
+	ld	[%l0], %l1
 
 ! -------end of getValue------------
-	call	printFloat
-	nop
 
+! --------in getAddressHelper: a
+
+! -------in writeStructAddress: a
+	set	x, %l0
+	add	%g0, %l0, %l0
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	st	%l1, [%l0]
+
+! ----------end of writeAssignExpr--------
 
 ! ------------in writePrint---------------
 
-! -------in getValue: y: null
+! -------in getValue: a: null
 
-! --------in getAddressHelper: y
-	set	72, %l0
-	add	%fp, %l0, %l0
+! --------in getAddressHelper: a
+
+! -------in writeStructAddress: a
+	set	x, %l0
+	add	%g0, %l0, %l0
+	add	%l0, 0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %f0
+	ld	[%l0], %l1
 
 ! -------end of getValue------------
-	call	printFloat
+	set	.intFmt, %o0
+	mov	%l1, %o1
+	call	printf
 	nop
 
 
@@ -78,129 +97,5 @@ foo:
 	ret
 	restore
 
-	SAVE.foo = -(92 + 0) & -8
-
-
-! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<main>>>>>>>>>>>>>>>>>
-	.align 4
-	.global main
-main:
-	set	SAVE.main, %g1
-	save	%sp, %g1, %sp
-
-
-! ------in writeConstantLiteral: 2
-	set	2, %l1
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! -------in getValue: 2: 2.0
-
-! --------in getAddressHelper: 2
-	set	-4, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! ---------in writeLocalVariableWInit:a
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-
-! ------in writeConstantLiteral: 777
-	set	777, %l1
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! -------in writePassParameter--------
-
-! ---------intToFloat: 777 777
-
-! =======in intToFloat: getAddress of 777
-
-! --------in getAddressHelper: 777
-	set	-12, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-
-! =======in intToFloat: load value of 777
-	ld	[%l0], %f0
-
-! =======in intToFloat: call itos 777
-	fitos	%f0, %f0
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	st	%f0, [%l0]
-
-! -------in getValue: 777: 777.0
-
-! --------in getAddressHelper: 777
-	set	-12, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-	st	%f0, [%l0]
-	ld	[%l0], %o0
-
-! -------in writePassParameter--------
-
-! ---------intToFloat: a null
-
-! =======in intToFloat: getAddress of a
-
-! --------in getAddressHelper: a
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-
-! =======in intToFloat: load value of a
-	ld	[%l0], %f0
-
-! =======in intToFloat: call itos a
-	fitos	%f0, %f0
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%f0, [%l0]
-
-! -------in getValue: a: null
-
-! --------in getAddressHelper: a
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-	st	%f0, [%l0]
-	ld	[%l0], %o1
-
-! ----------writeFuncCall------------
-	call	foo
-	nop
-
-
-! ========writeFuncCall: get address of retSTO, store retValue in it ==========
-
-! --------------in writeFuncClose--------------
-	ret
-	restore
-
-	SAVE.main = -(92 + 12) & -8
+	SAVE.main = -(92 + 4) & -8
 

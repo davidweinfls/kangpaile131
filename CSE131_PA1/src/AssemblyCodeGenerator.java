@@ -465,7 +465,30 @@ public class AssemblyCodeGenerator {
     	if(debug) writeDebug("-------in writeStructAddress: " + sto.getName());
     	//TODO: struct of struct stuff
     	//need to do recursive check. since a struct field can be of type struct, array, pointer...
-    	
+    	if(sto.getStruct().getIsArray())
+    	{
+    		
+    	}
+    	else if(sto.getStruct().getIsStructField())
+    	{
+    		
+    	}
+    	else if(sto.getStruct().getIsDeref())
+    	{
+    		
+    	}
+    	else if(sto.getStruct().getType().isPointerType() || (sto.isVar() && ((VarSTO)sto).isRef() ))
+    	{
+    		
+    	}
+    	//basicType
+    	else
+    	{
+    		//get struct's base offset
+    		addToBuffer(text_buffer, sto.getStruct().getAddress());
+    	}
+    	//add offset to base offset
+    	addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L0, Integer.toString(sto.getFieldOffset()), Sparc.L0 );
     }
 	
     
@@ -631,7 +654,7 @@ public class AssemblyCodeGenerator {
 		}
 		else if(sto.getIsStructField())
 		{
-			
+			writeStructAddress(sto);
 		}
 		else
 		{
