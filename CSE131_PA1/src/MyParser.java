@@ -304,14 +304,12 @@ class MyParser extends parser
                             myAsWriter.writeLocalVariableWInit(var, expr);
 						}
 					}
-					
 					m_symtab.insert (var);
 				}
 				//ptr w/o init
 				else if(exprType == null)
 				{
                     var = new VarSTO(id, varType, true, true);
-                    
                   //gloabl
 					if(m_symtab.getLevel() ==1)
 					{
@@ -333,12 +331,6 @@ class MyParser extends parser
 						}
 						else
 						{
-							if(exprType.isIntType() && t.isFloatType())
-							{
-								myAsWriter.intToFloat(expr);
-							}
-							myAsWriter.getValue(expr);
-							
 							m_currOffset -= t.getSize();
                             var.setOffset(m_currOffset);
                             var.setBase("%%fp");

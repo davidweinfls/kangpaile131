@@ -1,6 +1,10 @@
-int * x;
+	int* x;
+	int* y;
 
 function: void main()
 {
+
+	
+	x = y;
 	
 }

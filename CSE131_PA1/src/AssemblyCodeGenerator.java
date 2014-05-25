@@ -668,6 +668,27 @@ public class AssemblyCodeGenerator {
 				localReg = 0;
 			}
 		}
+		// for pointer
+		else
+		{
+			getAddressHelper(sto);
+			//if passed by ref, load value in address
+			if(sto.isVar() && ((VarSTO)sto).isRef())
+			{
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+			}
+			
+			if(localReg == 0)
+			{
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+				localReg = 1;
+			}
+			else
+			{
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L2);
+				localReg = 0;
+			}
+		}
 		if(debug) writeDebug("-------end of getValue------------");
     }
     
