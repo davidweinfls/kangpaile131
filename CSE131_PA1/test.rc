@@ -1,10 +1,18 @@
-	int* x;
-	int* y;
+structdef FOO
+{
+	int a;
+};
+
+FOO x;
+FOO* y;
 
 function: void main()
 {
-
+	x.a = 5;
+	y = &x;
 	
-	x = y;
+	int z = y->a;
+	
+	cout << z << endl;
 	
 }

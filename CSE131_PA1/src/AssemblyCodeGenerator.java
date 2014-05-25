@@ -513,7 +513,14 @@ public class AssemblyCodeGenerator {
     	}
     	else if(sto.getStruct().getType().isPointerType() || (sto.isVar() && ((VarSTO)sto).isRef() ))
     	{
-    		
+    		if(debug) writeDebug("=======in writeStructAddress: " + sto.getStruct().getName() + " is a ptr or byRef========");
+
+            if (sto.getStruct().getIsStructField())
+            	writeStructAddress (sto.getStruct());
+            else
+    		  addToBuffer(text_buffer, sto.getStruct().getAddress());
+            addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+        
     	}
     	//basicType
     	else
@@ -1892,7 +1899,21 @@ public class AssemblyCodeGenerator {
     	
     }
     
-    
+    void writeAddressOf(STO sto, STO s)
+    {
+    	if(debug) writeDebug("------in writeAddressOf: " + sto.getName());
+    	//get original sto address
+    	getAddressHelper(sto);
+        if (sto.isVar() && ((VarSTO) sto).isRef())
+        	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+        //mov address to %l1
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.L1);
+        //get retSTO address
+        addToBuffer(text_buffer, s.getAddress());
+        //store address to retSTO
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+        if(debug) writeDebug("-------end of writeAddressOf-------");
+    }
 	
 	
 	

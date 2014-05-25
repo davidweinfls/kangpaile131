@@ -1265,6 +1265,9 @@ class MyParser extends parser
     STO DoArrowCheck(STO sto, String id)
     {
     	if(sto.isError())	return sto;
+    	
+    	STO elt = null;
+    	int offset = 0;
     	//check 15a.1
     	if(!sto.getType().isPointerType() || 
     		!((PointerType)sto.getType()).getBaseType().isStructType() )
@@ -1281,7 +1284,7 @@ class MyParser extends parser
 			STO strSTO = m_symtab.access(((PointerType) sto.getType())
 					.getBaseType().getName());
 			Vector<STO> fieldList = ((StructType)strSTO.getType()).getFieldList();
-			STO elt = null;
+			
 			for(int i = 0; i < fieldList.size(); i++)
 			{
 				elt = fieldList.get(i);
@@ -1290,6 +1293,7 @@ class MyParser extends parser
 					found = true;
 					break;
 				}
+				offset += elt.getType().getSize();
 			}
 			//if not found, return errormsg14
 			if(found == false)
@@ -1299,8 +1303,15 @@ class MyParser extends parser
                 		id, strSTO.getType().getName()));
                 return new ErrorSTO("right side is not a field in struct");
 			}
-			return elt;
+			
     	}
+    	STO retSTO = elt.copy();
+        retSTO.setBase(sto.getBase());
+        retSTO.setFieldOffset(offset);
+        retSTO.setIsStructField();
+        retSTO.setStruct(sto.copy());
+        
+        return retSTO;
     }
 
     /*
@@ -1460,6 +1471,11 @@ class MyParser extends parser
 		{
 			PointerType ptrType = new PointerType(sto.getType().getName() + "*", 4, sto.getType());
 			retSTO = new ExprSTO(sto.getName(), ptrType);
+			//for project2:
+			m_currOffset -= 4;
+			retSTO.setOffset(m_currOffset);
+			retSTO.setBase("%%fp");
+            myAsWriter.writeAddressOf(sto, retSTO);
 		}
     	
     	return retSTO;
