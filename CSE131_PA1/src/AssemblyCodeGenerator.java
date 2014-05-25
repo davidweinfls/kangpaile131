@@ -1128,8 +1128,16 @@ public class AssemblyCodeGenerator {
 				case "!":
 					// 0. get sto's value
 					getValue(sto);
-					addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.XOR_OP,
+					if(localReg == 1)
+					{
+						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.XOR_OP,
 							Sparc.L1, "1", Sparc.L1);
+					}
+					else
+					{
+						addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.XOR_OP,
+								Sparc.L2, "1", Sparc.L2);
+					}
 					break;
 				case "++":
 					if (debug)
@@ -1156,9 +1164,14 @@ public class AssemblyCodeGenerator {
 			if (result.getType().isFloatType())
 				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
 			else
-				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+			{
+				if(localReg == 1)
+					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+				else
+					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L2, "[" + Sparc.L0 + "]");
+			}
 		}
-    	resetReg();
+    	//resetReg();
     	if(debug) writeDebug("---------end of writeUnary----------");
     }
     

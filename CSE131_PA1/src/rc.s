@@ -1,5 +1,5 @@
 ! 
-! Generated Sat May 24 16:56:44 PDT 2014
+! Generated Sat May 24 17:00:52 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -82,17 +82,17 @@ main:
 	add	%g0, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
+	ld	[%l0], %l2
 
 ! -------end of getValue------------
-	xor	%l1, 1, %l1
+	xor	%l2, 1, %l2
 
 ! =======in writeUnaryExpr, result get address=========
 	set	-8, %l0
 	add	%fp, %l0, %l0
 
 ! =======in writeUnaryExpr, non-const folding, store value=========
-	st	%l1, [%l0]
+	st	%l2, [%l0]
 
 ! ---------end of writeUnary----------
 
