@@ -17,6 +17,7 @@ public class AssemblyCodeGenerator {
 	private int num_of_or = 0;
 	private int num_of_comp = 0;
 	private int num_of_while = 0;
+	private int num_of_ptr = 0;
 	
 	// if localReg = 0, means %l1 is not taken, otherwise if localReg = 1, %l1 is taken, can be used
 	private int localReg = 0;
@@ -532,6 +533,45 @@ public class AssemblyCodeGenerator {
     	addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L0, Integer.toString(sto.getFieldOffset()), Sparc.L0 );
     }
 	
+	//used in getAddressHelper(). to get deref sto address
+	void writeDerefAddress(STO sto)
+	{
+		if(debug) writeDebug("-------in writeDerefAddress: " + sto.getName());
+		
+		//get pointer stored in param
+		STO ptr = sto.getPointer();
+		
+		//1. get address of this pointer 
+		getAddressHelper(ptr);
+		//check byRef
+		if(sto.isVar() && ((VarSTO)sto).isRef())
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+		
+		//2. load the address of the real var from [%l0] to %l0
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+		
+		if(debug) writeDebug("======in writeDerefAddress, check nullPtrExcep=======");
+		String ptrLabel = "ptrLabel" + num_of_ptr;
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L4);
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L0, Sparc.L4);
+		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, ptrLabel);
+		addToBuffer(text_buffer, Sparc.NOP);
+
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".NullPtrException", Sparc.O0);
+		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+		addToBuffer(text_buffer, Sparc.NOP);
+
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+        addToBuffer(text_buffer, Sparc.NOP);
+
+        decreaseIndent();
+        addToBuffer(text_buffer, ptrLabel + ":\n");
+        increaseIndent();
+        if(debug) writeDebug("======end of check nullPtrExcep=======");
+		
+		if(debug) writeDebug("-------end of writeDerefAddress-------");
+	}
     
     /*
      * write print statement, for cout
@@ -712,7 +752,7 @@ public class AssemblyCodeGenerator {
 		}
 		else if(sto.getIsDeref())
 		{
-			
+			writeDerefAddress(sto);
 		}
 		else if(sto.getIsStructField())
 		{

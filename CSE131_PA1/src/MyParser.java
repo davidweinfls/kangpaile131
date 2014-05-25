@@ -1251,8 +1251,12 @@ class MyParser extends parser
     	else
     	{
     		retSTO = new VarSTO(sto.getName(), ((PointerType)sto.getType()).getBaseType() );
+    		m_currOffset -= ((PointerType)sto.getType()).getBaseType().getSize();
     	}
 	
+    	retSTO.setIsDeref();
+    	retSTO.setPointer(sto);
+    	
     	return retSTO;
     }
     

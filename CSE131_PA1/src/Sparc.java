@@ -15,6 +15,8 @@ class Sparc
     public static final String GLOBAL_VAR  = ".global %s\n";
     public static final String BSS_VAR 	   = "%s:\t.skip %s\n";
     public static final String STRING_TEMP    = "%s:\t.asciz \"%s\"\n";
+    private static final String NULLPTR =
+            "Cannot dereference a nullPointer.\\n";
 
     //-----------------------------------------------------------------------------
     //      Sections
@@ -28,7 +30,8 @@ class Sparc
             ".intFmt:\t.asciz \"%%d\"\n" +
             ".boolT:\t.asciz \"true\"\n" +
             ".boolF:\t.asciz \"false\"\n" +
-            ".float_one:\t.single 0r1\n"; 
+            ".float_one:\t.single 0r1\n" +
+            ".NullPtrException:\t.asciz \"" + NULLPTR + "\"\n"; 
 
     //-----------------------------------------------------------------------------
     //      Registers
@@ -293,6 +296,7 @@ class Sparc
     
     public static final String FUNC_COMMENT = "! <<<<<<<<<<<<<<<<<<<%s>>>>>>>>>>>>>>>>>\n";
     public static final String FUNC_LABEL = "%s:\n";
+    
     
     public static final String ELSE = "else";
     

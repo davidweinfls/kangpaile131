@@ -1,18 +1,13 @@
-structdef FOO
+function : void main() 
 {
-	int a;
-};
+    int k = 8233;
+	int *p = &k;
 
-FOO x;
-FOO* y;
+	p++;
+	p++;
+	--p;
+	--p;
+	
+	cout << *p << endl;
 
-function: void main()
-{
-	x.a = 5;
-	y = &x;
-	
-	int z = y->a;
-	
-	cout << z << endl;
-	
 }
