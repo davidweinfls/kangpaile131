@@ -1,13 +1,15 @@
+function: void foo( int[5]& arr)
+{
+	cout << arr[1] << endl;
+}
+
+int[5] a;
+
+
+
 function : void main() 
 {
-    int k = 8233;
-	int *p = &k;
-
-	p++;
-	p++;
-	--p;
-	--p;
-	
-	cout << *p << endl;
-
+	a[1] = 100;
+	cout << a[1] << endl;
+	foo(a);
 }

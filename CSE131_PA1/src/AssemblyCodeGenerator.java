@@ -465,6 +465,8 @@ public class AssemblyCodeGenerator {
 		if(debug) writeDebug("=======in writeArrayAddress, get address of var :" + var.getName() + 
 				" and store in l4");
 		getAddressHelper(var);
+		if (var.getType().isPointerType() || (var.isVar() && ((VarSTO) var).isRef()))
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.L4);
 
 		// optionB: actually sometimes it doesnt work. since a VarSTO expr doesn't have a value at compile time
@@ -1788,15 +1790,19 @@ public class AssemblyCodeGenerator {
     	
     	if(byRef)
     	{
+    		if(debug) writeDebug("=====in writePassParameter, param " + arg.getName() + " is byRef=======");
+    		//get sto address
     		getAddressHelper(arg);
     		if (arg.isVar() && ((VarSTO) arg).isRef())
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		//store it to %o0
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, "%o" + index);
     	}
     	else
     	{
     		if (param.getType().isFloatType())
     		{
+    			//handle pass int to float param
     			if(arg.getType().isIntType())
     			{
     				resetReg();
@@ -1809,8 +1815,10 @@ public class AssemblyCodeGenerator {
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
     				return;
     			}
+    			//get param value
     			getValue(arg);
     			
+    			//attention: for float param, cannot just mov %f0 to %o0, need to st to %l0 and then ld from l0 to %o0
     			if(floatReg == 1)
     			{
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
@@ -1819,6 +1827,7 @@ public class AssemblyCodeGenerator {
     			{
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
     			}
+    			//store it to %o0
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
             }
     		else
