@@ -1500,6 +1500,48 @@ public class AssemblyCodeGenerator {
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
     		}
     	}
+    	//phaseIII, ptr pre/post inc/dec
+    	else if(stoType instanceof PointerType)
+    	{
+    		Type baseType = ((PointerType) stoType).getBaseType();
+    		if(o.getName() == "++")
+    		{
+    			if(localReg == 0)
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L2, Integer.toString(baseType.getSize()), Sparc.L2);
+    			}
+    			else 
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L1, Integer.toString(baseType.getSize()), Sparc.L1);
+    			}
+    		}
+    		else
+    		{
+    			if(localReg == 0)
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L2, Integer.toString(baseType.getSize()), Sparc.L2);
+    			}
+    			else 
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L1, Integer.toString(baseType.getSize()), Sparc.L1);
+    			}
+    		}
+    		//3. store value in its address
+    		if(debug) writeDebug("=======in writePre, step 3: store value ");
+    		getAddressHelper(sto);
+    		if(sto.isVar() && ((VarSTO)sto).isRef())
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		}
+    		if(localReg == 0)
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L2, "[" + Sparc.L0 + "]");
+    		}
+    		else
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    		}
+    	}
     	return sto;
     }
     
@@ -1604,6 +1646,55 @@ public class AssemblyCodeGenerator {
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     		}
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F3, "[" + Sparc.L0 + "]");
+    	}
+    	//phaseIII
+    	else if(stoType instanceof PointerType)
+    	{
+    		Type baseType = ((PointerType) stoType).getBaseType();
+    		//1.5 store original value to result
+        	if(debug) writeDebug("=======in writePost, step 1.5: store original value ");
+        	addToBuffer(text_buffer, result.getAddress());
+
+    	    if(localReg == 0)
+    		{
+    	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L2, "[" + Sparc.L0 + "]");
+    		}
+    		else
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    		}
+    		
+    	    if(debug) writeDebug("=======in writePost, step 2: computation ");
+    		if(o.getName() == "++")
+    		{
+    			if(localReg == 0)
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L2, Integer.toString(baseType.getSize()), Sparc.L3);
+    			}
+    			else
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L1, Integer.toString(baseType.getSize()), Sparc.L3);
+    			}
+    		}
+    		else
+    		{
+    			if(localReg == 0)
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L2, Integer.toString(baseType.getSize()), Sparc.L3);
+    			}
+    			else
+    			{
+    				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SUB_OP, Sparc.L1, Integer.toString(baseType.getSize()), Sparc.L3);
+    			}
+    		}
+    		//3. store value in its address
+    		if(debug) writeDebug("=======in writePost, step 3: store value ");
+    		getAddressHelper(sto);
+    		if(sto.isVar() && ((VarSTO)sto).isRef())
+    		{
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    		}
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
     	}
     	return result;
     }
