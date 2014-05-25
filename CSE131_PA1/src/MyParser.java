@@ -235,7 +235,7 @@ class MyParser extends parser
 					if(t.isStructType())
 						myAsWriter.writeGlobalStruct(id, false, expr, t, m_static);
 					else
-						myAsWriter.writeGlobalVariable(id, false, expr, t);
+						myAsWriter.writeGlobalVariable(id, false, expr, t, m_static);
 				}
 				else
 				{
@@ -261,17 +261,90 @@ class MyParser extends parser
 			else if(varType instanceof PointerType)
 			{
 				((PointerType) varType).setType(t);
+				//with init
 				if(exprType != null && exprType.isAssignable(varType))
 				{
-					if(t instanceof ArrayType)
+					//old project1 version
+					/*if(t instanceof ArrayType)
 						var = new VarSTO(id, varType, true, false);
 					else
-						var = new VarSTO (id, varType);
+						var = new VarSTO (id, varType);*/
+					var = new VarSTO(id, varType, true, true);
+					
+					//gloabl
+					if(m_symtab.getLevel() ==1)
+					{
+						if(!m_static)
+							var.setGlobal();
+						var.setBase("%%g0");
+						var.setGlobalOffset(id);
+						myAsWriter.writeGlobalVariable(id, true, expr, varType, m_static);
+					}
+					//local
+					else
+					{
+						if(m_static)
+						{
+							var.setGlobalOffset("static_" + m_funcName + "_" + id + (num_of_staticVar++) );
+	                        var.setBase("%%g0");
+	                        String static_name = var.getGlobalOffset();
+	                        myAsWriter.writeStaticVariable(static_name, true, expr, varType);
+						}
+						else
+						{
+							if(exprType.isIntType() && t.isFloatType())
+							{
+								myAsWriter.intToFloat(expr);
+							}
+							myAsWriter.getValue(expr);
+							
+							m_currOffset -= t.getSize();
+                            var.setOffset(m_currOffset);
+                            var.setBase("%%fp");
+                            myAsWriter.writeLocalVariableWInit(var, expr);
+						}
+					}
+					
 					m_symtab.insert (var);
 				}
+				//ptr w/o init
 				else if(exprType == null)
 				{
                     var = new VarSTO(id, varType, true, true);
+                    
+                  //gloabl
+					if(m_symtab.getLevel() ==1)
+					{
+						if(!m_static)
+							var.setGlobal();
+						var.setBase("%%g0");
+						var.setGlobalOffset(id);
+						myAsWriter.writeGlobalVariable(id, false, expr, t, m_static);
+					}
+					//local
+					else
+					{
+						if(m_static)
+						{
+							var.setGlobalOffset("static_" + m_funcName + "_" + id + (num_of_staticVar++) );
+	                        var.setBase("%%g0");
+	                        String static_name = var.getGlobalOffset();
+	                        myAsWriter.writeStaticVariable(static_name, false, expr, varType);
+						}
+						else
+						{
+							if(exprType.isIntType() && t.isFloatType())
+							{
+								myAsWriter.intToFloat(expr);
+							}
+							myAsWriter.getValue(expr);
+							
+							m_currOffset -= t.getSize();
+                            var.setOffset(m_currOffset);
+                            var.setBase("%%fp");
+                            myAsWriter.writeLocalVariableWOInit(var);
+						}
+					}
                     m_symtab.insert (var);
 				}
 				else	//right is not assignable to left
@@ -340,7 +413,7 @@ class MyParser extends parser
 						{
 							var.setGlobal();
 						}
-						myAsWriter.writeGlobalVariable(id, true, expr, t);
+						myAsWriter.writeGlobalVariable(id, true, expr, t, m_static);
 					}
 					//local
 					else

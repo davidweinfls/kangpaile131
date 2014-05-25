@@ -170,12 +170,12 @@ public class AssemblyCodeGenerator {
      * P2: write global variable initialization
      * 
      */
-    public void writeGlobalVariable(String id, boolean init, STO sto, Type t )
+    public void writeGlobalVariable(String id, boolean init, STO sto, Type t, boolean isStatic )
     {
     	if(debug) writeDebug("---------In writeGLobalVariable--------------");
     	
     	// add .global to file
-    	if(init)
+    	if(!isStatic)
     	{
     		addToBuffer(data_buffer, Sparc.GLOBAL_VAR, id);
     		addToBuffer(data_buffer, Sparc.NEW_LINE);

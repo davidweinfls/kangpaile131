@@ -1,11 +1,6 @@
-bool b = false;
+int * x;
 
 function: void main()
 {
-	//cout << b << endl;	//false
-	//cout <<!b << endl;	//true
-	//cout << b << endl;	//false
-
-	cout << !b && !b << endl;//true
-  
+	
 }
