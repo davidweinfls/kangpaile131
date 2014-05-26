@@ -1,15 +1,15 @@
-structdef LINK {
-	int a;
-};
+int x = 5;
 
-LINK magic;
-LINK * baz;
-
-function : void main() 
+function: int& foo(int& a)
 {
-	magic.a = 54;
-	baz = &magic;
+	a = 10;
+	return a;
+}
+
+function: void main()
+{
 	
-	//cout << "baz's sword: " << magic.a << endl;
-	cout << "baz's sword: " << (*baz).a << endl;
+	
+	cout << foo(x) << endl;
+	cout << x << endl;
 }

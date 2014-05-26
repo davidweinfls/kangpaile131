@@ -2054,6 +2054,27 @@ public class AssemblyCodeGenerator {
         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
         if(debug) writeDebug("-------end of writeAddressOf-------");
     }
+    
+    void writeNewStmt(STO sto)
+    {
+    	if(debug) writeDebug("---------in writeNewStmt------");
+    	//call to calloc to allocate memory on disk
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
+            Integer.toString(((PointerType) sto.getType()).getBaseType().getSize()), Sparc.O1);
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "calloc");
+    	addToBuffer(text_buffer, Sparc.NOP);
+
+        getAddressHelper(sto);
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
+        
+        if(debug) writeDebug("---------end 0f writeNewStmt------");
+    }
+    
+    void writeDeleteStmt(STO sto)
+    {
+    	
+    }
 	
 	
 	
