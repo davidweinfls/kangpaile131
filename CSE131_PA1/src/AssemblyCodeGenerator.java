@@ -1848,7 +1848,20 @@ public class AssemblyCodeGenerator {
         has_rodata = true;
         
         //call passed in function
-        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, sto.getName());
+        //if function ptr, call address
+        if(sto.getType().isFunctionPointerType() && !(sto.isFunc()) )
+        {
+        	if(sto.isVar() && ((VarSTO)sto).isRef())
+        	{
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L5 + "]", Sparc.L5);
+        	}
+        	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.L5);
+        }
+        //call label directly
+        else
+        {
+        	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, sto.getName());
+        }
         addToBuffer(text_buffer, Sparc.NOP);
         
         if(debug) writeDebug("========writeFuncCall: get address of retSTO, store retValue in it ==========");
@@ -1862,7 +1875,7 @@ public class AssemblyCodeGenerator {
         	addToBuffer(text_buffer, retSTO.getAddress());
         	if (isRef)
         	{
-        		
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
         	}
         	else
         		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
@@ -2115,6 +2128,38 @@ public class AssemblyCodeGenerator {
         if(debug) writeDebug("---------end 0f writeDeleteStmt------");
     }
 	
+    void  writeFuncPtr(STO sto)
+    {
+    	if(debug) writeDebug("-------in writeFuncPtr-------");
+    	
+    	//get func address
+    	getAddressHelper(sto);
+    	//load value from this address to %l5
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
+    	
+    	//check nullPtr
+    	if(debug) writeDebug("======in writeFuncPtr, check nullPtrExcep=======");
+		String ptrLabel = "ptrLabel" + num_of_ptr++;
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L4);
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L5, Sparc.L4);
+		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, ptrLabel);
+		addToBuffer(text_buffer, Sparc.NOP);
+
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".NullPtrException", Sparc.O0);
+		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+		addToBuffer(text_buffer, Sparc.NOP);
+
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+        addToBuffer(text_buffer, Sparc.NOP);
+
+        decreaseIndent();
+        addToBuffer(text_buffer, ptrLabel + ":\n");
+        increaseIndent();
+        if(debug) writeDebug("======end of check nullPtrExcep=======");
+    	
+    	if(debug) writeDebug("-------end of writeFuncPtr------");
+    }
 	
 	
 	

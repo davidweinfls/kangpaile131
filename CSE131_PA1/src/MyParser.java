@@ -810,6 +810,12 @@ class MyParser extends parser
 						args.size(), params.size()));
 				return (new ErrorSTO(sto.getName()));
 			}
+			
+			//for project2: 
+			if(sto.isVar())
+			{
+				myAsWriter.writeFuncPtr(sto);
+			}
 
 			for (int i = 0; i < params.size(); i++)
 			{

@@ -1,13 +1,8 @@
-int x = 5;
+function : void foo() { cout << "here" << endl; }
 
-function: int& foo(int& a)
+function : void main() 
 {
-	return a;
-}
-
-function: void main()
-{
-	
-	foo(x) = 10;
-	cout << x << endl;
+	funcptr : void() x;
+	x = foo;
+	x();
 }

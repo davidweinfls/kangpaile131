@@ -16,7 +16,7 @@ class Sparc
     public static final String BSS_VAR 	   = "%s:\t.skip %s\n";
     public static final String STRING_TEMP    = "%s:\t.asciz \"%s\"\n";
     private static final String NULLPTR =
-            "Cannot dereference a nullPointer.\\n";
+            "Attempt to dereference NULL pointer.\\n";
 
     //-----------------------------------------------------------------------------
     //      Sections
