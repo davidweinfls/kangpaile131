@@ -1,15 +1,23 @@
-function: void foo( int[5]& arr)
-{
-	cout << arr[1] << endl;
+int i,j;
+
+
+function : void foo1(int * p){
+   *p = 5;
+   p = &j;
 }
 
-int[5] a;
 
-
-
-function : void main() 
+function : void main()
 {
-	a[1] = 100;
-	cout << a[1] << endl;
-	foo(a);
+	int * ip = &i;
+	foo1(ip);
+	
+	cout << "i is: " << i << endl;
+	cout << "value of ip is: " << *ip << endl;
+	
+	j = 99;
+	
+	//ip should now print out a non-null value, which is 99
+	cout << "value of ip is: " << *ip << endl;
+
 }

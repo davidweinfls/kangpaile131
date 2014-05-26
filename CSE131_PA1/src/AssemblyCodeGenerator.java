@@ -282,15 +282,15 @@ public class AssemblyCodeGenerator {
  		} 
  		else if(varType instanceof StructType && exprType instanceof StructType)
     	{
-    		if(debug) writeDebug("=======in writeAssignExpr, struct assign=======");
+    		if(debug) writeDebug("=======in writeLocalVariableWInit, struct assign=======");
     		
     		//1. get var address, store in out0
-    		if(debug) writeDebug("=======in writeAssignExpr, get var address, store in out0=======");
+    		if(debug) writeDebug("=======in writeLocalVariableWInit, get var address, store in out0=======");
     		getAddressHelper(var);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.O0);
     		
     		//2. get expr address, store in out1
-    		if(debug) writeDebug("=======in writeAssignExpr, get expr address, store in out1=======");
+    		if(debug) writeDebug("=======in writeLocalVariableWInit, get expr address, store in out1=======");
     		getAddressHelper(expr);
     		//if expr is pass-by-ref
     		if(expr.isVar() && ((VarSTO)expr).isRef())
@@ -300,11 +300,11 @@ public class AssemblyCodeGenerator {
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.O1);
     		
     		//3. get exprType.size, store in out2
-    		if(debug) writeDebug("=======in writeAssignExpr, get exprType.size, store in out2=======");
+    		if(debug) writeDebug("=======in writeLocalVariableWInit, get exprType.size, store in out2=======");
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(exprType.getSize()), Sparc.O2);
     		
     		//4. call memmove
-    		if(debug) writeDebug("=======in writeAssignExpr, call memmove=======");
+    		if(debug) writeDebug("=======in writeLocalVariableWInit, call memmove=======");
     		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "memmove, 0");
     		addToBuffer(text_buffer, Sparc.NOP);
     	}
@@ -546,14 +546,14 @@ public class AssemblyCodeGenerator {
 		//1. get address of this pointer 
 		getAddressHelper(ptr);
 		//check byRef
-		if(sto.isVar() && ((VarSTO)sto).isRef())
+		if(ptr.isVar() && ((VarSTO)ptr).isRef())
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
 		
 		//2. load the address of the real var from [%l0] to %l0
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
 		
 		if(debug) writeDebug("======in writeDerefAddress, check nullPtrExcep=======");
-		String ptrLabel = "ptrLabel" + num_of_ptr;
+		String ptrLabel = "ptrLabel" + num_of_ptr++;
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L4);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L0, Sparc.L4);
 		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, ptrLabel);
