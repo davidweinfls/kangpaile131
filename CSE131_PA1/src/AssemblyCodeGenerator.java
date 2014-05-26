@@ -2073,7 +2073,46 @@ public class AssemblyCodeGenerator {
     
     void writeDeleteStmt(STO sto)
     {
+    	if(debug) writeDebug("---------in writeDeleteStmt------");
+
+    	has_rodata = true;
+    	resetReg();
     	
+    	//get value of this var
+    	getValue(sto);
+    	
+    	//check nullPtr
+    	if(debug) writeDebug("======in writeDeleteStmt, check nullPtrExcep=======");
+		String ptrLabel = "ptrLabel" + num_of_ptr++;
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L4);
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.L4);
+		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, ptrLabel);
+		addToBuffer(text_buffer, Sparc.NOP);
+
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".NullPtrException", Sparc.O0);
+		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+		addToBuffer(text_buffer, Sparc.NOP);
+
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+        addToBuffer(text_buffer, Sparc.NOP);
+
+        decreaseIndent();
+        addToBuffer(text_buffer, ptrLabel + ":\n");
+        increaseIndent();
+        if(debug) writeDebug("======end of check nullPtrExcep=======");
+        
+        // free ptr, call free
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, Sparc.O0);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "free");
+        addToBuffer(text_buffer, Sparc.NOP);
+
+       /* //set 0 to sto
+        getAddressHelper(sto);
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L1);
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");*/
+        
+        if(debug) writeDebug("---------end 0f writeDeleteStmt------");
     }
 	
 	

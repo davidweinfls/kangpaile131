@@ -1,5 +1,5 @@
 ! 
-! Generated Sun May 25 22:37:47 PDT 2014
+! Generated Mon May 26 00:32:03 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -38,37 +38,6 @@ foo:
 	add	%fp, %l0, %l0
 	st	%i0, [%l0]
 
-! ------in writeConstantLiteral: 10
-	set	10, %l1
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! ----------in writeAssignExpr: a  =  10
-
-! -------in getValue: 10: 10.0
-
-! --------in getAddressHelper: 10
-	set	-4, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! --------in getAddressHelper: a
-	set	68, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-	st	%l1, [%l0]
-
-! ----------end of writeAssignExpr--------
-
 ! --------in writeReturnStmt---------
 
 ! --------in getAddressHelper: a
@@ -83,7 +52,7 @@ foo:
 
 ! --------------in writeFuncClose--------------
 
-	SAVE.foo = -(92 + 4) & -8
+	SAVE.foo = -(92 + 0) & -8
 
 
 ! in writeFuncDec
@@ -114,34 +83,40 @@ main:
 
 
 ! ========writeFuncCall: get address of retSTO, store retValue in it ==========
-	set	-4, %l0
+	set	0, %l0
 	add	%fp, %l0, %l0
 	st	%o0, [%l0]
 
-! ------------in writePrint---------------
+! ------in writeConstantLiteral: 10
+	set	10, %l1
+	set	-4, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
 
-! -------in getValue: result: null
+! ------end of writeConstantLiteral-------
 
-! --------in getAddressHelper: result
+! ----------in writeAssignExpr: result  =  10
+
+! -------in getValue: 10: 10.0
+
+! --------in getAddressHelper: 10
 	set	-4, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
 	ld	[%l0], %l1
 
 ! -------end of getValue------------
-	set	.intFmt, %o0
-	mov	%l1, %o1
-	call	printf
-	nop
 
+! --------in getAddressHelper: result
+	set	0, %l0
+	add	%fp, %l0, %l0
 
-! ------------in writePrint---------------
-	set	.endl, %o0
-	call	printf
-	nop
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	st	%l1, [%l0]
 
+! ----------end of writeAssignExpr--------
 
 ! ------------in writePrint---------------
 

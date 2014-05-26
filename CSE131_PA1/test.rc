@@ -2,14 +2,12 @@ int x = 5;
 
 function: int& foo(int& a)
 {
-	a = 10;
 	return a;
 }
 
 function: void main()
 {
 	
-	
-	cout << foo(x) << endl;
+	foo(x) = 10;
 	cout << x << endl;
 }
