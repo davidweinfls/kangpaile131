@@ -803,9 +803,9 @@ public class AssemblyCodeGenerator {
     {
     	//check first operand
 		//load a, if equals to 0, branch to endAND
-		if(debug) writeDebug("=======in writeOr, ||, check first operand=========");
+		if(debug) writeDebug("--------in writeOr, ||, check first operand--------");
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L3);
-		addToBuffer(text_buffer, a.getAddress());
+		getAddressHelper(a);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
 		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, "endOR" + num_of_or);
@@ -819,7 +819,7 @@ public class AssemblyCodeGenerator {
     {
     	//check first operand
 		//load a, if equals to 0, branch to endAND
-		if(debug) writeDebug("=======in writeAnd, &&, check first operand=========");
+		if(debug) writeDebug("--------in writeAnd, &&, check first operand--------");
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
 		getAddressHelper(a);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);

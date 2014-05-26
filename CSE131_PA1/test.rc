@@ -1,8 +1,20 @@
-function : void foo() { cout << "here" << endl; }
+structdef BAR {
+	bool **c;
+};
+structdef FOO {
+	bool[4000] dude;
+};
+
+FOO gangster;
+BAR bee;
 
 function : void main() 
 {
-	funcptr : void() x;
-	x = foo;
-	x();
+	bool *dudette = &gangster.dude[2431];
+	BAR *bird = &bee;
+	bird->c = &dudette;
+	
+	cout << **(bird->c) << endl;
+	
+	cout << **(bird->c) || true << endl;
 }
