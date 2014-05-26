@@ -512,9 +512,9 @@ public class AssemblyCodeGenerator {
     	}
     	else if(sto.getStruct().getIsDeref())
     	{
-    		
+    		writeDerefAddress(sto.getStruct());
     	}
-    	else if(sto.getStruct().getType().isPointerType() || (sto.isVar() && ((VarSTO)sto).isRef() ))
+    	else if(sto.getStruct().getType().isPointerType() || (sto.getStruct().isVar() && ((VarSTO)sto.getStruct()).isRef() ))
     	{
     		if(debug) writeDebug("=======in writeStructAddress: " + sto.getStruct().getName() + " is a ptr or byRef========");
 

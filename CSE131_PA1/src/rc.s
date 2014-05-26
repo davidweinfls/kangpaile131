@@ -1,5 +1,5 @@
 ! 
-! Generated Sun May 25 21:29:47 PDT 2014
+! Generated Sun May 25 21:45:45 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -125,6 +125,35 @@ main:
 ! --------in getAddressHelper: a
 
 ! -------in writeStructAddress: a
+
+! -------in writeDerefAddress: baz
+
+! --------in getAddressHelper: baz
+	set	baz, %l0
+	add	%g0, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel0
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel0:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
 	add	%l0, 0, %l0
 
 ! --------end of getAddressHelper------------ 
