@@ -1323,7 +1323,8 @@ public class AssemblyCodeGenerator {
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     		}
-    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.O0);
+    		//IMPORTANT! because later we need %o0 to store right side computation result, we store to %o3 temporarily.
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.L6);
     		
     		//2. get expr address, store in out1
     		if(debug) writeDebug("=======in writeAssignExpr, get expr address, store in out1=======");
@@ -1333,6 +1334,9 @@ public class AssemblyCodeGenerator {
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     		}
+    		
+    		//get addresss of var
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L6, Sparc.O0);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.O1);
     		
     		//3. get exprType.size, store in out2
@@ -2244,8 +2248,11 @@ public class AssemblyCodeGenerator {
     	else
     	{
     		if(debug) writeDebug("========in writeTypeCast, do regular case=========");
+    		if(debug) writeDebug("========in writeTypeCast, get oldSTO value=========");
     		getValue(oldSTO);
+    		if(debug) writeDebug("========in writeTypeCast, get newSTO address=========");
     		getAddressHelper(newSTO);
+    		if(debug) writeDebug("========in writeTypeCast, store old value to new sto=========");
     		if(newType.isFloatType())
     		{
     			if(floatReg == 0)

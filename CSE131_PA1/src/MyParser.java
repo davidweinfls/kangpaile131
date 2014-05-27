@@ -470,7 +470,7 @@ class MyParser extends parser
 				m_errors.print (Formatter.toString(ErrorMsg.redeclared_id, id));
 			}
 
-			VarSTO 		sto = new VarSTO (id);
+			VarSTO sto = new VarSTO (id);
 			m_symtab.insert (sto);
 		}
 	}
@@ -885,6 +885,7 @@ class MyParser extends parser
 			if (byRef) {
 				ret = new VarSTO("result", returnType);
 				((VarSTO) ret).setRef();
+				m_currOffset -= returnType.getSize();
 			}
 			else
 			{

@@ -1,11 +1,16 @@
-function: int foo() 
+structdef FOO
 {
-	static int x = 5;
-	return ++x;
-}
+	int a;
+};
 
-function: void main() {
-cout << foo(); // 6
-cout << foo(); // 7
-cout << foo(); // 8
+FOO[2] x;
+
+function: void main()
+{
+	cout << x[0].a << endl;
+	
+	x[1].a = 10;
+	x[0] = x[1];
+	
+	cout << x[0].a << endl;
 }
