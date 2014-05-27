@@ -500,7 +500,6 @@ public class AssemblyCodeGenerator {
 	void writeStructAddress(STO sto)
     {
     	if(debug) writeDebug("-------in writeStructAddress: " + sto.getName());
-    	//TODO: struct of struct stuff
     	//need to do recursive check. since a struct field can be of type struct, array, pointer...
     	if(sto.getStruct().getIsArray())
     	{
@@ -767,6 +766,7 @@ public class AssemblyCodeGenerator {
 		if(debug) writeDebug("--------end of getAddressHelper------------ ");
     }
     
+    //used when need to convert int to float value. value is stored in either F0 or F1
     void intToFloat(STO sto)
     {
     	if(debug) writeDebug("---------intToFloat: " + sto.getName() + " " + ((sto instanceof ConstSTO) ? ((ConstSTO)sto).getIntValue() : null) );
@@ -797,6 +797,38 @@ public class AssemblyCodeGenerator {
     		floatReg = 0;
     	}
     	if(debug) writeDebug("---------intToFloat---------");
+    }
+    
+  //used when need to convert int to float value. value is stored in either F0 or F1
+    void FloatToInt(STO sto)
+    {
+    	if(debug) writeDebug("---------FloatToInt: " + sto.getName() + " " + ((sto instanceof ConstSTO) ? ((ConstSTO)sto).getIntValue() : null) );
+    	
+    	//1. get address
+    	if(debug) writeDebug("=======in FloatToInt: getAddress of " + sto.getName());
+    	getAddressHelper(sto);
+    	
+    	//2. load value to float register
+    	if(debug) writeDebug("=======in FloatToInt: load value of " + sto.getName());
+    	if(floatReg == 0)
+    	{
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F0);
+    		
+    		//3. call intofloat
+    		if(debug) writeDebug("=======in FloatToInt: call itos " + sto.getName());
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FSTOI_OP, Sparc.F0, Sparc.F0);
+    		floatReg = 1;
+    	}
+    	else
+    	{
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F1);
+    		
+    		//3. call intofloat
+    		if(debug) writeDebug("=======in FloatToInt: call itos " + sto.getName());
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FSTOI_OP, Sparc.F1, Sparc.F1);
+    		floatReg = 0;
+    	}
+    	if(debug) writeDebug("---------FloatToInt---------");
     }
     
     void writeOr(STO a)
@@ -2159,6 +2191,87 @@ public class AssemblyCodeGenerator {
         if(debug) writeDebug("======end of check nullPtrExcep=======");
     	
     	if(debug) writeDebug("-------end of writeFuncPtr------");
+    }
+    
+    void writeTypeCast(STO newSTO, STO oldSTO)
+    {
+    	if(debug) writeDebug("----------in writeTypeCast-----------");
+    	
+    	Type newType = newSTO.getType();
+    	Type oldType = oldSTO.getType();
+    	
+    	//handle int to float
+    	if(newType.isFloatType() && (oldType.isIntType() || oldType.isBoolType()))
+    	{
+    		if(debug) writeDebug("========in writeTypeCast, do Int to Float=========");
+    		//get oldSTO value, stored in either F1 or F0
+    		intToFloat(oldSTO);
+    		if(floatReg == 0)
+    		{
+    			//value is stored in F1
+    			//get newSTO address
+        		getAddressHelper(newSTO);
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
+    		}
+    		else
+    		{
+    			//value is stored in F1
+    			//get newSTO address
+        		getAddressHelper(newSTO);
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    		}
+    	}
+    	//handle float to int
+    	else if((newType.isIntType() || newType.isBoolType()) && oldType.isFloatType() )
+    	{
+    		if(debug) writeDebug("========in writeTypeCast, do Float to Int=========");
+    		//get oldSTO value
+    		FloatToInt(oldSTO);
+    		if(floatReg == 0)
+    		{
+    			//value is in F1
+    			getAddressHelper(newSTO);
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
+    		}
+    		else
+    		{
+    			//value is in F0
+    			getAddressHelper(newSTO);
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    		}
+    	}
+    	//handle all the other cases
+    	else
+    	{
+    		if(debug) writeDebug("========in writeTypeCast, do regular case=========");
+    		getValue(oldSTO);
+    		getAddressHelper(newSTO);
+    		if(newType.isFloatType())
+    		{
+    			if(floatReg == 0)
+    			{
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
+    			}
+    			else
+    			{
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    			}
+    		}
+    		else
+    		{
+    			if(localReg == 0)
+    			{
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L2, "[" + Sparc.L0 + "]");
+    			}
+    			else
+    			{
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    			}
+    		}
+    	}
+    		
+    	
+    	if(debug) writeDebug("----------end of writeTypeCast----------");
     }
 	
 	

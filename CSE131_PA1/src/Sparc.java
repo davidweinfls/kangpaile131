@@ -180,6 +180,8 @@ class Sparc
     //      Fitos
     //-----------------------------------------------------------------------------
     public static final String FITOS_OP = "fitos";
+    
+    public static final String FSTOI_OP = "fstoi";
 
     //-----------------------------------------------------------------------------
     //      Shifting

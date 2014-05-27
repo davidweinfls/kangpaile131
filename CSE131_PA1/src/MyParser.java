@@ -1427,6 +1427,7 @@ class MyParser extends parser
     	if(sto.isError()) return sto;
         Type type = sto.getType ();
         STO retSTO;
+        //check invalid typecast
         if ((!(type.isBasicType()) && !(type.isPointerType()) && !(type.isNullPointerType())) ||
             (!(t.isBasicType()) && !(t.isPointerType())))
         {
@@ -1458,6 +1459,13 @@ class MyParser extends parser
         {
 			retSTO = new ExprSTO(sto.getName(), t);
 		}
+        
+        m_currOffset -= t.getSize();
+        retSTO.setOffset(m_currOffset);
+        retSTO.setBase("%%fp");
+        
+        myAsWriter.writeTypeCast(retSTO, sto);
+        retSTO.setIsTypeCast();
     	return retSTO;
     }
     

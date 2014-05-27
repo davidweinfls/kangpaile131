@@ -258,6 +258,16 @@ abstract class STO
 		m_field_offset = s;
 	}
 	
+	//for project2:
+	public boolean getIsTypeCast()
+	{
+		return isTypeCast;
+	}
+	
+	public void setIsTypeCast()
+	{
+		isTypeCast = true;
+	}
 	
 	//for project2:
 	//used in DoDesignator_Dot()
@@ -339,4 +349,5 @@ abstract class STO
 	private STO			m_pointer;
 	private STO			m_struct;
 	private int 		m_field_offset;
+	private boolean		isTypeCast = false;
 }

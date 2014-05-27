@@ -1,20 +1,11 @@
-structdef BAR {
-	bool **c;
-};
-structdef FOO {
-	bool[4000] dude;
-};
-
-FOO gangster;
-BAR bee;
-
-function : void main() 
+function: int foo() 
 {
-	bool *dudette = &gangster.dude[2431];
-	BAR *bird = &bee;
-	bird->c = &dudette;
-	
-	cout << **(bird->c) << endl;
-	
-	cout << **(bird->c) || true << endl;
+	static int x = 5;
+	return ++x;
+}
+
+function: void main() {
+cout << foo(); // 6
+cout << foo(); // 7
+cout << foo(); // 8
 }
