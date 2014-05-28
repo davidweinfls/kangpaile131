@@ -885,7 +885,7 @@ class MyParser extends parser
 			if (byRef) {
 				ret = new VarSTO("result", returnType);
 				((VarSTO) ret).setRef();
-				m_currOffset -= returnType.getSize();
+				//m_currOffset -= returnType.getSize();
 			}
 			else
 			{

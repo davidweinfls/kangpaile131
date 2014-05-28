@@ -1,16 +1,15 @@
-structdef FOO
+function: int& foo(int a)
 {
-	int a;
-};
-
-FOO[2] x;
+	return a;
+}
 
 function: void main()
 {
-	cout << x[0].a << endl;
+	int x = 5;
 	
-	x[1].a = 10;
-	x[0] = x[1];
+	cout << foo(x) << endl;
 	
-	cout << x[0].a << endl;
+	foo(x) = 10;
+	
+	cout << x << endl;
 }

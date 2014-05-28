@@ -1359,11 +1359,11 @@ public class AssemblyCodeGenerator {
     		getAddressHelper(var);
     		
     		//check if var is pass-by-reference
-    		if (var instanceof VarSTO && ((VarSTO)var).isRef())
+    		/*if (var instanceof VarSTO && ((VarSTO)var).isRef())
     		{
     			//load value stored in its address, which is the addresss of the real variable
             	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
-    		}
+    		}*/
     		//3. store expr value (%f0) to var address [%l0]
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]" ); 
     	}
