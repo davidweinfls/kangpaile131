@@ -614,20 +614,8 @@ public class AssemblyCodeGenerator {
     	// ld
     	getValue(sto);
     	
-	    if(t instanceof IntType)
-	    {
-	    	/*
-	    	 * set _intFmt, %o0
-			 * set 5, %o1
-			 * call printf
-			 * nop
-	    	 */
-	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Sparc.INTFMT, Sparc.O0 );
-	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1 , Sparc.O1);
-	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
-	    	addToBuffer(text_buffer, Sparc.NOP);		
-	    } 
-	    else if(t instanceof FloatType)
+	    
+	    if(t instanceof FloatType)
 	    {
 	    	// call printFloat
 	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTFLOAT);
@@ -649,6 +637,19 @@ public class AssemblyCodeGenerator {
             addToBuffer(text_buffer, Sparc.NOP);
             num_of_bool++;
 	    }
+	    else
+	    {
+	    	/*
+	    	 * set _intFmt, %o0
+			 * set 5, %o1
+			 * call printf
+			 * nop
+	    	 */
+	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Sparc.INTFMT, Sparc.O0 );
+	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1 , Sparc.O1);
+	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+	    	addToBuffer(text_buffer, Sparc.NOP);		
+	    } 
 	    localReg = 0;
     	floatReg = 0;
     	
@@ -769,7 +770,7 @@ public class AssemblyCodeGenerator {
     //used when need to convert int to float value. value is stored in either F0 or F1
     void intToFloat(STO sto)
     {
-    	if(debug) writeDebug("---------intToFloat: " + sto.getName() + " " + ((sto instanceof ConstSTO) ? ((ConstSTO)sto).getIntValue() : null) );
+    	if(debug) writeDebug("---------in intToFloat: " + sto.getName() + " " + ((sto instanceof ConstSTO) ? ((ConstSTO)sto).getIntValue() : null) );
     	Type t = new FloatType(sto.getName(), 4);
     	
     	//1. get address
@@ -796,7 +797,7 @@ public class AssemblyCodeGenerator {
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F1, Sparc.F1);
     		floatReg = 0;
     	}
-    	if(debug) writeDebug("---------intToFloat---------");
+    	if(debug) writeDebug("---------end of intToFloat---------");
     }
     
   //used when need to convert int to float value. value is stored in either F0 or F1
@@ -1359,11 +1360,11 @@ public class AssemblyCodeGenerator {
     		getAddressHelper(var);
     		
     		//check if var is pass-by-reference
-    		/*if (var instanceof VarSTO && ((VarSTO)var).isRef())
+    		if (var instanceof VarSTO && ((VarSTO)var).isRef())
     		{
     			//load value stored in its address, which is the addresss of the real variable
             	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
-    		}*/
+    		}
     		//3. store expr value (%f0) to var address [%l0]
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]" ); 
     	}
@@ -1911,6 +1912,7 @@ public class AssemblyCodeGenerator {
         	addToBuffer(text_buffer, retSTO.getAddress());
         	if (isRef)
         	{
+        		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.O0 + "]", Sparc.L1);
         		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
         	}
         	else
@@ -1919,7 +1921,13 @@ public class AssemblyCodeGenerator {
         else
         {
         	addToBuffer(text_buffer, retSTO.getAddress());
-        	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
+        	if (isRef)
+        	{
+        		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.O0 + "]", Sparc.L1);
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
+        	}
+        	else
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
         } 
 
 
@@ -1983,31 +1991,43 @@ public class AssemblyCodeGenerator {
 			{
 				if(funcReturnType instanceof FloatType) {
 	                getAddressHelper(returnExpr);
+	                //probably don't need this. if pass by ref, then just
                     if (returnExpr.isVar() && ((VarSTO) returnExpr).isRef())
                         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
-                    if (!byRef) {
+                    if (!byRef)
+                    {
                     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.F0);
-                    } else {
+                    }
+                    else
+                    {
                     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
                     }
+                    
 	                if(returnExpr.getType().isIntType())
+	                {
 	                	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F0, Sparc.F0);
+	                }
 	            } else {
 	            	getAddressHelper(returnExpr);
-	            	//if return expr is by ref
-	            	if(returnExpr.isVar() && ((VarSTO)returnExpr).isRef())
+	            	//get valued stored in returnExpr
+	            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+	            	
+	            	boolean passByRef = returnExpr.isVar() && ((VarSTO)returnExpr).isRef();
+	            	
+	            	if(passByRef && !byRef)
+	            	{
+	            		//TODO
+	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+	            	}
+	            	else if(passByRef && !byRef)
 	            	{
 	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
 	            	}
-	            	//if function return by ref
-	            	if(!byRef)
-	            	{
-	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.I0);
-	            	}
 	            	else
 	            	{
-	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
+	            		//do nothing, for passbyRef && byRef , pass by value && return by value
 	            	}
+            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
 	            }
 			}
 		}

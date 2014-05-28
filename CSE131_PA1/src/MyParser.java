@@ -12,7 +12,7 @@ import java.util.Vector;
 class MyParser extends parser
 {
 	private AssemblyCodeGenerator myAsWriter;
-	private boolean debug = true;
+	private boolean debug = false;
 
 	//----------------------------------------------------------------
 	//
@@ -296,7 +296,8 @@ class MyParser extends parser
 							{
 								myAsWriter.intToFloat(expr);
 							}
-							myAsWriter.getValue(expr);
+							else 
+								myAsWriter.getValue(expr);
 							
 							m_currOffset -= t.getSize();
                             var.setOffset(m_currOffset);
@@ -423,7 +424,8 @@ class MyParser extends parser
 							{
 								myAsWriter.intToFloat(expr);
 							}
-							myAsWriter.getValue(expr);
+							else
+								myAsWriter.getValue(expr);
 							m_currOffset -= t.getSize();
                             var.setOffset(m_currOffset);
                             var.setBase("%%fp");
@@ -885,16 +887,20 @@ class MyParser extends parser
 			if (byRef) {
 				ret = new VarSTO("result", returnType);
 				((VarSTO) ret).setRef();
-				//m_currOffset -= returnType.getSize();
+				//TODO
+				m_currOffset -= returnType.getSize();
+				ret.setBase("%%fp");
+				ret.setOffset(m_currOffset);
 			}
 			else
 			{
 				ret = new ExprSTO("result", returnType);
 				m_currOffset -= returnType.getSize();
+				ret.setBase("%%fp");
+				ret.setOffset(m_currOffset);
 			}
 			
-			ret.setBase("%%fp");
-			ret.setOffset(m_currOffset);
+			
 			//write to assembly
 			myAsWriter.writeFuncCall(sto, ret, byRef);
 			return ret;
