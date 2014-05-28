@@ -1,7 +1,20 @@
+function : void bar(float a,float &b)
+{
+	cout << "bar a = 5 = " << a << endl;
+  	cout << "bar b = 5 = " << b << endl;
+  	b = 3;
+}
+
+function : void foo(float &y)
+{
+	y = 5;
+  	cout << "foo y = 5 = " << y << endl;
+  	bar(y, y);
+}
+
 function : void main()
 {
-	int * p;
-	new p;	
-	cout << *p << endl;
-	delete p;
-} 
+  	float j = 8;
+  	foo(j);
+  	cout << "main j = 3 = " << j << endl;
+}

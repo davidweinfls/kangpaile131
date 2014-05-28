@@ -1870,6 +1870,8 @@ public class AssemblyCodeGenerator {
     		else
     		{
     			addToBuffer(text_buffer, arg.getAddress());
+    			if (arg.isVar() && ((VarSTO) arg).isRef())
+        			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, "%o" + index);
     		}
