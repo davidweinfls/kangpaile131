@@ -2019,10 +2019,6 @@ public class AssemblyCodeGenerator {
 	            		//TODO
 	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
 	            	}
-	            	else if(passByRef && !byRef)
-	            	{
-	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
-	            	}
 	            	else
 	            	{
 	            		//do nothing, for passbyRef && byRef , pass by value && return by value

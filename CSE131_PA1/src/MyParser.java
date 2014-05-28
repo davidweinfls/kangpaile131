@@ -1351,6 +1351,9 @@ class MyParser extends parser
             m_errors.print(Formatter.toString (ErrorMsg.error16_New,
              sto.getType().getName()));
         }
+    	
+    	//for project2:
+    	myAsWriter.writeNewStmt(sto);
     }
     
     /*
@@ -1373,6 +1376,8 @@ class MyParser extends parser
             m_errors.print(Formatter.toString (ErrorMsg.error16_Delete,
              sto.getType().getName()));
         }
+    	//for project2:
+    	myAsWriter.writeDeleteStmt(sto);
     }
     
     /*
