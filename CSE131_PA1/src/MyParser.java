@@ -1803,9 +1803,10 @@ class MyParser extends parser
             retSTO.setIsArray();
 		}
 		
+		// do runtime array bounds check
 		if(!(aType.isPointerType()))
 		{
-			
+			myAsWriter.writeRunTimeArrayCheck(sto, expr);
 		}
 			
 		return retSTO;

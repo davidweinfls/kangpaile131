@@ -1,8 +1,9 @@
+int[3] myArr;
 int x;
-static int y;
-extern int z;
 
-function : void main() 
+function : int main() 
 {
-	cout << x << y << z;
+	x = 47;
+	x = myArr[x];
+	return 0;
 }

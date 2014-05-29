@@ -17,6 +17,7 @@ class Sparc
     public static final String STRING_TEMP    = "%s:\t.asciz \"%s\"\n";
     private static final String NULLPTR =
             "Attempt to dereference NULL pointer.\\n";
+    private static final String ARRAYOUTOFBOUNDS = "Index value of %%d is outside legal range [0, %%d).\\n";
 
     //-----------------------------------------------------------------------------
     //      Sections
@@ -31,7 +32,8 @@ class Sparc
             ".boolT:\t.asciz \"true\"\n" +
             ".boolF:\t.asciz \"false\"\n" +
             ".float_one:\t.single 0r1\n" +
-            ".NullPtrException:\t.asciz \"" + NULLPTR + "\"\n"; 
+            ".NullPtrException:\t.asciz \"" + NULLPTR + "\"\n" + 
+            ".ArrayOutOfBounds:\t.asciz \"" + ARRAYOUTOFBOUNDS + "\"\n"; 
 
     //-----------------------------------------------------------------------------
     //      Registers

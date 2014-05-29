@@ -18,6 +18,7 @@ public class AssemblyCodeGenerator {
 	private int num_of_comp = 0;
 	private int num_of_while = 0;
 	private int num_of_ptr = 0;
+	private int num_of_array = 0;
 	
 	// if localReg = 0, means %l1 is not taken, otherwise if localReg = 1, %l1 is taken, can be used
 	private int localReg = 0;
@@ -439,6 +440,69 @@ public class AssemblyCodeGenerator {
 	   	increaseIndent();
 	   	addToBuffer(bss_buffer, Sparc.NEW_LINE);
 	}
+	
+	//P2: phaseIII, do runtime array bounds check
+    public void writeRunTimeArrayCheck(STO var, STO index)
+    {
+    	if(debug) writeDebug("--------in  writeRunTimeArrayCheck: " + var.getName() );
+    	
+    	int arraySize = ((ArrayType) var.getType()).getArraySize();
+    	String arrayUpperBoundLabel = "arrayUpperBoundCheck" + num_of_array;
+    	
+    	//A: do upper bound check
+    	getAddressHelper(index);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(arraySize), Sparc.L1);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L0, Sparc.L1);
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BL_OP, arrayUpperBoundLabel);
+    	addToBuffer(text_buffer, Sparc.NOP);
+    	
+    	//printout error message if upper bound is out of range
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".ArrayOutOfBounds", Sparc.O0);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.O1);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(arraySize), Sparc.O2);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+        addToBuffer(text_buffer, Sparc.NOP);
+        
+        //call exit(1)
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+        addToBuffer(text_buffer, Sparc.NOP);
+        
+        //printout arrayLabel to skip the print error message part and exit part
+        decreaseIndent();
+        addToBuffer(text_buffer, arrayUpperBoundLabel + ":\n" );
+        increaseIndent();
+    	
+    	//B: do lower bound check
+        String arrayLowerBoundLabel = "arrayLowerBoundCheck" + num_of_array++;
+        
+        getAddressHelper(index);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L1);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L0, Sparc.L1);
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BL_OP, arrayLowerBoundLabel);
+    	addToBuffer(text_buffer, Sparc.NOP);
+    	
+    	//printout error message if lower bound is out of range
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".ArrayOutOfBounds", Sparc.O0);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.O1);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(arraySize), Sparc.O2);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+        addToBuffer(text_buffer, Sparc.NOP);
+        
+        //call exit(1)
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+        addToBuffer(text_buffer, Sparc.NOP);
+        
+        //printout arrayLabel to skip the print error message part and exit part
+        decreaseIndent();
+        addToBuffer(text_buffer, arrayLowerBoundLabel + ":\n" );
+        increaseIndent();
+    	
+    	if(debug) writeDebug("--------end of writeRunTimeArrayCheck---------");
+    }
 	
 	// used in a lot of place. Basically used when trying to access elements in array
 	public void writeArrayAddress(STO sto)
@@ -2300,9 +2364,6 @@ public class AssemblyCodeGenerator {
     	
     	if(debug) writeDebug("----------end of writeTypeCast----------");
     }
-	
-	
-	
-	
+		
 	
 } //end of code gen
