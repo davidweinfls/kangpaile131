@@ -460,11 +460,13 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoExternDecl (Vector<String> lstIDs)
+	DoExternDecl (Vector<STO> lstIDs, Type t)
 	{
 		for (int i = 0; i < lstIDs.size (); i++)
 		{
-			String id = lstIDs.elementAt (i);
+			STO s = lstIDs.elementAt (i);
+			if(s instanceof ErrorSTO) return;
+			String id = s.getName();
 
 			if (m_symtab.accessLocal (id) != null)
 			{
@@ -472,7 +474,13 @@ class MyParser extends parser
 				m_errors.print (Formatter.toString(ErrorMsg.redeclared_id, id));
 			}
 
-			VarSTO sto = new VarSTO (id);
+			// put on symbol table
+			// access the variable using its name like any other variable
+			VarSTO sto = new VarSTO (id, t);
+			
+			sto.setBase("%%g0");
+			sto.setGlobalOffset(id);
+			
 			m_symtab.insert (sto);
 		}
 	}
@@ -633,7 +641,7 @@ class MyParser extends parser
 	//
 	//----------------------------------------------------------------
 	void
-	DoFuncDecl_1 (Type returnType, String id, boolean ref)
+	DoFuncDecl_1 (Type returnType, String id, boolean ref, boolean extern)
 	{
 		if (m_symtab.accessLocal (id) != null)
 		{
@@ -677,7 +685,8 @@ class MyParser extends parser
 		m_symtab.openScope ();	//open new scope
 		m_symtab.setFunc (sto);	//current function we're in is set
 		
-		myAsWriter.writeFuncDec(id);
+		//if not extern, write function declaration to assembly
+		if(!extern) myAsWriter.writeFuncDec(id);
 	}
 
 
@@ -694,8 +703,8 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print (ErrorMsg.error6c_Return_missing);
         }
-		
-		myAsWriter.writeFuncClose(func.getName(), m_currOffset, func.getReturnType());
+		//if not extern, write close function to assembly
+		if(!extern) myAsWriter.writeFuncClose(func.getName(), m_currOffset, func.getReturnType());
 		
 		m_symtab.closeScope ();	//close scope, pops top scope off
 		m_symtab.setFunc (null);	// we are back in outer scope

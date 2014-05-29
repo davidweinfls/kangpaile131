@@ -4,7 +4,7 @@ import java.util.*;
 
 public class AssemblyCodeGenerator {
 
-	private boolean debug = true;
+	private boolean debug = false;
 	
 	//useful instance vars
 	private int indent_level = 0;
@@ -618,6 +618,8 @@ public class AssemblyCodeGenerator {
 	    if(t instanceof FloatType)
 	    {
 	    	// call printFloat
+	    	//TODO: call fitos in case we did (float*)int
+	    	//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F0, Sparc.F0);
 	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTFLOAT);
 	    	addToBuffer(text_buffer, Sparc.NOP);
 	    }
