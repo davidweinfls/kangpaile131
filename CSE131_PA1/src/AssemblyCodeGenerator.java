@@ -4,7 +4,7 @@ import java.util.*;
 
 public class AssemblyCodeGenerator {
 
-	private boolean debug = false;
+	private boolean debug = true;
 	
 	//useful instance vars
 	private int indent_level = 0;
@@ -649,11 +649,20 @@ public class AssemblyCodeGenerator {
     	floatReg = 0;
     	if(debug) writeDebug("------------in writePrint---------------" );
     	
-    	if(sto == null)
+    	if(sto == null )
     	{
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Sparc.ENDL, Sparc.O0 );
     		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
     		addToBuffer(text_buffer, Sparc.NOP);
+    		return;
+    	}
+    	
+    	// check for function return void
+    	if( (sto.getType() != null) && sto.getType().isVoidType())
+    	{
+/*    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Sparc.ENDL, Sparc.O0 );
+    		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+    		addToBuffer(text_buffer, Sparc.NOP);*/
     		return;
     	}
     	

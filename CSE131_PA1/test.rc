@@ -1,7 +1,10 @@
-int[3] x;
+function : void foo1()
+{
+	cout<< "foo1";
+}
 
 function : void main()
 {
-  x[2] = 5;
-  cout<<x[2]<<endl;
+	cout << "abaaba" <<  foo1() << endl;
+
 }
