@@ -792,6 +792,12 @@ public class AssemblyCodeGenerator {
 				localReg = 0;
 			}
 		}
+		// TODO: for array type, only get the address
+		else if(t.isArrayType())
+		{
+			getAddressHelper(sto);
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.L1);
+		}
 		// for pointer
 		else
 		{

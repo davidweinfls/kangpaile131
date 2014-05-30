@@ -1,34 +1,22 @@
-function : float&  foo(float& a)
-{   
-    a++;
-    //cout << "&a" << &a << endl;
-    return a;
-}
-
-float y = 5.0;
-function: float& foo1()
-{
-	return y;
-}
-
 function : void main()
-{	
-  float x = 44.0;  
-    
-    	//cout << "old &x: " << &x << endl;
-    
-    cout << foo(x) << endl;	//45
-    
-	    //cout << "new &x: " << &x << endl;
-    
-    cout << "x is: " << x << endl;	//45
-    
-    foo(x) = 50.0;
-    
-    cout << "new x is: " << x << endl;	//50
-    
-    foo1() = 10.0;
-    
-    cout << y << endl;
-    
+{
+	int[2] a;
+	a[0] = 0;
+	a[1] = 1;
+
+	int *p = a;
+	
+	cout << &a << endl;	//address of array first elt
+	cout << p << endl;	//address of array first elt
+	
+	
+	cout << p[0] << endl;	//value of array first elt 
+							//how will this work? 1. 
+							
+	cout << &p[0] << endl;	//address of array first elt
+	
+	cout << ++p << endl;	//move ptr to points to the second elt
+	
+	cout << *p << endl;		//get the value in the second elt
+
 }

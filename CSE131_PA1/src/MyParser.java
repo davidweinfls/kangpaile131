@@ -1749,6 +1749,9 @@ class MyParser extends parser
 			Type t = ((PointerType) aType).getBaseType();
 			retSTO = new VarSTO(aType.getName(), t);
 			//TODO:
+			retSTO.setIsArray();
+            VariableBox<STO, STO> array = new VariableBox<STO, STO> (sto, expr);
+            retSTO.setArray (array);
 		}
 		//check b
 		else if(!(bType instanceof IntType))

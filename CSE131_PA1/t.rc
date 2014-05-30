@@ -1,15 +1,30 @@
-int a = 0123;
-//boolean b = true && false;
-const int c = 0X420;
-const float d = c ^ c;
-float * e = nullptr;
-function : float & foo() {
-	//return e[-9000];
-	//auto f = &(++a);
-	return a;
-	a = sizeof(e[c]);
-	return *&foo();
-	return *e;
-	int[3] g = {0,1,2,3};
+structdef INTSTRUCT {
+	bool b; 
+	int x; 
+	INTSTRUCT* y;
+};
+structdef INTSTRUCTSTRUCT {
+	bool b; 
+	INTSTRUCT x;
+};
+typedef INTSTRUCTSTRUCT* INTSTRUCTSTRUCTPTR;
+typedef INTSTRUCTSTRUCT STRUCT;
+INTSTRUCTSTRUCTPTR[5] arr;
+INTSTRUCTSTRUCT x;
+
+function : void main () {
+  STRUCT b;
+  STRUCT d;
+  INTSTRUCT theOnlyIntStruct;
+  b.x.x = 3;
+  
+  cout << b.x.x << endl;
+  
+  d.x = theOnlyIntStruct;
+  
+  d.x.y = &(b.x);
+  //x.x.x = 5;
+  
+  cout << (d.x.y)->x << endl;
 
 }
