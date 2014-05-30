@@ -481,7 +481,7 @@ public class AssemblyCodeGenerator {
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L1);
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L0, Sparc.L1);
-    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BL_OP, arrayLowerBoundLabel);
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BGE_OP, arrayLowerBoundLabel);
     	addToBuffer(text_buffer, Sparc.NOP);
     	
     	//printout error message if lower bound is out of range

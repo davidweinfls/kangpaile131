@@ -1,9 +1,7 @@
-int[3] myArr;
-int x;
+int[3] x;
 
-function : int main() 
+function : void main()
 {
-	x = 47;
-	x = myArr[x];
-	return 0;
+  x[2] = 5;
+  cout<<x[2]<<endl;
 }
