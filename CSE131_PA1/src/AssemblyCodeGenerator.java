@@ -2250,10 +2250,10 @@ public class AssemblyCodeGenerator {
         addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "free");
         addToBuffer(text_buffer, Sparc.NOP);
 
-       /* //set 0 to sto
+        //set 0 to sto
         getAddressHelper(sto);
         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L1);
-        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");*/
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
         
         if(debug) writeDebug("---------end 0f writeDeleteStmt------");
     }
