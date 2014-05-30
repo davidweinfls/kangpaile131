@@ -2087,7 +2087,8 @@ public class AssemblyCodeGenerator {
 	            } else {
 	            	getAddressHelper(returnExpr);
 	            	//get valued stored in returnExpr
-	            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+	            	if(!byRef)
+	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
 	            	
 	            	boolean passByRef = returnExpr.isVar() && ((VarSTO)returnExpr).isRef();
 	            	

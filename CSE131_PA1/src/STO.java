@@ -294,7 +294,8 @@ abstract class STO
 		{
 			retSTO.setIsStructField();
 			retSTO.setFieldOffset(getFieldOffset());
-			//TODO: set struct retSTO.setStruct(getStruct());
+			//TODO: set struct 
+			retSTO.setStruct(getStruct());
 		}
 		
 		if(getIsDeref())
