@@ -17,7 +17,8 @@ class Sparc
     public static final String STRING_TEMP    = "%s:\t.asciz \"%s\"\n";
     private static final String NULLPTR =
             "Attempt to dereference NULL pointer.\\n";
-    private static final String ARRAYOUTOFBOUNDS = "Index value of %%d is outside legal range [0, %%d).\\n";
+    private static final String ARRAYOUTOFBOUNDS = "Index value of %%d is outside legal range [0,%%d).\\n";
+    private static final String DEALLOCATEDSTACK = "Attempt to dereference a pointer into deallocated stack space.\\n";
 
     //-----------------------------------------------------------------------------
     //      Sections
@@ -33,7 +34,8 @@ class Sparc
             ".boolF:\t.asciz \"false\"\n" +
             ".float_one:\t.single 0r1\n" +
             ".NullPtrException:\t.asciz \"" + NULLPTR + "\"\n" + 
-            ".ArrayOutOfBounds:\t.asciz \"" + ARRAYOUTOFBOUNDS + "\"\n"; 
+            ".ArrayOutOfBounds:\t.asciz \"" + ARRAYOUTOFBOUNDS + "\"\n" + 
+            ".deallocatedStack:\t.asciz \"" + DEALLOCATEDSTACK + "\"\n"; 
 
     //-----------------------------------------------------------------------------
     //      Registers
@@ -219,6 +221,12 @@ class Sparc
     public static final String BNE_OP  = "bne";
     public static final String BA_OP   = "ba";
     public static final String BN_OP   = "bn";
+    
+    //unsigned compare operation
+    public static final String BLU_OP = "blu";
+    public static final String BLEU_OP = "bleu";
+    public static final String BGU_OP = "bgu";
+    public static final String BGEU_OP = "bgeu";
 
     public static final String FBE_OP  = "fbe";
     public static final String FBGE_OP = "fbge";

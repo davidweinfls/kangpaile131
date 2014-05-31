@@ -311,6 +311,7 @@ FuncDef ::=    T_FUNCTION T_COLON ReturnType:_1 OptRef:_4 T_ID:_2
                     T_LBRACE OptStmtList T_RBRACE
                     {:
                         ((MyParser) parser).DoFuncDecl_2(false);
+                        ((MyParser) parser).resetOffset();
                     :}
     ;
 

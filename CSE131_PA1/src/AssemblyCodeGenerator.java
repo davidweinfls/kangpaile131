@@ -19,11 +19,15 @@ public class AssemblyCodeGenerator {
 	private int num_of_while = 0;
 	private int num_of_ptr = 0;
 	private int num_of_array = 0;
+	private int num_of_deallocatedStack = 0;
 	
 	// if localReg = 0, means %l1 is not taken, otherwise if localReg = 1, %l1 is taken, can be used
 	private int localReg = 0;
 	// if floatReg = 0, means %f0 is not taken, otherwise if floatReg = 1, %f0 is taken, can be used
 	private int floatReg = 0;
+	
+	//extra credit 1:
+	private int lowestOffset = 0;
 	
 	private Stack<String> ifStack = new Stack<String>();
 	private Stack<String> andStack = new Stack<String>();
@@ -466,7 +470,7 @@ public class AssemblyCodeGenerator {
         
         //call exit(1)
         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
-        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.EXIT);
         addToBuffer(text_buffer, Sparc.NOP);
         
         //printout arrayLabel to skip the print error message part and exit part
@@ -493,7 +497,7 @@ public class AssemblyCodeGenerator {
         
         //call exit(1)
         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
-        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.EXIT);
         addToBuffer(text_buffer, Sparc.NOP);
         
         //printout arrayLabel to skip the print error message part and exit part
@@ -627,7 +631,7 @@ public class AssemblyCodeGenerator {
 		addToBuffer(text_buffer, Sparc.NOP);
 
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
-        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.EXIT);
         addToBuffer(text_buffer, Sparc.NOP);
 
         decreaseIndent();
@@ -2132,7 +2136,7 @@ public class AssemblyCodeGenerator {
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0
 					+ "]", Sparc.O0);
 		}
-		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.EXIT);
 		addToBuffer(text_buffer, Sparc.NOP);
 	}
     
@@ -2243,7 +2247,7 @@ public class AssemblyCodeGenerator {
 		addToBuffer(text_buffer, Sparc.NOP);
 
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
-        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.EXIT);
         addToBuffer(text_buffer, Sparc.NOP);
 
         decreaseIndent();
@@ -2286,7 +2290,7 @@ public class AssemblyCodeGenerator {
 		addToBuffer(text_buffer, Sparc.NOP);
 
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
-        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "exit");
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.EXIT);
         addToBuffer(text_buffer, Sparc.NOP);
 
         decreaseIndent();
@@ -2379,6 +2383,50 @@ public class AssemblyCodeGenerator {
     		
     	
     	if(debug) writeDebug("----------end of writeTypeCast----------");
+    }
+    
+    //get lowestOffset
+    int getLowestOffset()
+    {
+    	return lowestOffset;
+    }
+    
+    void setLowestOffset(int offset)
+    {
+    	lowestOffset = offset;
+    }
+    
+    //extra credit 1
+    void writeDeallocatedStack(STO sto)
+    {
+    	if(debug) writeDebug("-------in writeDeallocatedStack--------");
+    	
+    	writeDerefAddress(sto);
+    	
+    	String deallocatedLabel = "deallocatedStack" + num_of_deallocatedStack++;
+    	
+    	//compare sp address
+    	addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.SP, Integer.toString(lowestOffset), Sparc.L4);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L0, Sparc.L4);
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BLU_OP, deallocatedLabel);
+    	addToBuffer(text_buffer, Sparc.NOP);
+    	
+    	addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.SP, "92", Sparc.L4);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L0, Sparc.L4);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BGU_OP, deallocatedLabel);
+        addToBuffer(text_buffer, Sparc.NOP);
+        
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".deallocatedStack", Sparc.O0);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+        addToBuffer(text_buffer, Sparc.NOP);
+        
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.O0);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.EXIT);
+        addToBuffer(text_buffer, Sparc.NOP);
+        
+        decreaseIndent();
+        addToBuffer(text_buffer, deallocatedLabel + ":\n");
+        increaseIndent();
     }
 		
 	

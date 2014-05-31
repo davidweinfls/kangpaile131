@@ -1,22 +1,31 @@
-function : void main()
-{
-	int[2] a;
-	a[0] = 0;
-	a[1] = 1;
-
-	int *p = a;
-	
-	cout << &a << endl;	//address of array first elt
-	cout << p << endl;	//address of array first elt
-	
-	
-	cout << p[0] << endl;	//value of array first elt 
-							//how will this work? 1. 
-							
-	cout << &p[0] << endl;	//address of array first elt
-	
-	cout << ++p << endl;	//move ptr to points to the second elt
-	
-	cout << *p << endl;		//get the value in the second elt
-
+function : int * good(bool alloc) {
+static int y = 5;
+int * yy;
+if (alloc) {
+new yy;
+return yy;
+}
+return &y;
+}
+function : int * bad() {
+int z;
+return &z; // This is bad
+}
+function : int **** goodBad(int *** zz) {
+*zz; // Okay - when goodBad is called by main below, zz contains
+// the address of ipp (in main), which points to
+// an address in an existing stack frame
+return &zz; // But this is bad
+}
+int * ip; // global var allocated in BSS
+function : void main() {
+int ** ipp = &ip;
+*ipp; //Okay - ipp has the value &ip, which points into the BSS
+*&ipp; //Okay - &ipp points into the current stack frame
+*good(true); //Okay - good returns a pointer into the Heap
+*good(false); //Okay - good returns a pointer into the Data segment
+*bad(); // Error - bad returns a pointer to a local variable
+// in deallocated stack space
+*goodBad(&ipp); // Error - goodBad returns a pointer to a
+// formal parameter in deallocated stack space
 }

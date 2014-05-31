@@ -1279,6 +1279,9 @@ class MyParser extends parser
     	retSTO.setIsDeref();
     	retSTO.setPointer(sto);
     	
+    	//extra credit 1:
+    	myAsWriter.writeDeallocatedStack(retSTO);
+    	
     	return retSTO;
     }
     
@@ -1743,12 +1746,12 @@ class MyParser extends parser
              aType.getName()));
             return new ErrorSTO ("Check11 error. Illegal Array Usage");
 		}
-		//TODO: if left is a pointer Type
+		//IMPORTANT: if left is a pointer Type, handle case for int * = a; (a is an array), then do p[0]...
 		else if(aType instanceof PointerType)
 		{
 			Type t = ((PointerType) aType).getBaseType();
 			retSTO = new VarSTO(aType.getName(), t);
-			//TODO:
+
 			retSTO.setIsArray();
             VariableBox<STO, STO> array = new VariableBox<STO, STO> (sto, expr);
             retSTO.setArray (array);
@@ -1911,6 +1914,16 @@ class MyParser extends parser
 		{
 			myAsWriter.writeOr(sto);
 		}
+	}
+	
+	//for extra credit 1: reset current offset
+	void resetOffset()
+	{
+		if(m_currOffset < myAsWriter.getLowestOffset())
+		{
+			myAsWriter.setLowestOffset(m_currOffset);
+		}
+		m_currOffset = 0;
 	}
 
 
