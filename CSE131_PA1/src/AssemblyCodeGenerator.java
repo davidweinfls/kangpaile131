@@ -1910,7 +1910,7 @@ public class AssemblyCodeGenerator {
     //P2: used in DoFuncCall(). Pass in parameters into %o0 ~ %o5 before function call 
     public void writePassParameter(STO arg, STO param, boolean byRef, int index)
     {
-    	if(debug) writeDebug("-------in writePassParameter--------");
+    	if(debug) writeDebug("-------in writePassParameter: " + param.getName());
     	
     	if(byRef)
     	{
@@ -2536,6 +2536,59 @@ public class AssemblyCodeGenerator {
         decreaseIndent();
         addToBuffer(text_buffer, deallocatedLabel + ":\n");
         increaseIndent();
+    }
+    
+    //extra credit 3
+    void writeExtraArguments(Vector<VariableBox<STO, VarSTO>> extraArgs, int offset)
+    {
+    	if(debug) writeDebug("---------in writeExtraArguments--------");
+    	int currOffset = 92;
+    	//allocated stack space for arg7 & 8
+        addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.SP, "-" + Integer.toString(offset) + " & -8", Sparc.SP);
+        
+        //loop through all extra args
+        for(int i = 0; i < extraArgs.size(); i++)
+        {
+        	VariableBox<STO, VarSTO> vb = extraArgs.get(i);
+        	resetReg();
+        	STO arg = vb.getVariable();
+        	VarSTO param = vb.getExpr();
+        	if(debug) writeDebug("=======in writeExtraArguments, param is: " + param.getName());
+        	//get param's value or address
+        	if(param.isRef())
+        	{
+        		getAddressHelper(arg);
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.L1);
+        	}
+        	else
+        	{
+        		if(param.getType().isFloatType() & arg.getType().isIntType())
+        		{
+        			intToFloat(arg);
+        		}
+        		else
+        		{
+        			getValue(arg);
+        		}
+        		
+        	}
+        	//get extra args' address
+    		//%sp + offset
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(currOffset), Sparc.L0);
+    		addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.SP, Sparc.L0, Sparc.L0);
+            if (param.getType().isFloatType() && !param.isRef()) 
+            {
+            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+            }
+            else
+            {
+            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 +"]");
+            }
+            
+        	currOffset += arg.getType().getSize();
+        }
+    	
+    	if(debug) writeDebug("---------end of writeExtraArguments-------");
     }
 		
 	

@@ -796,6 +796,10 @@ class MyParser extends parser
         Vector<VarSTO> params;
         boolean error = false;
         boolean byRef = false;
+        
+        Vector<VariableBox<STO, VarSTO>> extraArgs = new Vector<VariableBox<STO, VarSTO>>();
+        VariableBox<STO, VarSTO> vb = new VariableBox<STO, VarSTO>();
+        int offset = 0;
 		
 		if (!sto.isFunc() && !sto.getType().isFunctionPointerType()) {
 			m_nNumErrors++;
@@ -887,13 +891,31 @@ class MyParser extends parser
 				{
 					myAsWriter.writePassParameter(arg, parameter, parameter.isRef(), i);
 				}
+				//extra args i6, i7
 				else
 				{
-					
+					if(parameter.isRef())
+					{
+						offset += 4;
+					}
+					else
+					{
+						offset += arg.getType().getSize();
+					}
+					//create vb for debug use
+					vb = new VariableBox<STO, VarSTO>(arg, parameter);
+					extraArgs.addElement(vb);
 				}
 			}
 			if (error)
 				return new ErrorSTO(sto.getName());
+			
+			//if more than 6 args
+			if(params.size() >= 6 )
+			{
+				//call write extra args
+				myAsWriter.writeExtraArguments(extraArgs, offset);
+			}
 			
 			STO ret;
 			if (byRef) {
