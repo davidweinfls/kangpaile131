@@ -19,12 +19,13 @@ class Sparc
             "Attempt to dereference NULL pointer.\\n";
     private static final String ARRAYOUTOFBOUNDS = "Index value of %%d is outside legal range [0,%%d).\\n";
     private static final String DEALLOCATEDSTACK = "Attempt to dereference a pointer into deallocated stack space.\\n";
+    private static final String MEMORYLEAKERROR = "%%d memory leak(s) detected in heap space.\\n";
 
     //-----------------------------------------------------------------------------
     //      Sections
     //-----------------------------------------------------------------------------
     public static final String TEXT_SEC   = ".section \".text\"\n";
-    public static final String DATA_SEC   = ".section \".data\"\n"; //+ "._memleak:\t.word\t0\n"; 
+    public static final String DATA_SEC   = ".section \".data\"\n" + ".allocatedMemory:\t.word\t0\n"; 
     public static final String BSS_SEC    = ".section \".bss\"\n"; 
     public static final String RODATA_SEC = ".section \".rodata\"\n" +
             /*"._fincdec:\t.single 0r1\n" +*/
@@ -35,7 +36,8 @@ class Sparc
             ".float_one:\t.single 0r1\n" +
             ".NullPtrException:\t.asciz \"" + NULLPTR + "\"\n" + 
             ".ArrayOutOfBounds:\t.asciz \"" + ARRAYOUTOFBOUNDS + "\"\n" + 
-            ".deallocatedStack:\t.asciz \"" + DEALLOCATEDSTACK + "\"\n"; 
+            ".deallocatedStack:\t.asciz \"" + DEALLOCATEDSTACK + "\"\n" + 
+            ".memoryLeakError:\t.asciz \"" + MEMORYLEAKERROR + "\"\n"; 
 
     //-----------------------------------------------------------------------------
     //      Registers

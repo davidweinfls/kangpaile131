@@ -21,6 +21,7 @@ public class AssemblyCodeGenerator {
 	private int num_of_array = 0;
 	private int num_of_deallocatedStack = 0;
 	private int num_of_typecast = 0;
+	private int num_of_memoryLeak = 0;
 	
 	// if localReg = 0, means %l1 is not taken, otherwise if localReg = 1, %l1 is taken, can be used
 	private int localReg = 0;
@@ -2222,6 +2223,12 @@ public class AssemblyCodeGenerator {
         getAddressHelper(sto);
         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
         
+        //increment allocatedMemory value
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".allocatedMemory", Sparc.L0);
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, "inc", Sparc.L1);
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+        
         if(debug) writeDebug("---------end 0f writeNewStmt------");
     }
     
@@ -2266,7 +2273,33 @@ public class AssemblyCodeGenerator {
         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L1);
         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
         
+        //decrement allocatedMemory value
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".allocatedMemory", Sparc.L0);
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, "dec", Sparc.L1);
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+        
         if(debug) writeDebug("---------end 0f writeDeleteStmt------");
+    }
+    
+    //extra credit 2
+    void writeMemoryLeak()
+    {
+    	if(debug) writeDebug("-------in writeMemoryLeak-------");
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".memoryLeakError", Sparc.O0);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".allocatedMemory", Sparc.L0);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.O1);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.O1, Sparc.G0);
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, "._memleaklabel"+ num_of_memoryLeak);
+    	addToBuffer(text_buffer, Sparc.NOP);
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+        addToBuffer(text_buffer, Sparc.NOP);
+        decreaseIndent();
+        addToBuffer(text_buffer, "._memleaklabel" + num_of_memoryLeak + ":\n");
+        increaseIndent();
+        num_of_memoryLeak++;
+        
+        if(debug) writeDebug("-------end of writeMemoryLeak--------");
     }
 	
     void  writeFuncPtr(STO sto)

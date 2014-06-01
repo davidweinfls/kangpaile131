@@ -703,6 +703,9 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print (ErrorMsg.error6c_Return_missing);
         }
+		//memoryLeak(3) write memory leak before reaches the end of function
+		if(m_symtab.getFunc().getName().equals("main"))
+			myAsWriter.writeMemoryLeak();
 		//if not extern, write close function to assembly
 		if(!extern) myAsWriter.writeFuncClose(func.getName(), m_currOffset, func.getReturnType());
 		
@@ -1013,6 +1016,9 @@ class MyParser extends parser
 	            return;
 			}
 		}
+		//memoryLeak(1). write memory leak before main returns
+		if(m_symtab.getFunc().getName().equals("main"))
+			myAsWriter.writeMemoryLeak();
 		myAsWriter.writeReturnStmt(returnExpr, ret, func.getRef());
 	}
 	
@@ -1028,6 +1034,8 @@ class MyParser extends parser
             		ExprType.getName()));
             return new ErrorSTO ("NaN for Exit");
         }
+        //memoryLeak(2). write memory leak before exit()
+        myAsWriter.writeMemoryLeak();
         myAsWriter.writeExitStmt(expr);
         return expr;
 	}

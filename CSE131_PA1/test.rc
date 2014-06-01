@@ -1,16 +1,12 @@
+int* x;
+int* y;
+int* z;
 
-function: void foo(int& a)
+function : int main()
 {
-	a = 1000;
-} 
- 
-function: void main(){
-
-    int [6] array;
-    array[4] = 999;
-     
-    foo(array[4]);
-    
-    cout<< array[4] <<endl;
-     
+	new x;
+	new y;
+	new z;
+	return 0; /* would report a memory leak here */
+	delete x;
 }
