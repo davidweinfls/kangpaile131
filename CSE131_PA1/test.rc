@@ -1,5 +1,5 @@
 function : void main()
 {
 	//float f = 2.3;
-	cout << (int) (bool) 5 << endl; //1
+	cout << (int)(bool)2.5 << endl; //1
 }

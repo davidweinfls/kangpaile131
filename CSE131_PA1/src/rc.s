@@ -1,5 +1,5 @@
 ! 
-! Generated Sat May 31 17:48:35 PDT 2014
+! Generated Sat May 31 17:55:04 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -13,6 +13,7 @@
 .deallocatedStack:	.asciz "Attempt to dereference a pointer into deallocated stack space.\n"
 	.align 4
 
+temp0:	.single 0r2.5
 	.section ".data"
 	.align 4
 
@@ -29,28 +30,27 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 5
-	set	5, %l1
+! ------in writeConstantLiteral: 2.5
+	set	temp0, %l0
+	ld	[%l0], %f0
 	set	-4, %l0
 	add	%fp, %l0, %l0
-	st	%l1, [%l0]
+	st	%f0, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
 ! ----------in writeTypeCast-----------
 
-! ========in writeTypeCast, int to bool=========
-
-! -------in getValue: 5: 5.0
-
-! --------in getAddressHelper: 5
+! ========in writeTypeCast, float to bool=========
 	set	-4, %l0
+	add	%fp, %l0, %l0
+	ld	[%l0], %l1
+
+! --------in getAddressHelper: 2.5
+	set	-8, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
 	set	0, %l3
 	cmp	%l1, %g0
 	be	.typeCastBool0
@@ -59,12 +59,6 @@ main:
 	set	1, %l3
 
 .typeCastBool0:
-
-! --------in getAddressHelper: 5
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
 	st	%l3, [%l0]
 
 ! ----------end of writeTypeCast----------
@@ -75,35 +69,35 @@ main:
 
 ! ========in writeTypeCast, get oldSTO value=========
 
-! -------in getValue: 5: 1.0
+! -------in getValue: 2.5: 1.0
 
-! --------in getAddressHelper: 5
+! --------in getAddressHelper: 2.5
 	set	-8, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l2
+	ld	[%l0], %l1
 
 ! -------end of getValue------------
 
 ! ========in writeTypeCast, get newSTO address=========
 
-! --------in getAddressHelper: 5
+! --------in getAddressHelper: 2.5
 	set	-12, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
 
 ! ========in writeTypeCast, store old value to new sto=========
-	st	%l2, [%l0]
+	st	%l1, [%l0]
 
 ! ----------end of writeTypeCast----------
 
 ! ------------in writePrint---------------
 
-! -------in getValue: 5: 1.0
+! -------in getValue: 2.5: 1.0
 
-! --------in getAddressHelper: 5
+! --------in getAddressHelper: 2.5
 	set	-12, %l0
 	add	%fp, %l0, %l0
 
