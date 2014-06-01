@@ -1,5 +1,16 @@
-function : void main()
+
+function: void foo(int& a)
 {
-	//float f = 2.3;
-	cout << (int)(bool)2.5 << endl; //1
+	a = 1000;
+} 
+ 
+function: void main(){
+
+    int [6] array;
+    array[4] = 999;
+     
+    foo(array[4]);
+    
+    cout<< array[4] <<endl;
+     
 }
