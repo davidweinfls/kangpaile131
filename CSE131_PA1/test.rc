@@ -5,8 +5,11 @@ int* z;
 function : int main()
 {
 	new x;
-	new y;
-	new z;
-	return 0; /* would report a memory leak here */
+	y = x;
+	//new y;
+	//new z;
 	delete x;
+	delete y;
+	return 0; /* would report a memory leak here */
+	
 }

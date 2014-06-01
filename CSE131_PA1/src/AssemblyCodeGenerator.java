@@ -2286,6 +2286,23 @@ public class AssemblyCodeGenerator {
     void writeMemoryLeak()
     {
     	if(debug) writeDebug("-------in writeMemoryLeak-------");
+    	
+    	//check double deletion
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".doubleDeleteError", Sparc.O0);
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".allocatedMemory", Sparc.L0);
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.O1);
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.O1, Sparc.G0);
+        addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BGE_OP, "._memleaklabel"+ num_of_memoryLeak);
+    	addToBuffer(text_buffer, Sparc.NOP);
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTF);
+        addToBuffer(text_buffer, Sparc.NOP);
+        decreaseIndent();
+        addToBuffer(text_buffer, "._memleaklabel" + num_of_memoryLeak + ":\n");
+        increaseIndent();
+        num_of_memoryLeak++;
+        //if allocated memory >= 0, check memory leak
+        
+    	//check memory leak
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".memoryLeakError", Sparc.O0);
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, ".allocatedMemory", Sparc.L0);
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.O1);
@@ -2297,7 +2314,7 @@ public class AssemblyCodeGenerator {
         decreaseIndent();
         addToBuffer(text_buffer, "._memleaklabel" + num_of_memoryLeak + ":\n");
         increaseIndent();
-        num_of_memoryLeak++;
+        num_of_memoryLeak++;        
         
         if(debug) writeDebug("-------end of writeMemoryLeak--------");
     }

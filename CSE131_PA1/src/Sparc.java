@@ -20,6 +20,7 @@ class Sparc
     private static final String ARRAYOUTOFBOUNDS = "Index value of %%d is outside legal range [0,%%d).\\n";
     private static final String DEALLOCATEDSTACK = "Attempt to dereference a pointer into deallocated stack space.\\n";
     private static final String MEMORYLEAKERROR = "%%d memory leak(s) detected in heap space.\\n";
+    private static final String DOUBLEDELETERROR = "Double delete detected. Memory region has already been released in heap space.\\n";
 
     //-----------------------------------------------------------------------------
     //      Sections
@@ -37,7 +38,8 @@ class Sparc
             ".NullPtrException:\t.asciz \"" + NULLPTR + "\"\n" + 
             ".ArrayOutOfBounds:\t.asciz \"" + ARRAYOUTOFBOUNDS + "\"\n" + 
             ".deallocatedStack:\t.asciz \"" + DEALLOCATEDSTACK + "\"\n" + 
-            ".memoryLeakError:\t.asciz \"" + MEMORYLEAKERROR + "\"\n"; 
+            ".memoryLeakError:\t.asciz \"" + MEMORYLEAKERROR + "\"\n" +
+            ".doubleDeleteError:\t.asciz \"" + DOUBLEDELETERROR + "\"\n"; 
 
     //-----------------------------------------------------------------------------
     //      Registers
