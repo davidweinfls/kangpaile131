@@ -20,6 +20,7 @@ public class AssemblyCodeGenerator {
 	private int num_of_ptr = 0;
 	private int num_of_array = 0;
 	private int num_of_deallocatedStack = 0;
+	private int num_of_typecast = 0;
 	
 	// if localReg = 0, means %l1 is not taken, otherwise if localReg = 1, %l1 is taken, can be used
 	private int localReg = 0;
@@ -888,7 +889,7 @@ public class AssemblyCodeGenerator {
   //used when need to convert int to float value. value is stored in either F0 or F1
     void FloatToInt(STO sto)
     {
-    	if(debug) writeDebug("---------FloatToInt: " + sto.getName() + " " + ((sto instanceof ConstSTO) ? ((ConstSTO)sto).getIntValue() : null) );
+    	if(debug) writeDebug("---------in FloatToInt: " + sto.getName() + " " + ((sto instanceof ConstSTO) ? ((ConstSTO)sto).getIntValue() : null) );
     	
     	//1. get address
     	if(debug) writeDebug("=======in FloatToInt: getAddress of " + sto.getName());
@@ -914,7 +915,7 @@ public class AssemblyCodeGenerator {
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FSTOI_OP, Sparc.F1, Sparc.F1);
     		floatReg = 0;
     	}
-    	if(debug) writeDebug("---------FloatToInt---------");
+    	if(debug) writeDebug("---------end of FloatToInt---------");
     }
     
     void writeOr(STO a)
@@ -2329,8 +2330,8 @@ public class AssemblyCodeGenerator {
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
     		}
     	}
-    	//handle float to int
-    	else if((newType.isIntType() || newType.isBoolType()) && oldType.isFloatType() )
+    	//handle float to int, 
+    	else if((newType.isIntType()) && oldType.isFloatType() )
     	{
     		if(debug) writeDebug("========in writeTypeCast, do Float to Int=========");
     		//get oldSTO value
@@ -2346,6 +2347,63 @@ public class AssemblyCodeGenerator {
     			//value is in F0
     			getAddressHelper(newSTO);
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    		}
+    	}
+    	//handle float/int to bool, need to store 1 or 0 to newSTO
+    	else if(newType.isBoolType() && (oldType.isFloatType() || oldType.isIntType() ))
+    	{
+    		if(oldType.isFloatType())
+    		{
+    			if(debug) writeDebug("========in writeTypeCast, float to bool=========");
+        		//get oldSTO value
+        		FloatToInt(oldSTO);
+        		
+        		getAddressHelper(newSTO);
+        		
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+        		
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
+        		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
+    	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, "be", ".typeCastBool" + num_of_typecast);
+    	    	addToBuffer(text_buffer, Sparc.NOP);
+    	    	
+    	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L3);
+    	    	
+
+                decreaseIndent();
+                addToBuffer(text_buffer, Sparc.NEW_LINE);
+                addToBuffer(text_buffer, ".typeCastBool" + num_of_typecast + ":\n");
+                increaseIndent();
+                num_of_typecast++;
+
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
+
+    		}
+    		else
+    		{
+    			if(debug) writeDebug("========in writeTypeCast, int to bool=========");
+        		//get oldSTO value
+        		getValue(oldSTO);
+        		
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
+        		if(localReg == 0)
+        			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L2, Sparc.G0);
+        		else
+        			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
+    	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, "be", ".typeCastBool" + num_of_typecast);
+    	    	addToBuffer(text_buffer, Sparc.NOP);
+    	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L3);
+
+                decreaseIndent();
+                addToBuffer(text_buffer, Sparc.NEW_LINE);
+                addToBuffer(text_buffer, ".typeCastBool" + num_of_typecast + ":\n");
+                increaseIndent();
+                num_of_typecast++;
+                
+                getAddressHelper(newSTO);
+                addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
     		}
     	}
     	//handle all the other cases
