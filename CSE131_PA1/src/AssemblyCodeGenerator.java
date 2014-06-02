@@ -2161,6 +2161,69 @@ public class AssemblyCodeGenerator {
         floatReg = 0;
     }
     
+    //extra credit 4: overload function call
+    void writeOverloadFuncCall(FunctionPointerType funcPtr, Vector args, STO retSTO, boolean isRef )
+    {
+    	if(debug) writeDebug("--------in writeOverloadFuncCall: " + funcPtr.getFuncName());
+    	
+    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, funcPtr.getFuncName());
+        addToBuffer(text_buffer, Sparc.NOP);
+        
+        Type retType = retSTO.getType();
+        
+        if (retType.isVoidType())
+        {
+            // Do Nothing
+        }
+        // if returnSTO is not void, store returned value ot retSTO's address
+        else if (retType.isFloatType())
+        {
+        	addToBuffer(text_buffer, retSTO.getAddress());
+        	if (isRef)
+        	{
+        		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.O0 + "]", Sparc.L1);
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
+        	}
+        	else
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+        }
+        else
+        {
+        	addToBuffer(text_buffer, retSTO.getAddress());
+        	if (isRef)
+        	{
+        		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.O0 + "]", Sparc.L1);
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
+        	}
+        	else
+        		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
+        } 
+    	
+    	if(debug) writeDebug("--------end of writeOverloadFuncCall-------");
+    }
+    
+    void writeOverloadFuncDec(String id)
+    {
+    	has_text = true;
+    	
+    	// main:
+        decreaseIndent();
+    	addToBuffer(text_buffer, Sparc.FUNC_LABEL, id);
+        increaseIndent();
+
+        // set Save.main, %g1
+        addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
+            String.format(Sparc.SAVE_DOT_FUNCNAME, id), Sparc.G1);
+        // save %sp, %g1, %sp
+        addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SAVE_OP, Sparc.SP, Sparc.G1, Sparc.SP);
+
+        decreaseIndent();
+        addToBuffer(text_buffer, Sparc.NEW_LINE);
+        increaseIndent();
+
+        this.currFuncName = id;
+    }
+    
     void writeCin(STO sto)
     {
     	Type t = sto.getType();

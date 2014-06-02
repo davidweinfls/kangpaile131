@@ -749,6 +749,16 @@ class MyParser extends parser
                     return;	//if illegal overload function declaration, return
                     		//dont insert param to symtab
                 }
+                //write overload function params
+                StringBuilder id = new StringBuilder();
+                
+                id.append("._"+sto.getName());
+                for (int i = 0; i < params.size(); ++i)
+                {
+                    VarSTO param = params.elementAt(i);
+                    id.append(param.getType().getName()+"_"+(i+1));
+                }
+                myAsWriter.writeOverloadFuncDec(id);
             }
 			//FuncSTO sto = m_symtab.getFunc();
 			for(int i = 0; i < params.size(); i++)
@@ -953,7 +963,16 @@ class MyParser extends parser
             }
 			returnType = check.getReturnType(); 
 			byRef = check.getByRef();
+			params = check.getParams();
 			STO ret;
+			
+			for(int i = 0; i < params.size(); i++)
+			{
+				STO arg = (STO)args.get(i);
+				VarSTO parameter = params.get(i);
+				myAsWriter.writePassParameter(arg, parameter, parameter.isRef(), i);
+			}
+			
             if (byRef)
             { 
                 ret = new VarSTO ("result", returnType);
@@ -961,6 +980,13 @@ class MyParser extends parser
             }
             else 
             	ret = new ExprSTO ("result", returnType);
+            
+            m_currOffset -= returnType.getSize();
+            ret.setOffset(m_currOffset);
+            ret.setBase("%%fp");
+            
+            //do overload function call
+            myAsWriter.writeOverloadFuncCall(check, args, ret, byRef);
             return ret;
 		}
 	}
