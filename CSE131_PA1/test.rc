@@ -1,11 +1,34 @@
-function : void main()
-{
-    int b = 441;
-    int *c = &b; 
-	//int **rawr1 = &c;
-	
-	float *a = (float *)c;
-    //float **a = (float **)rawr1;
+function : float&  foo(float& a)
+{   
+    a++;
+    //cout << "&a" << &a << endl;
+    return a;
+}
 
-    cout << *a << endl;
+float y = 5.0;
+function: float& foo1()
+{
+	return y;
+}
+
+function : void main()
+{	
+  float x = 44.0;  
+    
+    	//cout << "old &x: " << &x << endl;
+    
+    cout << foo(x) << endl;	//45
+    
+	    //cout << "new &x: " << &x << endl;
+    
+    cout << "x is: " << x << endl;	//45
+    
+    foo(x) = 50.0;
+    
+    cout << "new x is: " << x << endl;	//50
+    
+    foo1() = 10.0;
+    
+    cout << y << endl;
+    
 }

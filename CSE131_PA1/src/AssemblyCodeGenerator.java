@@ -1908,7 +1908,7 @@ public class AssemblyCodeGenerator {
     }
     
     //P2: used in DoFuncCall(). Pass in parameters into %o0 ~ %o5 before function call 
-    public void writePassParameter(STO arg, STO param, boolean byRef, int index)
+    public void writePassParameter(STO arg, STO param, boolean byRef, int index, STO temp)
     {
     	if(debug) writeDebug("-------in writePassParameter: " + param.getName());
     	
@@ -1929,14 +1929,20 @@ public class AssemblyCodeGenerator {
     			//handle pass int to float param
     			if(arg.getType().isIntType())
     			{
-    				resetReg();
+    				//resetReg();
     				intToFloat(arg);
-    				addToBuffer(text_buffer, arg.getAddress());
+    				
+    				addToBuffer(text_buffer, temp.getAddress());
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o" + index);
+    				
+    				
+    				/*addToBuffer(text_buffer, arg.getAddress());
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
     				resetReg();
     				getValue(arg);
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
-    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
+    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);*/
     				return;
     			}
     			//get param value
@@ -1963,6 +1969,7 @@ public class AssemblyCodeGenerator {
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L1, "%o" + index);
     		}
     	}
+    	resetReg();
     	if(debug) writeDebug("-------end of writePassParameter--------");
     }
     

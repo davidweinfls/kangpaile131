@@ -845,6 +845,13 @@ class MyParser extends parser
 			{
 				myAsWriter.writeFuncPtr(sto);
 			}
+			
+			//temp var to store %f0 for float to int param
+			VarSTO temp = new VarSTO("tmp");
+            m_currOffset -= 4;
+            temp.setBase("%%fp");
+            temp.setOffset(m_currOffset);
+            myAsWriter.resetReg();
 
 			for (int i = 0; i < params.size(); i++)
 			{
@@ -900,7 +907,7 @@ class MyParser extends parser
 				//pass parameters in %i0~i5
 				if(i < 6 && !error)
 				{
-					myAsWriter.writePassParameter(arg, parameter, parameter.isRef(), i);
+					myAsWriter.writePassParameter(arg, parameter, parameter.isRef(), i, temp);
 				}
 				//extra args i6, i7
 				else
@@ -967,11 +974,18 @@ class MyParser extends parser
 			params = check.getParams();
 			STO ret;
 			
+			//temp var to store %f0 for float to int param
+			VarSTO temp = new VarSTO("tmp");
+            m_currOffset -= 4;
+            temp.setBase("%%fp");
+            temp.setOffset(m_currOffset);
+            myAsWriter.resetReg();
+			
 			for(int i = 0; i < params.size(); i++)
 			{
 				STO arg = (STO)args.get(i);
 				VarSTO parameter = params.get(i);
-				myAsWriter.writePassParameter(arg, parameter, parameter.isRef(), i);
+				myAsWriter.writePassParameter(arg, parameter, parameter.isRef(), i, temp);
 			}
 			
             if (byRef)
