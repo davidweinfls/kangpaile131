@@ -752,13 +752,14 @@ class MyParser extends parser
                 //write overload function params
                 StringBuilder id = new StringBuilder();
                 
-                id.append("._"+sto.getName());
+                id.append(sto.getName());
                 for (int i = 0; i < params.size(); ++i)
                 {
-                    VarSTO param = params.elementAt(i);
-                    id.append(param.getType().getName()+"_"+(i+1));
+                    VarSTO param = params.get(i);
+                    Type paramType = param.getType();
+                    id.append(paramType.getName() + "_" + (i+1));
                 }
-                myAsWriter.writeOverloadFuncDec(id);
+                myAsWriter.writeOverloadFuncDec(id.toString());
             }
 			//FuncSTO sto = m_symtab.getFunc();
 			for(int i = 0; i < params.size(); i++)

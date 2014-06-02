@@ -1,25 +1,14 @@
-float a7 = 7.5;
-float a8 = 8.5;
-
-function: void foo(int a1, int a2, int a3, int a4, int a5, int a6, float& a7, float& a8)
+function: void foo(int a)
 {
-	cout << a1 << endl;
-	cout << a2 << endl;
-	cout << a3 << endl;
-	cout << a4 << endl;
-	cout << a5 << endl;
-	cout << a6 << endl;
-	
-	a7 = 10.5;
-	a8 = 13.5;
-	
-	//cout << a7 << endl;
-	//cout << a8 << endl;
+	cout << "1" << endl;
 }
 
-function : void main()
+function: void foo(int a, int b)
 {
-    foo(1,2,3,4,5,6, a7, a8);
-    cout << a7 << endl;
-    cout << a8 << endl;
+	cout << "2" << endl;
+}
+
+function: void main()
+{
+	foo(1,2);
 }
