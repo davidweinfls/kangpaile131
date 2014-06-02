@@ -1,5 +1,5 @@
 ! 
-! Generated Sun Jun 01 20:36:17 PDT 2014
+! Generated Sun Jun 01 22:00:18 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -15,82 +15,12 @@
 .doubleDeleteError:	.asciz "Double delete detected. Memory region has already been released in heap space.\n"
 	.align 4
 
-temp0:	.asciz "1"
-	.align 4
-temp1:	.asciz "2"
-	.align 4
 	.section ".data"
 .allocatedMemory:	.word	0
 	.align 4
 
 	.section ".text"
 	.align 4
-
-
-! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<foo>>>>>>>>>>>>>>>>>
-	.align 4
-	.global foo
-foo:
-	set	SAVE.foo, %g1
-	save	%sp, %g1, %sp
-
-
-! -------in writeParameter: a param num: 0
-	set	68, %l0
-	add	%fp, %l0, %l0
-	st	%i0, [%l0]
-
-! ------------in writePrint---------------
-	set	temp0, %o0
-	call	printf
-	nop
-
-
-! ------------in writePrint---------------
-	set	.endl, %o0
-	call	printf
-	nop
-
-
-! --------------in writeFuncClose--------------
-	ret
-	restore
-
-	SAVE.foo = -(92 + 0) & -8
-
-fooint_1int_2:
-	set	SAVE.fooint_1int_2, %g1
-	save	%sp, %g1, %sp
-
-
-! -------in writeParameter: a param num: 0
-	set	68, %l0
-	add	%fp, %l0, %l0
-	st	%i0, [%l0]
-
-! -------in writeParameter: b param num: 1
-	set	72, %l0
-	add	%fp, %l0, %l0
-	st	%i1, [%l0]
-
-! ------------in writePrint---------------
-	set	temp1, %o0
-	call	printf
-	nop
-
-
-! ------------in writePrint---------------
-	set	.endl, %o0
-	call	printf
-	nop
-
-
-! --------------in writeFuncClose--------------
-	ret
-	restore
-
-	SAVE.fooint_1int_2 = -(92 + 0) & -8
 
 
 ! in writeFuncDec
@@ -102,52 +32,208 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 1
-	set	1, %l1
+! ------in writeConstantLiteral: 441
+	set	441, %l1
 	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
-! ------in writeConstantLiteral: 2
-	set	2, %l1
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
+! -------in getValue: 441: 441.0
 
-! ------end of writeConstantLiteral-------
-
-! -------in writePassParameter: a
-
-! --------in getAddressHelper: 1
+! --------in getAddressHelper: 441
 	set	-4, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l1
-	mov	%l1, %o0
 
-! -------end of writePassParameter--------
+! -------end of getValue------------
 
-! -------in writePassParameter: b
+! ---------in writeLocalVariableWInit:b
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
 
-! --------in getAddressHelper: 2
+
+! ------in writeAddressOf: b
+
+! --------in getAddressHelper: b
 	set	-8, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
+	mov	%l0, %l1
+	set	-12, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! -------end of writeAddressOf-------
+
+! -------in getValue: b: null
+
+! --------in getAddressHelper: b
+	set	-12, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
 	ld	[%l0], %l1
-	mov	%l1, %o1
 
-! -------end of writePassParameter--------
+! -------end of getValue------------
 
-! --------in writeOverloadFuncCall: fooint_1int_2
-	call	fooint_1int_2
+! ---------in writeLocalVariableWInit:c
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+
+! ----------in writeTypeCast-----------
+
+! ========in writeTypeCast, do regular case=========
+
+! ========in writeTypeCast, get oldSTO value=========
+
+! -------in getValue: c: null
+
+! --------in getAddressHelper: c
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+
+! ========in writeTypeCast, get newSTO address=========
+
+! --------in getAddressHelper: c
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+
+! ========in writeTypeCast, store old value to new sto=========
+	st	%l1, [%l0]
+
+! ----------end of writeTypeCast----------
+
+! -------in getValue: c: null
+
+! --------in getAddressHelper: c
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+
+! ---------in writeLocalVariableWInit:a
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+
+! -------in writeDeallocatedStack--------
+
+! -------in writeDerefAddress: a
+
+! --------in getAddressHelper: a
+	set	-24, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel0
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel0:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
+	add	%sp, 0, %l4
+	cmp	%l0, %l4
+	blu	deallocatedStack0
+	nop
+
+	add	%sp, 92, %l4
+	cmp	%l0, %l4
+	bgu	deallocatedStack0
+	nop
+
+	set	.deallocatedStack, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+deallocatedStack0:
+
+! ------------in writePrint---------------
+
+! -------in getValue: a: null
+
+! --------in getAddressHelper: a
+
+! -------in writeDerefAddress: a
+
+! --------in getAddressHelper: a
+	set	-24, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel1
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel1:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %f0
+
+! -------end of getValue------------
+	fitos	%f0, %f0
+	call	printFloat
 	nop
 
 
-! --------end of writeOverloadFuncCall-------
+! ------------in writePrint---------------
+	set	.endl, %o0
+	call	printf
+	nop
+
 
 ! -------in writeMemoryLeak-------
 	set	.doubleDeleteError, %o0
@@ -179,5 +265,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 8) & -8
+	SAVE.main = -(92 + 28) & -8
 

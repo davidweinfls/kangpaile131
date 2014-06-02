@@ -698,7 +698,7 @@ public class AssemblyCodeGenerator {
 	    {
 	    	// call printFloat
 	    	//TODO: call fitos in case we did (float*)int
-	    	//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F0, Sparc.F0);
+	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F0, Sparc.F0);
 	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTFLOAT);
 	    	addToBuffer(text_buffer, Sparc.NOP);
 	    }

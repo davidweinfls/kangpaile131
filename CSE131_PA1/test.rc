@@ -1,14 +1,11 @@
-function: void foo(int a)
+function : void main()
 {
-	cout << "1" << endl;
-}
+    int b = 441;
+    int *c = &b; 
+	//int **rawr1 = &c;
+	
+	float *a = (float *)c;
+    //float **a = (float **)rawr1;
 
-function: void foo(int a, int b)
-{
-	cout << "2" << endl;
-}
-
-function: void main()
-{
-	foo(1,2);
+    cout << *a << endl;
 }
