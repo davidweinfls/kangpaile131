@@ -292,12 +292,15 @@ class MyParser extends parser
 						}
 						else
 						{
-							if(exprType.isIntType() && t.isFloatType())
+							if(!(expr.getIsTypeCast()))
 							{
-								myAsWriter.intToFloat(expr);
+								if(exprType.isIntType() && t.isFloatType())
+								{
+									myAsWriter.intToFloat(expr);
+								}
+								else 
+									myAsWriter.getValue(expr);
 							}
-							else 
-								myAsWriter.getValue(expr);
 							
 							m_currOffset -= t.getSize();
                             var.setOffset(m_currOffset);
@@ -420,12 +423,15 @@ class MyParser extends parser
 						}
 						else
 						{
-							if(t.isFloatType() && exprType.isIntType())
+							if(!expr.getIsTypeCast())
 							{
-								myAsWriter.intToFloat(expr);
+								if(t.isFloatType() && exprType.isIntType())
+								{
+									myAsWriter.intToFloat(expr);
+								}
+								else
+									myAsWriter.getValue(expr);
 							}
-							else
-								myAsWriter.getValue(expr);
 							m_currOffset -= t.getSize();
                             var.setOffset(m_currOffset);
                             var.setBase("%%fp");

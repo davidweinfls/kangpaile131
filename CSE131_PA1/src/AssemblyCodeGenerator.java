@@ -698,7 +698,7 @@ public class AssemblyCodeGenerator {
 	    {
 	    	// call printFloat
 	    	//TODO: call fitos in case we did (float*)int
-	    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F0, Sparc.F0);
+	    	//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F0, Sparc.F0);
 	    	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, Sparc.PRINTFLOAT);
 	    	addToBuffer(text_buffer, Sparc.NOP);
 	    }
@@ -1372,8 +1372,19 @@ public class AssemblyCodeGenerator {
     	Type varType = var.getType();
     	Type exprType = expr.getType();
     	
+    	//typecast assign
+    	if(expr.getIsTypeCast())
+    	{
+    		getAddressHelper(var);
+    		if (var.isVar() && ((VarSTO) var).isRef())
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+            if(var.getType().isFloatType())
+            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0+"]");
+            else
+            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
+    	}
     	//assign to float
-    	if(varType instanceof FloatType)
+    	else if(varType instanceof FloatType)
     	{
     		if(debug) writeDebug("=======in writeAssignExpr, varType is float=======");
     		
@@ -1934,13 +1945,15 @@ public class AssemblyCodeGenerator {
     				addToBuffer(text_buffer, arg.getAddress());
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
     				resetReg();
-    				getValue(arg);
+    				if(!arg.getIsTypeCast())
+    					getValue(arg);
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
     				return;
     			}
     			//get param value
-    			getValue(arg);
+    			if(!arg.getIsTypeCast())
+    				getValue(arg);
     			
     			//attention: for float param, cannot just mov %f0 to %o0, need to st to %l0 and then ld from l0 to %o0
     			if(floatReg == 1)
@@ -2418,9 +2431,19 @@ public class AssemblyCodeGenerator {
     void writeTypeCast(STO newSTO, STO oldSTO)
     {
     	if(debug) writeDebug("----------in writeTypeCast-----------");
+    	Type newType = null;
+    	Type oldType = null;
     	
-    	Type newType = newSTO.getType();
-    	Type oldType = oldSTO.getType();
+    	/*if(newSTO.getType().isPointerType() && oldSTO.getType().isPointerType())
+    	{
+    		newType = ((PointerType)newSTO.getType()).getBaseType();
+    		oldType = ((PointerType)oldSTO.getType()).getBaseType();
+    	}
+    	else
+    	{*/
+    		newType = newSTO.getType();
+    		oldType = oldSTO.getType();
+    	//}
     	
     	//handle int to float
     	if(newType.isFloatType() && (oldType.isIntType() || oldType.isBoolType()))
@@ -2625,13 +2648,16 @@ public class AssemblyCodeGenerator {
         	}
         	else
         	{
-        		if(param.getType().isFloatType() & arg.getType().isIntType())
+        		if(!arg.getIsTypeCast())
         		{
-        			intToFloat(arg);
-        		}
-        		else
-        		{
-        			getValue(arg);
+	        		if(param.getType().isFloatType() & arg.getType().isIntType())
+	        		{
+	        			intToFloat(arg);
+	        		}
+	        		else
+	        		{
+	        			getValue(arg);
+	        		}
         		}
         		
         	}

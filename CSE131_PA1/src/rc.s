@@ -1,5 +1,5 @@
 ! 
-! Generated Sun Jun 01 22:00:18 PDT 2014
+! Generated Sun Jun 01 22:41:40 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -118,17 +118,6 @@ main:
 
 ! ----------end of writeTypeCast----------
 
-! -------in getValue: c: null
-
-! --------in getAddressHelper: c
-	set	-20, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
 ! ---------in writeLocalVariableWInit:a
 	set	-24, %l0
 	add	%fp, %l0, %l0
@@ -224,7 +213,6 @@ ptrLabel1:
 	ld	[%l0], %f0
 
 ! -------end of getValue------------
-	fitos	%f0, %f0
 	call	printFloat
 	nop
 
