@@ -1,5 +1,5 @@
 ! 
-! Generated Sun Jun 01 22:41:40 PDT 2014
+! Generated Sun Jun 01 22:51:27 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -117,6 +117,17 @@ main:
 	st	%l1, [%l0]
 
 ! ----------end of writeTypeCast----------
+
+! -------in getValue: c: null
+
+! --------in getAddressHelper: c
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
 
 ! ---------in writeLocalVariableWInit:a
 	set	-24, %l0

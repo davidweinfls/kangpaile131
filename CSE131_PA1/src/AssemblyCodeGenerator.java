@@ -1372,19 +1372,8 @@ public class AssemblyCodeGenerator {
     	Type varType = var.getType();
     	Type exprType = expr.getType();
     	
-    	//typecast assign
-    	if(expr.getIsTypeCast())
-    	{
-    		getAddressHelper(var);
-    		if (var.isVar() && ((VarSTO) var).isRef())
-    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
-            if(var.getType().isFloatType())
-            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0+"]");
-            else
-            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
-    	}
     	//assign to float
-    	else if(varType instanceof FloatType)
+    	if(varType instanceof FloatType)
     	{
     		if(debug) writeDebug("=======in writeAssignExpr, varType is float=======");
     		
@@ -1945,15 +1934,13 @@ public class AssemblyCodeGenerator {
     				addToBuffer(text_buffer, arg.getAddress());
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
     				resetReg();
-    				if(!arg.getIsTypeCast())
-    					getValue(arg);
+    				getValue(arg);
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
     				return;
     			}
     			//get param value
-    			if(!arg.getIsTypeCast())
-    				getValue(arg);
+    			getValue(arg);
     			
     			//attention: for float param, cannot just mov %f0 to %o0, need to st to %l0 and then ld from l0 to %o0
     			if(floatReg == 1)
@@ -2648,16 +2635,13 @@ public class AssemblyCodeGenerator {
         	}
         	else
         	{
-        		if(!arg.getIsTypeCast())
+        		if(param.getType().isFloatType() & arg.getType().isIntType())
         		{
-	        		if(param.getType().isFloatType() & arg.getType().isIntType())
-	        		{
-	        			intToFloat(arg);
-	        		}
-	        		else
-	        		{
-	        			getValue(arg);
-	        		}
+        			intToFloat(arg);
+        		}
+        		else
+        		{
+        			getValue(arg);
         		}
         		
         	}
