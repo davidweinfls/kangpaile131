@@ -591,6 +591,12 @@ public class AssemblyCodeGenerator {
             	writeStructAddress (sto.getStruct());
             else
     		  addToBuffer(text_buffer, sto.getStruct().getAddress());
+            //if the param passed in is both a pointer and and by ref
+            if(sto.getStruct().getType().isPointerType() && (sto.getStruct().isVar() && ((VarSTO)sto.getStruct()).isRef())) 
+            {
+            	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+            }
+            		
             addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
         
     	}
@@ -1917,7 +1923,7 @@ public class AssemblyCodeGenerator {
     		if(debug) writeDebug("=====in writePassParameter, param " + arg.getName() + " is byRef=======");
     		//get sto address
     		getAddressHelper(arg);
-    		if (arg.isVar() && ((VarSTO) arg).isRef())
+    		if (arg.isVar() && ((VarSTO) arg).isRef() )// || arg.getType().isPointerType())
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     		//store it to %o0
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, "%o" + index);
