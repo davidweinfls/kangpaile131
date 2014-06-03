@@ -1,22 +1,9 @@
-structdef A{
-	float [5] x;
-};
-function: void foo(A* & a){
-
-	int i = 0;
-	while (i < 5){
-		cout<<a->x[i]<<endl;
-		cout<<((*a).x[i] + 100)<<endl;
-		//a->x[i] = (*a).x[i] + 100;
-		i ++ ;
-	}
-
+function : void foo (float i, float ii, float iii)
+{
+    cout << i << " " << ii << " " << iii << endl;
 }
-A b;
-function: void main(){
 
-	 
-	A* a = &b;
-	foo(a);
-
+function : void main()
+{
+	foo(1,2,3);
 }

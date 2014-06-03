@@ -598,7 +598,6 @@ public class AssemblyCodeGenerator {
             }
             		
             addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
-        
     	}
     	//basicType
     	else
@@ -1939,7 +1938,10 @@ public class AssemblyCodeGenerator {
     				intToFloat(arg);
     				
     				addToBuffer(text_buffer, temp.getAddress());
-    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    				if(floatReg == 1)
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
+    				else
+    					addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
     				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o" + index);
     				
     				
@@ -2434,16 +2436,8 @@ public class AssemblyCodeGenerator {
     	Type newType = null;
     	Type oldType = null;
     	
-    	/*if(newSTO.getType().isPointerType() && oldSTO.getType().isPointerType())
-    	{
-    		newType = ((PointerType)newSTO.getType()).getBaseType();
-    		oldType = ((PointerType)oldSTO.getType()).getBaseType();
-    	}
-    	else
-    	{*/
-    		newType = newSTO.getType();
-    		oldType = oldSTO.getType();
-    	//}
+    	newType = newSTO.getType();
+    	oldType = oldSTO.getType();
     	
     	//handle int to float
     	if(newType.isFloatType() && (oldType.isIntType() || oldType.isBoolType()))
