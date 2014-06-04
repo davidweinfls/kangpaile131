@@ -1,30 +1,20 @@
-structdef INTSTRUCT {
-	bool b; 
-	int x; 
-	INTSTRUCT* y;
-};
-structdef INTSTRUCTSTRUCT {
-	bool b; 
-	INTSTRUCT x;
-};
-typedef INTSTRUCTSTRUCT* INTSTRUCTSTRUCTPTR;
-typedef INTSTRUCTSTRUCT STRUCT;
-INTSTRUCTSTRUCTPTR[5] arr;
-INTSTRUCTSTRUCT x;
+function : void foo (int a)
+{
+cout << "int" << endl;
+}
 
-function : void main () {
-  STRUCT b;
-  STRUCT d;
-  INTSTRUCT theOnlyIntStruct;
-  b.x.x = 3;
-  
-  cout << b.x.x << endl;
-  
-  d.x = theOnlyIntStruct;
-  
-  d.x.y = &(b.x);
-  //x.x.x = 5;
-  
-  cout << (d.x.y)->x << endl;
+function : void foo (int a, int b)
+{
+cout << "int int" << endl;
+}
 
+function : void foo (int a, float b)
+{
+cout << "int float" << endl;
+}
+
+function : int foo (bool b)
+{
+cout << "bool" << endl;
+return 2;
 }

@@ -516,6 +516,9 @@ public class AssemblyCodeGenerator {
 	public void writeArrayAddress(STO sto)
 	{
 		if(debug) writeDebug("----------in writeArrayAddress: " + sto.getName());
+		
+		arrayReg++;
+		
 		//get var and its size
 		VariableBox<STO, STO> box = sto.getArray();
 		STO var = box.getVariable();
@@ -529,7 +532,10 @@ public class AssemblyCodeGenerator {
 		if(debug) writeDebug("=======in writeArrayAddress, get value of index: " + expr.getName());
 		// optionA:
 		getAddressHelper(expr);
-		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
+		if(arrayReg%2 == 1)
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
+		else
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L6);
 		
 		//1. get address of var, store it in %l4
 		//if recursive, need to check type of var and call corresponding write**Address methods.
@@ -547,30 +553,38 @@ public class AssemblyCodeGenerator {
 		//3. if basicType, %l5 * 4 to get the scaled offset, %l5
 		if(debug) writeDebug("=======in writeArrayAddress, scale the offset");
 		
-		//-------------------------------testing----------------------------------------
-		//get index value again
-		getAddressHelper(expr);
-		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
-		//-------------------------------testing----------------------------------------
-		
 		if(stoType.isBasicType() || stoType.isPointerType())
 		{
-			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SLL_OP, Sparc.L5, "2", Sparc.L5);
+			if(arrayReg%2 == 1)
+				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SLL_OP, Sparc.L5, "2", Sparc.L5);
+			else
+				addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SLL_OP, Sparc.L6, "2", Sparc.L6);
 		}
 		//TODO:
 		else
 		{
 			//if array elts are struct, or array or etc, need to do index * sizeof(object)
-			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L5, Sparc.O0);
+			if(arrayReg%2 == 1)
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L5, Sparc.O0);
+			else
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L6, Sparc.O0);
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(stoType.getSize()), Sparc.O1);
 			addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, ".mul");
 			addToBuffer(text_buffer, Sparc.NOP);
-			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.O0, Sparc.L5);
+			if(arrayReg%2 == 1)
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.O0, Sparc.L5);
+			else
+				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.O0, Sparc.L6);
 		}
 	
 		//4. base + offset, add %l4 and %l5 to get the result address 
 		if(debug) writeDebug("=======in writeArrayAddress, base + offset");
-		addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L4, Sparc.L5, Sparc.L0);
+		if(arrayReg%2 == 1)
+			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L4, Sparc.L5, Sparc.L0);
+		else
+			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L4, Sparc.L6, Sparc.L0);
+		
+		arrayReg--;
 		
 		if(debug) writeDebug("---------end of writeArrayAddress--------");
 	}

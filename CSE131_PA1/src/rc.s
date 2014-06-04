@@ -1,5 +1,5 @@
 ! 
-! Generated Tue Jun 03 20:49:06 PDT 2014
+! Generated Tue Jun 03 22:06:07 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -19,22 +19,9 @@
 .allocatedMemory:	.word	0
 	.align 4
 
-	.section ".bss"
-	.align 4
-
-	.global a
-a:	.skip 8
-	
-	.global b
-b:	.skip 16
-	
 	.section ".text"
 	.align 4
 
-
-! --------in writeGlobalStruct--------
-
-! --------in writeGlobalStruct--------
 
 ! in writeFuncDec
 ! <<<<<<<<<<<<<<<<<<<main>>>>>>>>>>>>>>>>>
@@ -45,9 +32,11 @@ main:
 	save	%sp, %g1, %sp
 
 
+! ---------in writeLocalVariableWOInit:a
+
 ! ------in writeConstantLiteral: 1
 	set	1, %l1
-	set	-4, %l0
+	set	-12, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
@@ -56,7 +45,7 @@ main:
 ! --------in  writeRunTimeArrayCheck: x
 
 ! --------in getAddressHelper: 1
-	set	-4, %l0
+	set	-12, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -79,7 +68,7 @@ main:
 arrayUpperBoundCheck0:
 
 ! --------in getAddressHelper: 1
-	set	-4, %l0
+	set	-12, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -105,7 +94,7 @@ arrayLowerBoundCheck0:
 
 ! ------in writeConstantLiteral: 5
 	set	5, %l1
-	set	-8, %l0
+	set	-16, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
@@ -116,7 +105,7 @@ arrayLowerBoundCheck0:
 ! -------in getValue: 5: 5.0
 
 ! --------in getAddressHelper: 5
-	set	-8, %l0
+	set	-16, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -131,7 +120,7 @@ arrayLowerBoundCheck0:
 ! =======in writeArrayAddress, get value of index: 1
 
 ! --------in getAddressHelper: 1
-	set	-4, %l0
+	set	-12, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -142,21 +131,14 @@ arrayLowerBoundCheck0:
 ! --------in getAddressHelper: x
 
 ! -------in writeStructAddress: x
-	set	a, %l0
-	add	%g0, %l0, %l0
+	set	-8, %l0
+	add	%fp, %l0, %l0
 	add	%l0, 0, %l0
 
 ! --------end of getAddressHelper------------ 
 	mov	%l0, %l4
 
 ! =======in writeArrayAddress, scale the offset
-
-! --------in getAddressHelper: 1
-	set	-4, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
 	sll	%l5, 2, %l5
 
 ! =======in writeArrayAddress, base + offset
@@ -169,9 +151,11 @@ arrayLowerBoundCheck0:
 
 ! ----------end of writeAssignExpr--------
 
+! ---------in writeLocalVariableWOInit:b
+
 ! ------in writeConstantLiteral: 0
 	set	0, %l1
-	set	-12, %l0
+	set	-36, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
@@ -180,7 +164,7 @@ arrayLowerBoundCheck0:
 ! --------in  writeRunTimeArrayCheck: y
 
 ! --------in getAddressHelper: 0
-	set	-12, %l0
+	set	-36, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -203,7 +187,7 @@ arrayLowerBoundCheck0:
 arrayUpperBoundCheck1:
 
 ! --------in getAddressHelper: 0
-	set	-12, %l0
+	set	-36, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -240,7 +224,7 @@ arrayLowerBoundCheck1:
 ! =======in writeArrayAddress, get value of index: 0
 
 ! --------in getAddressHelper: 0
-	set	-12, %l0
+	set	-36, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -251,21 +235,14 @@ arrayLowerBoundCheck1:
 ! --------in getAddressHelper: y
 
 ! -------in writeStructAddress: y
-	set	b, %l0
-	add	%g0, %l0, %l0
+	set	-32, %l0
+	add	%fp, %l0, %l0
 	add	%l0, 0, %l0
 
 ! --------end of getAddressHelper------------ 
 	mov	%l0, %l4
 
 ! =======in writeArrayAddress, scale the offset
-
-! --------in getAddressHelper: 0
-	set	-12, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
 	mov	%l5, %o0
 	set	8, %o1
 	call	.mul
@@ -284,8 +261,8 @@ arrayLowerBoundCheck1:
 ! =======in writeAssignExpr, get expr address, store in out1=======
 
 ! --------in getAddressHelper: a
-	set	a, %l0
-	add	%g0, %l0, %l0
+	set	-8, %l0
+	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
 	mov	%l6, %o0
@@ -303,7 +280,7 @@ arrayLowerBoundCheck1:
 
 ! ------in writeConstantLiteral: 0
 	set	0, %l1
-	set	-16, %l0
+	set	-40, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
@@ -312,7 +289,7 @@ arrayLowerBoundCheck1:
 ! --------in  writeRunTimeArrayCheck: y
 
 ! --------in getAddressHelper: 0
-	set	-16, %l0
+	set	-40, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -335,7 +312,7 @@ arrayLowerBoundCheck1:
 arrayUpperBoundCheck2:
 
 ! --------in getAddressHelper: 0
-	set	-16, %l0
+	set	-40, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -359,9 +336,9 @@ arrayLowerBoundCheck2:
 
 ! --------end of writeRunTimeArrayCheck---------
 
-! ------in writeConstantLiteral: 0
-	set	0, %l1
-	set	-20, %l0
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-44, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
@@ -369,8 +346,8 @@ arrayLowerBoundCheck2:
 
 ! --------in  writeRunTimeArrayCheck: x
 
-! --------in getAddressHelper: 0
-	set	-20, %l0
+! --------in getAddressHelper: 1
+	set	-44, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -392,8 +369,8 @@ arrayLowerBoundCheck2:
 
 arrayUpperBoundCheck3:
 
-! --------in getAddressHelper: 0
-	set	-20, %l0
+! --------in getAddressHelper: 1
+	set	-44, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -425,227 +402,10 @@ arrayLowerBoundCheck3:
 
 ! ----------in writeArrayAddress: x
 
-! =======in writeArrayAddress, get value of index: 0
-
-! --------in getAddressHelper: 0
-	set	-20, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
-
-! =======in writeArrayAddress, get address of var :x and store in l4
-
-! --------in getAddressHelper: x
-
-! -------in writeStructAddress: x
-
-! ----------in writeArrayAddress: y
-
-! =======in writeArrayAddress, get value of index: 0
-
-! --------in getAddressHelper: 0
-	set	-16, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
-
-! =======in writeArrayAddress, get address of var :y and store in l4
-
-! --------in getAddressHelper: y
-
-! -------in writeStructAddress: y
-	set	b, %l0
-	add	%g0, %l0, %l0
-	add	%l0, 0, %l0
-
-! --------end of getAddressHelper------------ 
-	mov	%l0, %l4
-
-! =======in writeArrayAddress, scale the offset
-
-! --------in getAddressHelper: 0
-	set	-16, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
-	mov	%l5, %o0
-	set	8, %o1
-	call	.mul
-	nop
-
-	mov	%o0, %l5
-
-! =======in writeArrayAddress, base + offset
-	add	%l4, %l5, %l0
-
-! ---------end of writeArrayAddress--------
-	add	%l0, 0, %l0
-
-! --------end of getAddressHelper------------ 
-	mov	%l0, %l4
-
-! =======in writeArrayAddress, scale the offset
-
-! --------in getAddressHelper: 0
-	set	-20, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
-	sll	%l5, 2, %l5
-
-! =======in writeArrayAddress, base + offset
-	add	%l4, %l5, %l0
-
-! ---------end of writeArrayAddress--------
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-	set	.intFmt, %o0
-	mov	%l1, %o1
-	call	printf
-	nop
-
-
-! ------------in writePrint---------------
-	set	.endl, %o0
-	call	printf
-	nop
-
-
-! ------in writeConstantLiteral: 0
-	set	0, %l1
-	set	-24, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! --------in  writeRunTimeArrayCheck: y
-
-! --------in getAddressHelper: 0
-	set	-24, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-	set	2, %l1
-	cmp	%l0, %l1
-	bl	arrayUpperBoundCheck4
-	nop
-
-	set	.ArrayOutOfBounds, %o0
-	mov	%l0, %o1
-	set	2, %o2
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-arrayUpperBoundCheck4:
-
-! --------in getAddressHelper: 0
-	set	-24, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-	set	0, %l1
-	cmp	%l0, %l1
-	bge	arrayLowerBoundCheck4
-	nop
-
-	set	.ArrayOutOfBounds, %o0
-	mov	%l0, %o1
-	set	2, %o2
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-arrayLowerBoundCheck4:
-
-! --------end of writeRunTimeArrayCheck---------
-
-! ------in writeConstantLiteral: 1
-	set	1, %l1
-	set	-28, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! --------in  writeRunTimeArrayCheck: x
-
-! --------in getAddressHelper: 1
-	set	-28, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-	set	2, %l1
-	cmp	%l0, %l1
-	bl	arrayUpperBoundCheck5
-	nop
-
-	set	.ArrayOutOfBounds, %o0
-	mov	%l0, %o1
-	set	2, %o2
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-arrayUpperBoundCheck5:
-
-! --------in getAddressHelper: 1
-	set	-28, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-	set	0, %l1
-	cmp	%l0, %l1
-	bge	arrayLowerBoundCheck5
-	nop
-
-	set	.ArrayOutOfBounds, %o0
-	mov	%l0, %o1
-	set	2, %o2
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-arrayLowerBoundCheck5:
-
-! --------end of writeRunTimeArrayCheck---------
-
-! ------------in writePrint---------------
-
-! -------in getValue: x: null
-
-! --------in getAddressHelper: x
-
-! ----------in writeArrayAddress: x
-
 ! =======in writeArrayAddress, get value of index: 1
 
 ! --------in getAddressHelper: 1
-	set	-28, %l0
+	set	-44, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -662,41 +422,34 @@ arrayLowerBoundCheck5:
 ! =======in writeArrayAddress, get value of index: 0
 
 ! --------in getAddressHelper: 0
-	set	-24, %l0
+	set	-40, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
+	ld	[%l0], %l6
 
 ! =======in writeArrayAddress, get address of var :y and store in l4
 
 ! --------in getAddressHelper: y
 
 ! -------in writeStructAddress: y
-	set	b, %l0
-	add	%g0, %l0, %l0
+	set	-32, %l0
+	add	%fp, %l0, %l0
 	add	%l0, 0, %l0
 
 ! --------end of getAddressHelper------------ 
 	mov	%l0, %l4
 
 ! =======in writeArrayAddress, scale the offset
-
-! --------in getAddressHelper: 0
-	set	-24, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
-	mov	%l5, %o0
+	mov	%l6, %o0
 	set	8, %o1
 	call	.mul
 	nop
 
-	mov	%o0, %l5
+	mov	%o0, %l6
 
 ! =======in writeArrayAddress, base + offset
-	add	%l4, %l5, %l0
+	add	%l4, %l6, %l0
 
 ! ---------end of writeArrayAddress--------
 	add	%l0, 0, %l0
@@ -705,13 +458,6 @@ arrayLowerBoundCheck5:
 	mov	%l0, %l4
 
 ! =======in writeArrayAddress, scale the offset
-
-! --------in getAddressHelper: 1
-	set	-28, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l5
 	sll	%l5, 2, %l5
 
 ! =======in writeArrayAddress, base + offset
@@ -765,5 +511,5 @@ arrayLowerBoundCheck5:
 	ret
 	restore
 
-	SAVE.main = -(92 + 28) & -8
+	SAVE.main = -(92 + 44) & -8
 
