@@ -101,18 +101,21 @@ class FuncSTO extends STO
 	//m_overloadFuncList. 
 	public FunctionPointerType checkOverload(Vector v)
 	{
+		boolean found = false;
 		for(int i = 0; i < m_overloadFuncList.size(); i++)
 		{
 			//get overloaded functinonpointer
 			FunctionPointerType funcPtr = m_overloadFuncList.get(i);
 			Vector<VarSTO> paramList =  funcPtr.getParams();
+			found = false;
 			
 			if(v.size() == paramList.size())
 			{
+				found = true;
 				for(int j = 0; j < paramList.size(); j++)
 				{
-					STO p = (STO)v.get(i);
-					VarSTO param = paramList.get(i);
+					STO p = (STO)v.get(j);
+					VarSTO param = paramList.get(j);
 					Type pType = p.getType();
 					Type paramType = param.getType();
 					
@@ -121,24 +124,25 @@ class FuncSTO extends STO
 					{
 						if(!(pType.isEquivalent(paramType)))
 						{
-							return null;
+							found = false;
 						}
 						else if(!p.isModLValue() && !pType.isArrayType())
 						{
-							return null;
+							found = false;
 						}
 					}
 					else
 					{
 						if(!(pType.isEquivalent(paramType)))
 						{
-							return null;
+							found = false;
 						}
 					}
 				}
-				//found funcptr
-				return funcPtr;
+				
 			}
+			//found funcptr
+			if(found == true) return funcPtr;
 			
 		}
 		return null;
