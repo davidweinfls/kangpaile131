@@ -27,6 +27,8 @@ public class AssemblyCodeGenerator {
 	private int localReg = 0;
 	// if floatReg = 0, means %f0 is not taken, otherwise if floatReg = 1, %f0 is taken, can be used
 	private int floatReg = 0;
+	// if arrayReg = 0, means %l5 is not taken, otherwise if arrayReg = 1, %l5 is taken, can be used
+	private int arrayReg = 0;
 	
 	//extra credit 1:
 	private int lowestOffset = 0;
@@ -544,6 +546,13 @@ public class AssemblyCodeGenerator {
 		
 		//3. if basicType, %l5 * 4 to get the scaled offset, %l5
 		if(debug) writeDebug("=======in writeArrayAddress, scale the offset");
+		
+		//-------------------------------testing----------------------------------------
+		//get index value again
+		getAddressHelper(expr);
+		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
+		//-------------------------------testing----------------------------------------
+		
 		if(stoType.isBasicType() || stoType.isPointerType())
 		{
 			addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.SLL_OP, Sparc.L5, "2", Sparc.L5);
