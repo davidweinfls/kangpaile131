@@ -1638,7 +1638,6 @@ class MyParser extends parser
 	DoBinaryExpr(STO a, Operator o, STO b) 
 	{
 		STO result = o.checkOperands(a, b);
-		
 		//if(debug) myAsWriter.writeDebug(a.getName() + o.getName() + b.getName());
 		
 		if (result instanceof ErrorSTO) {
@@ -1650,7 +1649,9 @@ class MyParser extends parser
 		
 		myAsWriter.resetReg();
 		
-		m_currOffset -= result.getType().getSize();
+		//TODO: not sure if this if check is necessary
+		if(result.getType() != null)
+			m_currOffset -= result.getType().getSize();
         result.setOffset(m_currOffset);
         result.setBase("%%fp");
 

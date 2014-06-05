@@ -1,14 +1,4 @@
-bool b;
-
-function : bool& foo2 (bool& param)
-{
-	return param;
-}
-
-function : void main ()
-{
-
-	foo2(b) = true;
-
-	cout << b << endl;	
+function : void main(){
+	float a = 4.44;
+	cout << (a % 3.33) << endl; //For the T_MOD operator, the operand types must be equivalent to int, and the resulting type is int.
 }
