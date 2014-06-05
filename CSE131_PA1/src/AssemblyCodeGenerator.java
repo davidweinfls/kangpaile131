@@ -2142,21 +2142,17 @@ public class AssemblyCodeGenerator {
 	            } else {
 	            	getAddressHelper(returnExpr);
 	            	//get valued stored in returnExpr
-	            	if(!byRef)
+	            	if(returnExpr.isVar() && ((VarSTO)returnExpr).isRef())
 	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
-	            	
-	            	boolean passByRef = returnExpr.isVar() && ((VarSTO)returnExpr).isRef();
-	            	
-	            	if(passByRef && !byRef)
+	            	if(!byRef)
 	            	{
 	            		//TODO
 	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
 	            	}
 	            	else
 	            	{
-	            		//do nothing, for passbyRef && byRef , pass by value && return by value
+	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
 	            	}
-            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.I0);
 	            }
 			}
 		}

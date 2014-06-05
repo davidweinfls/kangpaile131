@@ -1,20 +1,14 @@
-function : void foo (int a)
+bool b;
+
+function : bool& foo2 (bool& param)
 {
-cout << "int" << endl;
+	return param;
 }
 
-function : void foo (int a, int b)
+function : void main ()
 {
-cout << "int int" << endl;
-}
 
-function : void foo (int a, float b)
-{
-cout << "int float" << endl;
-}
+	foo2(b) = true;
 
-function : int foo (bool b)
-{
-cout << "bool" << endl;
-return 2;
+	cout << b << endl;	
 }

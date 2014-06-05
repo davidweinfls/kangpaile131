@@ -1,5 +1,5 @@
 ! 
-! Generated Thu Jun 05 01:11:02 PDT 2014
+! Generated Thu Jun 05 01:38:53 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -15,23 +15,53 @@
 .doubleDeleteError:	.asciz "Double delete detected. Memory region has already been released in heap space.\n"
 	.align 4
 
-temp0:	.asciz "ok"
-	.align 4
 	.section ".data"
 .allocatedMemory:	.word	0
 	.align 4
 
+	.global b
+	
 	.section ".bss"
 	.align 4
 
-	.global a
-a:	.skip 4
-	
+b:	.skip 4
+
 	.section ".text"
 	.align 4
 
 
-! --------in writeGlobalStruct--------
+! ---------In writeGLobalVariable--------------
+
+! in writeFuncDec
+! <<<<<<<<<<<<<<<<<<<foo2>>>>>>>>>>>>>>>>>
+	.align 4
+	.global foo2
+foo2:
+	set	SAVE.foo2, %g1
+	save	%sp, %g1, %sp
+
+
+! -------in writeParameter: param param num: 0
+	set	68, %l0
+	add	%fp, %l0, %l0
+	st	%i0, [%l0]
+
+! --------in writeReturnStmt---------
+
+! --------in getAddressHelper: param
+	set	68, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	mov	%l0, %i0
+	ret
+	restore
+
+! --------------in writeFuncClose--------------
+
+	SAVE.foo2 = -(92 + 0) & -8
+
 
 ! in writeFuncDec
 ! <<<<<<<<<<<<<<<<<<<main>>>>>>>>>>>>>>>>>
@@ -42,86 +72,28 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeAddressOf: a
+! -------in writePassParameter: param
 
-! --------in getAddressHelper: a
-	set	a, %l0
+! =====in writePassParameter, param b is byRef=======
+
+! --------in getAddressHelper: b
+	set	b, %l0
 	add	%g0, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	mov	%l0, %l1
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
+	mov	%l0, %o0
 
-! -------end of writeAddressOf-------
+! -------end of writePassParameter--------
 
-! -------in getValue: a: null
+! ----------writeFuncCall------------
+	call	foo2
+	nop
 
-! --------in getAddressHelper: a
-	set	-4, %l0
-	add	%fp, %l0, %l0
 
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! ---------in writeLocalVariableWInit:struct
+! ========writeFuncCall: get address of retSTO, store retValue in it ==========
 	set	-8, %l0
 	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-
-! -------in writeDeallocatedStack--------
-
-! -------in writeDerefAddress: struct
-
-! --------in getAddressHelper: struct
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-
-! ======in writeDerefAddress, check nullPtrExcep=======
-	set	0, %l4
-	cmp	%l0, %l4
-	bne	ptrLabel0
-	nop
-
-	set	.NullPtrException, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-ptrLabel0:
-
-! ======end of check nullPtrExcep=======
-
-! -------end of writeDerefAddress-------
-	add	%sp, 0, %l4
-	cmp	%l0, %l4
-	blu	deallocatedStack0
-	nop
-
-	add	%sp, 92, %l4
-	cmp	%l0, %l4
-	bgu	deallocatedStack0
-	nop
-
-	set	.deallocatedStack, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-deallocatedStack0:
+	st	%o0, [%l0]
 
 ! ------in writeConstantLiteral: true
 	set	1, %l1
@@ -131,7 +103,7 @@ deallocatedStack0:
 
 ! ------end of writeConstantLiteral-------
 
-! ----------in writeAssignExpr: z  =  true
+! ----------in writeAssignExpr: result  =  true
 
 ! -------in getValue: true: 1.0
 
@@ -144,140 +116,36 @@ deallocatedStack0:
 
 ! -------end of getValue------------
 
-! --------in getAddressHelper: z
-
-! -------in writeStructAddress: z
-
-! -------in writeDerefAddress: struct
-
-! --------in getAddressHelper: struct
+! --------in getAddressHelper: result
 	set	-8, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l0
-
-! ======in writeDerefAddress, check nullPtrExcep=======
-	set	0, %l4
-	cmp	%l0, %l4
-	bne	ptrLabel1
-	nop
-
-	set	.NullPtrException, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-ptrLabel1:
-
-! ======end of check nullPtrExcep=======
-
-! -------end of writeDerefAddress-------
-	add	%l0, 0, %l0
-
-! --------end of getAddressHelper------------ 
 	st	%l1, [%l0]
 
 ! ----------end of writeAssignExpr--------
 
-! -------in writeDeallocatedStack--------
+! ------------in writePrint---------------
 
-! -------in writeDerefAddress: struct
+! -------in getValue: b: null
 
-! --------in getAddressHelper: struct
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-
-! ======in writeDerefAddress, check nullPtrExcep=======
-	set	0, %l4
-	cmp	%l0, %l4
-	bne	ptrLabel2
-	nop
-
-	set	.NullPtrException, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-ptrLabel2:
-
-! ======end of check nullPtrExcep=======
-
-! -------end of writeDerefAddress-------
-	add	%sp, 0, %l4
-	cmp	%l0, %l4
-	blu	deallocatedStack1
-	nop
-
-	add	%sp, 92, %l4
-	cmp	%l0, %l4
-	bgu	deallocatedStack1
-	nop
-
-	set	.deallocatedStack, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-deallocatedStack1:
-
-! ------------in writeIf: z
-
-! --------in getAddressHelper: z
-
-! -------in writeStructAddress: z
-
-! -------in writeDerefAddress: struct
-
-! --------in getAddressHelper: struct
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-
-! ======in writeDerefAddress, check nullPtrExcep=======
-	set	0, %l4
-	cmp	%l0, %l4
-	bne	ptrLabel3
-	nop
-
-	set	.NullPtrException, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-ptrLabel3:
-
-! ======end of check nullPtrExcep=======
-
-! -------end of writeDerefAddress-------
-	add	%l0, 0, %l0
+! --------in getAddressHelper: b
+	set	b, %l0
+	add	%g0, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l1
+
+! -------end of getValue------------
+	set	.boolF, %o0
 	cmp	%l1, %g0
-	be	else0
+	be	.printBool0
 	nop
 
+	set	.boolT, %o0
 
-! ------------in writePrint---------------
-	set	temp0, %o0
+.printBool0:
 	call	printf
 	nop
 
@@ -287,15 +155,6 @@ ptrLabel3:
 	call	printf
 	nop
 
-
-! ---------in writeElse---------
-	ba	.endIf0
-	nop
-
-else0:
-
-! ----------in writeCloseBlock-----------
-.endIf0:
 
 ! -------in writeMemoryLeak-------
 	set	.doubleDeleteError, %o0

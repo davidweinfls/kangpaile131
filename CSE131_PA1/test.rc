@@ -1,19 +1,14 @@
-structdef MYS
-{
-	bool z;
-};
+bool b;
 
-MYS a;
-
-function : void main( )
+function : bool& foo2 (bool& param)
 {
-	MYS * struct = &a;
-	(*struct).z = true;
-	
-	//cout << (*struct).z << endl;
-	
-	if( (*struct).z )
-	{
-		cout<< "ok"<<endl;
-	}
+	return param;
+}
+
+function : void main ()
+{
+
+	foo2(b) = true;
+
+	cout << b << endl;	
 }
