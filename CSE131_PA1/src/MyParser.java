@@ -26,6 +26,7 @@ class MyParser extends parser
 		m_nNumErrors = 0;
 		
 		myAsWriter = new AssemblyCodeGenerator("C:\\Users\\David Wei\\git\\Project1\\CSE131_PA1\\src\\rc.s");
+		//myAsWriter = new AssemblyCodeGenerator("rc.s");
 	}
 
 

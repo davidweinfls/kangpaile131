@@ -1,35 +1,29 @@
 
-function : void foo (int a)
-{
-cout << "int" << endl;
-}
-
-function : int foo (bool b)
-{
-cout << "bool" << endl;
-return 2;
-}
-
-/*
-function : void foo (int a, int b)
-{
-cout << "int int" << endl;
-}
-
-function : void foo (int a, float b)
-{
-cout << "int float" << endl;
-}
-*/
-
-
-
-function : void main()
-{
-	foo(3);
-	foo(false);
+function : void foo(int * b){
 	
-	//foo(2,3);
-	//foo(3,3.20);
-	//cout << foo(false) << endl;
+	cout << "b: " << b << endl;
+	
+	cout << *b << endl;
+	
+	
+	cout << b[2] << endl;
+
+}
+
+int[3] arr;
+
+function : void main(){
+	
+
+	arr[2] = 5;
+	
+	//int * c;
+	//c = arr;
+	//cout<<c[2]<<endl;
+	
+	//cout << &arr << endl;
+	//cout << "arr: " <<  arr << endl;	
+	//cout << &arr[0] << endl;
+	
+	foo(arr);
 }

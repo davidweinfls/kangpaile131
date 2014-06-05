@@ -1991,6 +1991,11 @@ public class AssemblyCodeGenerator {
     			//store it to %o0
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
             }
+    		else if(param.getType().isPointerType())
+    		{
+    			getAddressHelper(arg);
+    			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, "%o" + index);
+    		}
     		else
     		{
     			getAddressHelper(arg);
