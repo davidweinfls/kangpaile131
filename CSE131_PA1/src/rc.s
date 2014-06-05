@@ -1,5 +1,5 @@
 ! 
-! Generated Thu Jun 05 01:46:28 PDT 2014
+! Generated Thu Jun 05 01:56:45 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -15,10 +15,6 @@
 .doubleDeleteError:	.asciz "Double delete detected. Memory region has already been released in heap space.\n"
 	.align 4
 
-temp0:	.single 0r4.44
-temp1:	.single 0r3.33
-temp2:	.asciz "Incompatible type float to binary operator %%, equivalent to int expected."
-	.align 4
 	.section ".data"
 .allocatedMemory:	.word	0
 	.align 4
@@ -36,86 +32,1076 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 4.44
-	set	temp0, %l0
-	ld	[%l0], %f0
-	set	-4, %l0
+! ---------in writeLocalVariableWOInit:a
+
+! ------in writeConstantLiteral: 0
+	set	0, %l1
+	set	-12, %l0
 	add	%fp, %l0, %l0
-	st	%f0, [%l0]
+	st	%l1, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
-! -------in getValue: 4.44: 4.44
+! --------in  writeRunTimeArrayCheck: x
 
-! --------in getAddressHelper: 4.44
-	set	-4, %l0
+! --------in getAddressHelper: 0
+	set	-12, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %f0
+	ld	[%l0], %l0
+	set	2, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck0
+	nop
 
-! -------end of getValue------------
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
 
-! ---------in writeLocalVariableWInit:a
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%f0, [%l0]
+	set	1, %o0
+	call	exit
+	nop
 
+arrayUpperBoundCheck0:
 
-! ------in writeConstantLiteral: 3.33
-	set	temp1, %l0
-	ld	[%l0], %f0
+! --------in getAddressHelper: 0
 	set	-12, %l0
 	add	%fp, %l0, %l0
-	st	%f0, [%l0]
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck0
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck0:
+
+! --------end of writeRunTimeArrayCheck---------
+
+! ------in writeConstantLiteral: 0
+	set	0, %l1
+	set	-16, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
-! --------in writeBinaryExpr-------
+! ----------in writeAssignExpr: x  =  0
 
-! a % 3.33
+! -------in getValue: 0: 0.0
 
-! =======in writeBinaryExpr: Not const folding=======
+! --------in getAddressHelper: 0
+	set	-16, %l0
+	add	%fp, %l0, %l0
 
-! =======in writeBinaryExpr: get a's value and 3.33's value
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
 
-! -------in getValue: a: null
+! -------end of getValue------------
+
+! --------in getAddressHelper: x
+
+! ----------in writeArrayAddress: x
+
+! =======in writeArrayAddress, get value of index: 0
+
+! --------in getAddressHelper: 0
+	set	-12, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, get address of var :x and store in l4
+
+! --------in getAddressHelper: x
+
+! -------in writeStructAddress: x
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	st	%l1, [%l0]
+
+! ----------end of writeAssignExpr--------
+
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! --------in  writeRunTimeArrayCheck: x
+
+! --------in getAddressHelper: 1
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	2, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck1
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayUpperBoundCheck1:
+
+! --------in getAddressHelper: 1
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck1
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck1:
+
+! --------end of writeRunTimeArrayCheck---------
+
+! ------in writeConstantLiteral: 5
+	set	5, %l1
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ----------in writeAssignExpr: x  =  5
+
+! -------in getValue: 5: 5.0
+
+! --------in getAddressHelper: 5
+	set	-24, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+
+! --------in getAddressHelper: x
+
+! ----------in writeArrayAddress: x
+
+! =======in writeArrayAddress, get value of index: 1
+
+! --------in getAddressHelper: 1
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, get address of var :x and store in l4
+
+! --------in getAddressHelper: x
+
+! -------in writeStructAddress: x
+	set	-8, %l0
+	add	%fp, %l0, %l0
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	st	%l1, [%l0]
+
+! ----------end of writeAssignExpr--------
+
+! ---------in writeLocalVariableWOInit:b
+
+! ------in writeConstantLiteral: 0
+	set	0, %l1
+	set	-44, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! --------in  writeRunTimeArrayCheck: y
+
+! --------in getAddressHelper: 0
+	set	-44, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	2, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck2
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayUpperBoundCheck2:
+
+! --------in getAddressHelper: 0
+	set	-44, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck2
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck2:
+
+! --------end of writeRunTimeArrayCheck---------
+
+! ----------in writeAssignExpr: y  =  a
+
+! =======in writeAssignExpr, struct assign=======
+
+! =======in writeAssignExpr, get var address, store in out0=======
+
+! --------in getAddressHelper: y
+
+! ----------in writeArrayAddress: y
+
+! =======in writeArrayAddress, get value of index: 0
+
+! --------in getAddressHelper: 0
+	set	-44, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, get address of var :y and store in l4
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+	set	-40, %l0
+	add	%fp, %l0, %l0
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	mov	%l5, %o0
+	set	8, %o1
+	call	.mul
+	nop
+
+	mov	%o0, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l6
+
+! =======in writeAssignExpr, get expr address, store in out1=======
 
 ! --------in getAddressHelper: a
 	set	-8, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %f0
+	mov	%l6, %o0
+	mov	%l0, %o1
 
-! -------end of getValue------------
+! =======in writeAssignExpr, get exprType.size, store in out2=======
+	set	8, %o2
 
-! -------in getValue: 3.33: 3.33
-
-! --------in getAddressHelper: 3.33
-	set	-12, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %f1
-
-! -------end of getValue------------
-
-! =======in writeBinaryExpr, do computation=========
-	mov	%l1, %o0
-	mov	%l2, %o1
-	call	.rem
+! =======in writeAssignExpr, call memmove=======
+	call	memmove, 0
 	nop
 
-	mov	%o0, %l1
 
-! =======in writeBinaryExpr, do store result=========
-	set	-12, %l0
+! ----------end of writeAssignExpr--------
+
+! ---------in writeLocalVariableWOInit:c
+
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-80, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
+! ------end of writeConstantLiteral-------
+
+! --------in  writeRunTimeArrayCheck: z
+
+! --------in getAddressHelper: 1
+	set	-80, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	2, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck3
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayUpperBoundCheck3:
+
+! --------in getAddressHelper: 1
+	set	-80, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck3
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck3:
+
+! --------end of writeRunTimeArrayCheck---------
+
+! ----------in writeAssignExpr: z  =  b
+
+! =======in writeAssignExpr, struct assign=======
+
+! =======in writeAssignExpr, get var address, store in out0=======
+
+! --------in getAddressHelper: z
+
+! ----------in writeArrayAddress: z
+
+! =======in writeArrayAddress, get value of index: 1
+
+! --------in getAddressHelper: 1
+	set	-80, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, get address of var :z and store in l4
+
+! --------in getAddressHelper: z
+
+! -------in writeStructAddress: z
+	set	-76, %l0
+	add	%fp, %l0, %l0
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	mov	%l5, %o0
+	set	16, %o1
+	call	.mul
+	nop
+
+	mov	%o0, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l6
+
+! =======in writeAssignExpr, get expr address, store in out1=======
+
+! --------in getAddressHelper: b
+	set	-40, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l6, %o0
+	mov	%l0, %o1
+
+! =======in writeAssignExpr, get exprType.size, store in out2=======
+	set	16, %o2
+
+! =======in writeAssignExpr, call memmove=======
+	call	memmove, 0
+	nop
+
+
+! ----------end of writeAssignExpr--------
+
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-84, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! --------in  writeRunTimeArrayCheck: z
+
+! --------in getAddressHelper: 1
+	set	-84, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	2, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck4
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayUpperBoundCheck4:
+
+! --------in getAddressHelper: 1
+	set	-84, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck4
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck4:
+
+! --------end of writeRunTimeArrayCheck---------
+
+! ------in writeConstantLiteral: 0
+	set	0, %l1
+	set	-88, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! --------in  writeRunTimeArrayCheck: y
+
+! --------in getAddressHelper: 0
+	set	-88, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	2, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck5
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayUpperBoundCheck5:
+
+! --------in getAddressHelper: 0
+	set	-88, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck5
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck5:
+
+! --------end of writeRunTimeArrayCheck---------
+
+! ------in writeConstantLiteral: 0
+	set	0, %l1
+	set	-92, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! --------in  writeRunTimeArrayCheck: x
+
+! --------in getAddressHelper: 0
+	set	-92, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	2, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck6
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayUpperBoundCheck6:
+
+! --------in getAddressHelper: 0
+	set	-92, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck6
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck6:
+
+! --------end of writeRunTimeArrayCheck---------
+
 ! ------------in writePrint---------------
-	set	temp2, %o0
+
+! -------in getValue: x: null
+
+! --------in getAddressHelper: x
+
+! ----------in writeArrayAddress: x
+
+! =======in writeArrayAddress, get value of index: 0
+
+! --------in getAddressHelper: 0
+	set	-92, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, get address of var :x and store in l4
+
+! --------in getAddressHelper: x
+
+! -------in writeStructAddress: x
+
+! ----------in writeArrayAddress: y
+
+! =======in writeArrayAddress, get value of index: 0
+
+! --------in getAddressHelper: 0
+	set	-88, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l6
+
+! =======in writeArrayAddress, get address of var :y and store in l4
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! ----------in writeArrayAddress: z
+
+! =======in writeArrayAddress, get value of index: 1
+
+! --------in getAddressHelper: 1
+	set	-84, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l7
+
+! =======in writeArrayAddress, get address of var :z and store in l4
+
+! --------in getAddressHelper: z
+
+! -------in writeStructAddress: z
+	set	-76, %l0
+	add	%fp, %l0, %l0
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	mov	%l7, %o0
+	set	16, %o1
+	call	.mul
+	nop
+
+	mov	%o0, %l7
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l7, %l0
+
+! ---------end of writeArrayAddress--------
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	mov	%l6, %o0
+	set	8, %o1
+	call	.mul
+	nop
+
+	mov	%o0, %l6
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l6, %l0
+
+! ---------end of writeArrayAddress--------
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+	set	.intFmt, %o0
+	mov	%l1, %o1
+	call	printf
+	nop
+
+
+! ------------in writePrint---------------
+	set	.endl, %o0
+	call	printf
+	nop
+
+
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-96, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! --------in  writeRunTimeArrayCheck: z
+
+! --------in getAddressHelper: 1
+	set	-96, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	2, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck7
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayUpperBoundCheck7:
+
+! --------in getAddressHelper: 1
+	set	-96, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck7
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck7:
+
+! --------end of writeRunTimeArrayCheck---------
+
+! ------in writeConstantLiteral: 0
+	set	0, %l1
+	set	-100, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! --------in  writeRunTimeArrayCheck: y
+
+! --------in getAddressHelper: 0
+	set	-100, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	2, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck8
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayUpperBoundCheck8:
+
+! --------in getAddressHelper: 0
+	set	-100, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck8
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck8:
+
+! --------end of writeRunTimeArrayCheck---------
+
+! ------in writeConstantLiteral: 1
+	set	1, %l1
+	set	-104, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! --------in  writeRunTimeArrayCheck: x
+
+! --------in getAddressHelper: 1
+	set	-104, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	2, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck9
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayUpperBoundCheck9:
+
+! --------in getAddressHelper: 1
+	set	-104, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck9
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	2, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck9:
+
+! --------end of writeRunTimeArrayCheck---------
+
+! ------------in writePrint---------------
+
+! -------in getValue: x: null
+
+! --------in getAddressHelper: x
+
+! ----------in writeArrayAddress: x
+
+! =======in writeArrayAddress, get value of index: 1
+
+! --------in getAddressHelper: 1
+	set	-104, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, get address of var :x and store in l4
+
+! --------in getAddressHelper: x
+
+! -------in writeStructAddress: x
+
+! ----------in writeArrayAddress: y
+
+! =======in writeArrayAddress, get value of index: 0
+
+! --------in getAddressHelper: 0
+	set	-100, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l6
+
+! =======in writeArrayAddress, get address of var :y and store in l4
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! ----------in writeArrayAddress: z
+
+! =======in writeArrayAddress, get value of index: 1
+
+! --------in getAddressHelper: 1
+	set	-96, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l7
+
+! =======in writeArrayAddress, get address of var :z and store in l4
+
+! --------in getAddressHelper: z
+
+! -------in writeStructAddress: z
+	set	-76, %l0
+	add	%fp, %l0, %l0
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	mov	%l7, %o0
+	set	16, %o1
+	call	.mul
+	nop
+
+	mov	%o0, %l7
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l7, %l0
+
+! ---------end of writeArrayAddress--------
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	mov	%l6, %o0
+	set	8, %o1
+	call	.mul
+	nop
+
+	mov	%o0, %l6
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l6, %l0
+
+! ---------end of writeArrayAddress--------
+	add	%l0, 0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+	set	.intFmt, %o0
+	mov	%l1, %o1
 	call	printf
 	nop
 
@@ -156,5 +1142,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 12) & -8
+	SAVE.main = -(92 + 104) & -8
 

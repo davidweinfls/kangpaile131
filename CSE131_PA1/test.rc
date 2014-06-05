@@ -1,4 +1,25 @@
-function : void main(){
-	float a = 4.44;
-	cout << (a % 3.33) << endl; //For the T_MOD operator, the operand types must be equivalent to int, and the resulting type is int.
+structdef A{
+	int[2] x;
+};
+structdef B{
+	A[2] y;
+};
+structdef C{
+	B[2] z;
+};
+
+function : void main() {
+	A a;
+	a.x[0] = 0;
+	a.x[1] = 5;
+
+	B b;
+	b.y[0] = a;
+	
+	C c;
+	c.z[1] = b;
+	
+	//cout << b.y[0].x[1] << endl;
+	cout << c.z[1].y[0].x[0] <<endl;	//0
+	cout << c.z[1].y[0].x[1] <<endl;	//5
 }
