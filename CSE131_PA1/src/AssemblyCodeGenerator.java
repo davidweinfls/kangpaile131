@@ -1498,7 +1498,7 @@ public class AssemblyCodeGenerator {
     	}
     	else
     	{
-    		addToBuffer(text_buffer, sto.getAddress());
+    		getAddressHelper(sto);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
     	}
     	//compare %l1 with 0
@@ -1557,7 +1557,7 @@ public class AssemblyCodeGenerator {
     	}
     	else
     	{
-    		addToBuffer(text_buffer, sto.getAddress());
+    		getAddressHelper(sto);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
     	}
     	//compare %l1 with 0

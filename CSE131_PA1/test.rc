@@ -1,29 +1,19 @@
+structdef MYS
+{
+	bool z;
+};
 
-function : void foo(int * b){
-	
-	cout << "b: " << b << endl;
-	
-	cout << *b << endl;
-	
-	
-	cout << b[2] << endl;
+MYS a;
 
-}
-
-int[3] arr;
-
-function : void main(){
+function : void main( )
+{
+	MYS * struct = &a;
+	(*struct).z = true;
 	
-
-	arr[2] = 5;
+	//cout << (*struct).z << endl;
 	
-	//int * c;
-	//c = arr;
-	//cout<<c[2]<<endl;
-	
-	//cout << &arr << endl;
-	//cout << "arr: " <<  arr << endl;	
-	//cout << &arr[0] << endl;
-	
-	foo(arr);
+	if( (*struct).z )
+	{
+		cout<< "ok"<<endl;
+	}
 }
