@@ -2164,7 +2164,7 @@ public class AssemblyCodeGenerator {
 	            	if(!byRef)
 	            	{
 	            		//TODO
-	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.I0);
 	            	}
 	            	else
 	            	{

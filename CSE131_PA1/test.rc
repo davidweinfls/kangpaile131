@@ -1,25 +1,17 @@
-structdef A{
-	int[2] x;
-};
-structdef B{
-	A[2] y;
-};
-structdef C{
-	B[2] z;
-};
+int x = 0;
 
-function : void main() {
-	A a;
-	a.x[0] = 0;
-	a.x[1] = 5;
+function: int foo()
+{
+	x = x + 5;
+	if ( x > 5){
+		return 5;
+	}	
+	return 5 + foo();
+}
 
-	B b;
-	b.y[0] = a;
-	
-	C c;
-	c.z[1] = b;
-	
-	//cout << b.y[0].x[1] << endl;
-	cout << c.z[1].y[0].x[0] <<endl;	//0
-	cout << c.z[1].y[0].x[1] <<endl;	//5
+function: void main()
+{
+	int y = foo();	
+	cout << "10 = "<< y << endl;
+	return;
 }

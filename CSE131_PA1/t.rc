@@ -1,14 +1,95 @@
-bool b;
+structdef B{
+float * y;
+};
+structdef A{
+B* b;
+};
 
-function : bool& foo2 (bool& param)
-{
-	return param;
+A a;
+B b;
+
+function: void main(){
+
+A * ap = &a;
+B * bp = &b;
+
+ap->b = bp;
+new bp->y;
+*(bp->y) = 8.6;
+
+//cout << *(bp->y) << endl;
+
+cout << ap->b->y << endl;	//address 588
+cout << bp->y << endl;	 //address 984
+cout << a.b->y << endl;	 //address 588
+
+//cout << *(ap->b->y) << endl;
+
+delete bp->y;
 }
 
-function : void main ()
+/////////////////////////////////////////////////////////////////////
+
+structdef A{
+float [5] x;
+};
+function: void foo(A* & a){
+
+int i = 0;
+while (i < 5){
+cout<<a->x[i]<<endl;
+cout<<((*a).x[i] + 100)<<endl;
+//a->x[i] = (*a).x[i] + 100;
+i ++ ;
+}
+
+}
+
+function: void main(){
+
+A b; 
+A* a = &b;
+foo(a);
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// Struct arrays
+structdef STR {
+  int i;
+  STR * next;
+  float f;
+  bool b;
+};
+
+function : void main()
 {
+  STR[3] strarr;
+  int i = 0;
+  while(i < 3)
+  {
+    strarr[i].i = i;
+    strarr[i].f = i*i;
+    strarr[i].b = true;
 
-	foo2(b) = true;
+    strarr[i].next = &strarr[(i+1)%3];
+    i++;
+  }
 
-	cout << b << endl;	
+  i = 0;
+  while(i < 3)
+  {
+    cout << "Current Struct Info" << endl;
+    cout << "i = " << i << " = " << strarr[i].i << endl;
+    cout << "f = " << i*i << ".00 = " << strarr[i].f << endl;
+    cout << "b = true = " << strarr[i].b << endl << endl;
+
+    int n = (i+1)%3;
+    cout << "Next Struct Info" << endl;
+    cout << "i = "<< n << " = " << strarr[i].next->i << endl;
+    cout << "f = " << n*n << ".00 = " << strarr[i].next->f << endl;
+    cout << "b = true = " << strarr[i].next->b << endl << endl;
+    i++;
+  }
 }
