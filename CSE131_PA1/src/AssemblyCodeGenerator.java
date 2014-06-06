@@ -2527,7 +2527,7 @@ public class AssemblyCodeGenerator {
     		{
     			if(debug) writeDebug("========in writeTypeCast, float to bool=========");
         		//get oldSTO value
-        		addToBuffer(text_buffer, oldSTO.getAddress());
+        		getAddressHelper(oldSTO);
         		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
         		
         		getAddressHelper(newSTO);

@@ -1,16 +1,9 @@
-function : void foo(int * b){
-	cout<<b[2]<<endl;
-}
-
-
 function : void main(){
-	int[3] arr;
+	bool b3;
+	float f3 = 3; 
+	float* fptr = &f3;
 
-	arr[2] = 5;
-	
-	//int * c;
-	//c = arr;
-	//cout<<c[2]<<endl;
-	
-	foo(arr);
+	b3 = (bool) *fptr;
+	cout << "b3 = true << " <<	b3 << endl; 
+
 }
