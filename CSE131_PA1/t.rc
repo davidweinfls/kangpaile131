@@ -28,30 +28,7 @@ cout << a.b->y << endl;	 //address 588
 delete bp->y;
 }
 
-/////////////////////////////////////////////////////////////////////
 
-structdef A{
-float [5] x;
-};
-function: void foo(A* & a){
-
-int i = 0;
-while (i < 5){
-cout<<a->x[i]<<endl;
-cout<<((*a).x[i] + 100)<<endl;
-//a->x[i] = (*a).x[i] + 100;
-i ++ ;
-}
-
-}
-
-function: void main(){
-
-A b; 
-A* a = &b;
-foo(a);
-
-}
 
 ///////////////////////////////////////////////////////////////////
 

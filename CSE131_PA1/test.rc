@@ -1,9 +1,7 @@
-function : void main(){
-	bool b3;
-	float f3 = 3; 
-	float* fptr = &f3;
-
-	b3 = (bool) *fptr;
-	cout << "b3 = true << " <<	b3 << endl; 
-
+function : void main()
+{
+    int a = 3;
+    int c = 2;
+    decltype(a = c) b = a;
+    cout << b << endl;
 }

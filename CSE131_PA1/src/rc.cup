@@ -370,7 +370,18 @@ SubType ::=    		QualIdent:_1 {: RESULT = _1.getType(); :}
     |				DeclType:_1 {: RESULT = _1; :}
     ;
 
-DeclType ::= 		T_DECLTYPE T_LPAREN  Expr:_1 {: RESULT = _1.getType(); :} T_RPAREN
+DeclType ::= 		T_DECLTYPE
+					{:
+						((MyParser) parser).DoStop();
+					:}
+					 T_LPAREN  Expr:_1 
+					 {: 
+					 	RESULT = _1.getType(); 
+					 :} 
+					 T_RPAREN
+					 {:
+					 	((MyParser) parser).DoRun();
+					 :}
 	;
 
 BasicType ::=       T_INT:_1 

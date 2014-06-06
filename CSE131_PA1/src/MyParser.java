@@ -1998,6 +1998,17 @@ class MyParser extends parser
 		}
 		m_currOffset = 0;
 	}
+	
+	//make sure declType dont execute expr inside it
+	void DoRun()
+	{
+		myAsWriter.setRun();
+	}
+	
+	void DoStop()
+	{
+		myAsWriter.setStop();
+	}
 
 
 //----------------------------------------------------------------

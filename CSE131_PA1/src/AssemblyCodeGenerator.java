@@ -5,6 +5,7 @@ import java.util.*;
 public class AssemblyCodeGenerator {
 
 	private boolean debug = true;
+	private boolean Run = true;
 	
 	//useful instance vars
 	private int indent_level = 0;
@@ -141,10 +142,23 @@ public class AssemblyCodeGenerator {
     // append string to a chosen buffer(section) 
     public void addToBuffer(StringBuilder sb, String template, String ... params)
     {
-    	for (int i=0; i < indent_level; i++) {
-            sb.append(Sparc.SEPARATOR);
-        }
-        sb.append(String.format(template, (Object[])params));
+    	if(Run)
+    	{
+	    	for (int i=0; i < indent_level; i++) {
+	            sb.append(Sparc.SEPARATOR);
+	        }
+	        sb.append(String.format(template, (Object[])params));
+    	}
+    }
+    
+    public void setRun()
+    {
+    	Run = true;
+    }
+    
+    public void setStop()
+    {
+    	Run = false;
     }
     
     // write buffer to file
@@ -630,23 +644,29 @@ public class AssemblyCodeGenerator {
             if (sto.getStruct().getIsStructField())
             	writeStructAddress (sto.getStruct());
             else
-    		  addToBuffer(text_buffer, sto.getStruct().getAddress());
+    		  getAddressHelper(sto.getStruct());
             //if the param passed in is both a pointer and and by ref
+            //TODO: fuck!!!!!!!!
             if(sto.getStruct().getType().isPointerType() && (sto.getStruct().isVar() && ((VarSTO)sto.getStruct()).isRef())) 
             {
             	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
             }
             		
             addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+
     	}
     	//basicType
     	else
     	{
     		//get struct's base offset
-    		addToBuffer(text_buffer, sto.getStruct().getAddress());
+    		getAddressHelper(sto.getStruct());
     	}
+    	
     	//add offset to base offset
     	addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L0, Integer.toString(sto.getFieldOffset()), Sparc.L0 );
+    	// if the struct field is ptr, need to do a load 
+    	
+    	if(debug) writeDebug("-------------end of writeStructAddress: " + sto.getName());
     }
 	
 	//used in getAddressHelper(). to get deref sto address
