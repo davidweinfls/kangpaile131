@@ -2008,11 +2008,9 @@ public class AssemblyCodeGenerator {
     			//store it to %o0
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", "%o"+index);
             }
-    		else if(param.getType().isPointerType())
+    		else if(arg.getType().isArrayType())
     		{
     			getAddressHelper(arg);
-    			if(!(param.isVar() && ((VarSTO)param).isRef()))
-    				addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, "%o" + index);
     		}
     		else

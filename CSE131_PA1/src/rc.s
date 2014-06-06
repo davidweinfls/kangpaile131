@@ -1,5 +1,5 @@
 ! 
-! Generated Thu Jun 05 21:20:00 PDT 2014
+! Generated Thu Jun 05 22:45:31 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -15,302 +15,70 @@
 .doubleDeleteError:	.asciz "Double delete detected. Memory region has already been released in heap space.\n"
 	.align 4
 
-temp0:	.asciz "value of ip is: "
-	.align 4
 	.section ".data"
 .allocatedMemory:	.word	0
 	.align 4
-
-	.global i
-	
-	.section ".bss"
-	.align 4
-
-i:	.skip 4
 
 	.section ".text"
 	.align 4
 
 
-! ---------In writeGLobalVariable--------------
-
 ! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<foo2>>>>>>>>>>>>>>>>>
+! <<<<<<<<<<<<<<<<<<<foo>>>>>>>>>>>>>>>>>
 	.align 4
-	.global foo2
-foo2:
-	set	SAVE.foo2, %g1
+	.global foo
+foo:
+	set	SAVE.foo, %g1
 	save	%sp, %g1, %sp
 
 
-! -------in writeParameter: p param num: 0
+! -------in writeParameter: b param num: 0
 	set	68, %l0
 	add	%fp, %l0, %l0
 	st	%i0, [%l0]
 
-! -------in writeDeallocatedStack--------
-
-! -------in writeDerefAddress: p
-
-! --------in getAddressHelper: p
-	set	68, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-
-! ======in writeDerefAddress, check nullPtrExcep=======
-	set	0, %l4
-	cmp	%l0, %l4
-	bne	ptrLabel0
-	nop
-
-	set	.NullPtrException, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-ptrLabel0:
-
-! ======end of check nullPtrExcep=======
-
-! -------end of writeDerefAddress-------
-	add	%sp, 0, %l4
-	cmp	%l0, %l4
-	blu	deallocatedStack0
-	nop
-
-	add	%sp, 92, %l4
-	cmp	%l0, %l4
-	bgu	deallocatedStack0
-	nop
-
-	set	.deallocatedStack, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-deallocatedStack0:
-
-! ------in writeConstantLiteral: 7
-	set	7, %l1
-	set	-8, %l0
+! ------in writeConstantLiteral: 2
+	set	2, %l1
+	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
-! ----------in writeAssignExpr: p  =  7
+! ------------in writePrint---------------
 
-! -------in getValue: 7: 7.0
+! -------in getValue: int*: null
 
-! --------in getAddressHelper: 7
-	set	-8, %l0
+! --------in getAddressHelper: int*
+
+! ----------in writeArrayAddress: int*
+
+! =======in writeArrayAddress, get value of index: 2
+
+! --------in getAddressHelper: 2
+	set	-4, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
+	ld	[%l0], %l5
 
-! -------end of getValue------------
+! =======in writeArrayAddress, get address of var :b and store in l4
 
-! --------in getAddressHelper: p
-
-! -------in writeDerefAddress: p
-
-! --------in getAddressHelper: p
+! --------in getAddressHelper: b
 	set	68, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l0
+	mov	%l0, %l4
 
-! ======in writeDerefAddress, check nullPtrExcep=======
-	set	0, %l4
-	cmp	%l0, %l4
-	bne	ptrLabel1
-	nop
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
 
-	set	.NullPtrException, %o0
-	call	printf
-	nop
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
 
-	set	1, %o0
-	call	exit
-	nop
-
-ptrLabel1:
-
-! ======end of check nullPtrExcep=======
-
-! -------end of writeDerefAddress-------
-
-! --------end of getAddressHelper------------ 
-	st	%l1, [%l0]
-
-! ----------end of writeAssignExpr--------
-
-! --------------in writeFuncClose--------------
-	ret
-	restore
-
-	SAVE.foo2 = -(92 + 8) & -8
-
-
-! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<main>>>>>>>>>>>>>>>>>
-	.align 4
-	.global main
-main:
-	set	SAVE.main, %g1
-	save	%sp, %g1, %sp
-
-
-! ------in writeAddressOf: i
-
-! --------in getAddressHelper: i
-	set	i, %l0
-	add	%g0, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	mov	%l0, %l1
-	set	-4, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! -------end of writeAddressOf-------
-
-! -------in getValue: i: null
-
-! --------in getAddressHelper: i
-	set	-4, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! ---------in writeLocalVariableWInit:ip
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-
-! -------in writePassParameter: p
-
-! --------in getAddressHelper: ip
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-	mov	%l0, %o0
-
-! -------end of writePassParameter--------
-
-! ----------writeFuncCall------------
-	call	foo2
-	nop
-
-
-! ========writeFuncCall: get address of retSTO, store retValue in it ==========
-
-! ------------in writePrint---------------
-	set	temp0, %o0
-	call	printf
-	nop
-
-
-! -------in writeDeallocatedStack--------
-
-! -------in writeDerefAddress: ip
-
-! --------in getAddressHelper: ip
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-
-! ======in writeDerefAddress, check nullPtrExcep=======
-	set	0, %l4
-	cmp	%l0, %l4
-	bne	ptrLabel2
-	nop
-
-	set	.NullPtrException, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-ptrLabel2:
-
-! ======end of check nullPtrExcep=======
-
-! -------end of writeDerefAddress-------
-	add	%sp, -8, %l4
-	cmp	%l0, %l4
-	blu	deallocatedStack1
-	nop
-
-	add	%sp, 92, %l4
-	cmp	%l0, %l4
-	bgu	deallocatedStack1
-	nop
-
-	set	.deallocatedStack, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-deallocatedStack1:
-
-! ------------in writePrint---------------
-
-! -------in getValue: ip: null
-
-! --------in getAddressHelper: ip
-
-! -------in writeDerefAddress: ip
-
-! --------in getAddressHelper: ip
-	set	-8, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l0
-
-! ======in writeDerefAddress, check nullPtrExcep=======
-	set	0, %l4
-	cmp	%l0, %l4
-	bne	ptrLabel3
-	nop
-
-	set	.NullPtrException, %o0
-	call	printf
-	nop
-
-	set	1, %o0
-	call	exit
-	nop
-
-ptrLabel3:
-
-! ======end of check nullPtrExcep=======
-
-! -------end of writeDerefAddress-------
+! ---------end of writeArrayAddress--------
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l1
@@ -327,6 +95,164 @@ ptrLabel3:
 	call	printf
 	nop
 
+
+! --------------in writeFuncClose--------------
+	ret
+	restore
+
+	SAVE.foo = -(92 + 4) & -8
+
+
+! in writeFuncDec
+! <<<<<<<<<<<<<<<<<<<main>>>>>>>>>>>>>>>>>
+	.align 4
+	.global main
+main:
+	set	SAVE.main, %g1
+	save	%sp, %g1, %sp
+
+
+! ------in writeConstantLiteral: 3
+	set	3, %l1
+	set	-4, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ---------in writeLocalVariableWOInit:arr
+
+! ------in writeConstantLiteral: 2
+	set	2, %l1
+	set	-20, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! --------in  writeRunTimeArrayCheck: arr
+
+! --------in getAddressHelper: 2
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	3, %l1
+	cmp	%l0, %l1
+	bl	arrayUpperBoundCheck0
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	3, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayUpperBoundCheck0:
+
+! --------in getAddressHelper: 2
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	set	0, %l1
+	cmp	%l0, %l1
+	bge	arrayLowerBoundCheck0
+	nop
+
+	set	.ArrayOutOfBounds, %o0
+	mov	%l0, %o1
+	set	3, %o2
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+arrayLowerBoundCheck0:
+
+! --------end of writeRunTimeArrayCheck---------
+
+! ------in writeConstantLiteral: 5
+	set	5, %l1
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%l1, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ----------in writeAssignExpr: arr  =  5
+
+! -------in getValue: 5: 5.0
+
+! --------in getAddressHelper: 5
+	set	-24, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+
+! --------in getAddressHelper: arr
+
+! ----------in writeArrayAddress: arr
+
+! =======in writeArrayAddress, get value of index: 2
+
+! --------in getAddressHelper: 2
+	set	-20, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l5
+
+! =======in writeArrayAddress, get address of var :arr and store in l4
+
+! --------in getAddressHelper: arr
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l4
+
+! =======in writeArrayAddress, scale the offset
+	sll	%l5, 2, %l5
+
+! =======in writeArrayAddress, base + offset
+	add	%l4, %l5, %l0
+
+! ---------end of writeArrayAddress--------
+
+! --------end of getAddressHelper------------ 
+	st	%l1, [%l0]
+
+! ----------end of writeAssignExpr--------
+
+! -------in writePassParameter: b
+
+! --------in getAddressHelper: arr
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %o0
+
+! -------end of writePassParameter--------
+
+! ----------writeFuncCall------------
+	call	foo
+	nop
+
+
+! ========writeFuncCall: get address of retSTO, store retValue in it ==========
 
 ! -------in writeMemoryLeak-------
 	set	.doubleDeleteError, %o0
@@ -358,5 +284,5 @@ ptrLabel3:
 	ret
 	restore
 
-	SAVE.main = -(92 + 16) & -8
+	SAVE.main = -(92 + 28) & -8
 

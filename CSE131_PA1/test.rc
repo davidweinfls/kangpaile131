@@ -1,26 +1,16 @@
-int i;
-
-function : void foo2(int * p){
-   *p = 7;
+function : void foo(int * b){
+	cout<<b[2]<<endl;
 }
 
 
+function : void main(){
+	int[3] arr;
 
-function : void main()
-{	
-	int * ip = &i;
-	foo2(ip);
+	arr[2] = 5;
 	
-	cout << "value of ip is: " << *ip << endl;
+	//int * c;
+	//c = arr;
+	//cout<<c[2]<<endl;
 	
-	
-	
-	
-	
-	
-	
-	//cout << "i is: " << i << endl;
-	//j = 99;
-	//ip should not print out 99, but print out 7
-	//cout << "value of ip is: " << *ip << endl;
+	foo(arr);
 }
