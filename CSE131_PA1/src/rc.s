@@ -1,5 +1,5 @@
 ! 
-! Generated Thu Jun 05 20:04:30 PDT 2014
+! Generated Thu Jun 05 21:20:00 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -15,15 +15,18 @@
 .doubleDeleteError:	.asciz "Double delete detected. Memory region has already been released in heap space.\n"
 	.align 4
 
-temp0:	.asciz "10 = "
+temp0:	.asciz "value of ip is: "
 	.align 4
 	.section ".data"
 .allocatedMemory:	.word	0
 	.align 4
 
-	.global x
+	.global i
 	
-x:	.word 0
+	.section ".bss"
+	.align 4
+
+i:	.skip 4
 
 	.section ".text"
 	.align 4
@@ -32,65 +35,82 @@ x:	.word 0
 ! ---------In writeGLobalVariable--------------
 
 ! in writeFuncDec
-! <<<<<<<<<<<<<<<<<<<foo>>>>>>>>>>>>>>>>>
+! <<<<<<<<<<<<<<<<<<<foo2>>>>>>>>>>>>>>>>>
 	.align 4
-	.global foo
-foo:
-	set	SAVE.foo, %g1
+	.global foo2
+foo2:
+	set	SAVE.foo2, %g1
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 5
-	set	5, %l1
-	set	-4, %l0
+! -------in writeParameter: p param num: 0
+	set	68, %l0
+	add	%fp, %l0, %l0
+	st	%i0, [%l0]
+
+! -------in writeDeallocatedStack--------
+
+! -------in writeDerefAddress: p
+
+! --------in getAddressHelper: p
+	set	68, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel0
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel0:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
+	add	%sp, 0, %l4
+	cmp	%l0, %l4
+	blu	deallocatedStack0
+	nop
+
+	add	%sp, 92, %l4
+	cmp	%l0, %l4
+	bgu	deallocatedStack0
+	nop
+
+	set	.deallocatedStack, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+deallocatedStack0:
+
+! ------in writeConstantLiteral: 7
+	set	7, %l1
+	set	-8, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
 ! ------end of writeConstantLiteral-------
 
-! --------in writeBinaryExpr-------
+! ----------in writeAssignExpr: p  =  7
 
-! x + 5
+! -------in getValue: 7: 7.0
 
-! =======in writeBinaryExpr: Not const folding=======
-
-! =======in writeBinaryExpr: get x's value and 5's value
-
-! -------in getValue: x: null
-
-! --------in getAddressHelper: x
-	set	x, %l0
-	add	%g0, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! -------in getValue: 5: 5.0
-
-! --------in getAddressHelper: 5
-	set	-4, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l2
-
-! -------end of getValue------------
-
-! =======in writeBinaryExpr, do computation=========
-	add	%l1, %l2, %l1
-
-! =======in writeBinaryExpr, do store result=========
-	set	-8, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ----------in writeAssignExpr: x  =  result
-
-! -------in getValue: result: null
-
-! --------in getAddressHelper: result
+! --------in getAddressHelper: 7
 	set	-8, %l0
 	add	%fp, %l0, %l0
 
@@ -99,172 +119,47 @@ foo:
 
 ! -------end of getValue------------
 
-! --------in getAddressHelper: x
-	set	x, %l0
-	add	%g0, %l0, %l0
+! --------in getAddressHelper: p
+
+! -------in writeDerefAddress: p
+
+! --------in getAddressHelper: p
+	set	68, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel1
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel1:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
 
 ! --------end of getAddressHelper------------ 
 	st	%l1, [%l0]
 
 ! ----------end of writeAssignExpr--------
 
-! ------in writeConstantLiteral: 5
-	set	5, %l1
-	set	-12, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! --------in writeBinaryExpr-------
-
-! x > 5
-
-! =======in writeBinaryExpr: Not const folding=======
-
-! =======in writeBinaryExpr: get x's value and 5's value
-
-! -------in getValue: x: null
-
-! --------in getAddressHelper: x
-	set	x, %l0
-	add	%g0, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! -------in getValue: 5: 5.0
-
-! --------in getAddressHelper: 5
-	set	-12, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l2
-
-! -------end of getValue------------
-
-! =======in writeBinaryExpr, non comparsionOP=========
-	set	0, %l3
-
-! =======in writeBinaryExpr, compare two operands=========
-	cmp	%l1, %l2
-	ble	compOp0
-	nop
-
-	set	1, %l3
-compOp0:
-	set	-16, %l0
-	add	%fp, %l0, %l0
-	st	%l3, [%l0]
-
-! ------------in writeIf: result
-
-! --------in getAddressHelper: result
-	set	-16, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-	cmp	%l1, %g0
-	be	else0
-	nop
-
-
-! ------in writeConstantLiteral: 5
-	set	5, %l1
-	set	-20, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! --------in writeReturnStmt---------
-	set	5, %i0
-	ret
-	restore
-
-! ---------in writeElse---------
-	ba	.endIf0
-	nop
-
-else0:
-
-! ----------in writeCloseBlock-----------
-.endIf0:
-
-! ------in writeConstantLiteral: 5
-	set	5, %l1
-	set	-24, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! ------end of writeConstantLiteral-------
-
-! ----------writeFuncCall------------
-	call	foo
-	nop
-
-
-! ========writeFuncCall: get address of retSTO, store retValue in it ==========
-	set	-32, %l0
-	add	%fp, %l0, %l0
-	st	%o0, [%l0]
-
-! --------in writeBinaryExpr-------
-
-! 5 + result
-
-! =======in writeBinaryExpr: Not const folding=======
-
-! =======in writeBinaryExpr: get 5's value and result's value
-
-! -------in getValue: 5: 5.0
-
-! --------in getAddressHelper: 5
-	set	-24, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
-
-! -------end of getValue------------
-
-! -------in getValue: result: null
-
-! --------in getAddressHelper: result
-	set	-32, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %l2
-
-! -------end of getValue------------
-
-! =======in writeBinaryExpr, do computation=========
-	add	%l1, %l2, %l1
-
-! =======in writeBinaryExpr, do store result=========
-	set	-36, %l0
-	add	%fp, %l0, %l0
-	st	%l1, [%l0]
-
-! --------in writeReturnStmt---------
-
-! --------in getAddressHelper: result
-	set	-36, %l0
-	add	%fp, %l0, %l0
-
-! --------end of getAddressHelper------------ 
-	ld	[%l0], %i0
-	ret
-	restore
-
 ! --------------in writeFuncClose--------------
+	ret
+	restore
 
-	SAVE.foo = -(92 + 36) & -8
+	SAVE.foo2 = -(92 + 8) & -8
 
 
 ! in writeFuncDec
@@ -276,20 +171,24 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ----------writeFuncCall------------
-	call	foo
-	nop
+! ------in writeAddressOf: i
 
+! --------in getAddressHelper: i
+	set	i, %l0
+	add	%g0, %l0, %l0
 
-! ========writeFuncCall: get address of retSTO, store retValue in it ==========
-	set	-8, %l0
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l1
+	set	-4, %l0
 	add	%fp, %l0, %l0
-	st	%o0, [%l0]
+	st	%l1, [%l0]
 
-! -------in getValue: result: null
+! -------end of writeAddressOf-------
 
-! --------in getAddressHelper: result
-	set	-8, %l0
+! -------in getValue: i: null
+
+! --------in getAddressHelper: i
+	set	-4, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
@@ -297,11 +196,30 @@ main:
 
 ! -------end of getValue------------
 
-! ---------in writeLocalVariableWInit:y
-	set	-12, %l0
+! ---------in writeLocalVariableWInit:ip
+	set	-8, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
+
+! -------in writePassParameter: p
+
+! --------in getAddressHelper: ip
+	set	-8, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	mov	%l0, %o0
+
+! -------end of writePassParameter--------
+
+! ----------writeFuncCall------------
+	call	foo2
+	nop
+
+
+! ========writeFuncCall: get address of retSTO, store retValue in it ==========
 
 ! ------------in writePrint---------------
 	set	temp0, %o0
@@ -309,13 +227,90 @@ main:
 	nop
 
 
+! -------in writeDeallocatedStack--------
+
+! -------in writeDerefAddress: ip
+
+! --------in getAddressHelper: ip
+	set	-8, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel2
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel2:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
+	add	%sp, -8, %l4
+	cmp	%l0, %l4
+	blu	deallocatedStack1
+	nop
+
+	add	%sp, 92, %l4
+	cmp	%l0, %l4
+	bgu	deallocatedStack1
+	nop
+
+	set	.deallocatedStack, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+deallocatedStack1:
+
 ! ------------in writePrint---------------
 
-! -------in getValue: y: null
+! -------in getValue: ip: null
 
-! --------in getAddressHelper: y
-	set	-12, %l0
+! --------in getAddressHelper: ip
+
+! -------in writeDerefAddress: ip
+
+! --------in getAddressHelper: ip
+	set	-8, %l0
 	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel3
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel3:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
 
 ! --------end of getAddressHelper------------ 
 	ld	[%l0], %l1
@@ -332,10 +327,6 @@ main:
 	call	printf
 	nop
 
-
-! --------in writeReturnStmt---------
-	ret
-	restore
 
 ! -------in writeMemoryLeak-------
 	set	.doubleDeleteError, %o0
@@ -367,5 +358,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 12) & -8
+	SAVE.main = -(92 + 16) & -8
 

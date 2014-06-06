@@ -1,17 +1,26 @@
-int x = 0;
+int i;
 
-function: int foo()
-{
-	x = x + 5;
-	if ( x > 5){
-		return 5;
-	}	
-	return 5 + foo();
+function : void foo2(int * p){
+   *p = 7;
 }
 
-function: void main()
-{
-	int y = foo();	
-	cout << "10 = "<< y << endl;
-	return;
+
+
+function : void main()
+{	
+	int * ip = &i;
+	foo2(ip);
+	
+	cout << "value of ip is: " << *ip << endl;
+	
+	
+	
+	
+	
+	
+	
+	//cout << "i is: " << i << endl;
+	//j = 99;
+	//ip should not print out 99, but print out 7
+	//cout << "value of ip is: " << *ip << endl;
 }
