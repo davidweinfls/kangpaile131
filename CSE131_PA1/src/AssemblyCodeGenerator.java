@@ -644,7 +644,7 @@ public class AssemblyCodeGenerator {
             if (sto.getStruct().getIsStructField())
             	writeStructAddress (sto.getStruct(), AssignOp);
             else
-    		  getAddressHelper(sto.getStruct(), false);
+    		  getAddressHelper(sto.getStruct(), AssignOp);
             //if the param passed in is both a pointer and and by ref
             //TODO: fuck!!!!!!!!
             if(sto.getStruct().getType().isPointerType() && (sto.getStruct().isVar() && ((VarSTO)sto.getStruct()).isRef())) 
@@ -659,14 +659,14 @@ public class AssemblyCodeGenerator {
     	else
     	{
     		//get struct's base offset
-    		getAddressHelper(sto.getStruct(), false);
+    		getAddressHelper(sto.getStruct(), AssignOp);
     	}
     	
     	//add offset to base offset
     	addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L0, Integer.toString(sto.getFieldOffset()), Sparc.L0 );
-    	// if the struct field is ptr, need to do a load 
-    	if( sto.getType().isPointerType() && !AssignOp )
-    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
+    	// TODO: if the struct field is ptr, need to do a load 
+/*    	if( sto.getType().isPointerType() && !AssignOp )
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);*/
     	
     	if(debug) writeDebug("-------------end of writeStructAddress: " + sto.getName());
     }
@@ -680,7 +680,7 @@ public class AssemblyCodeGenerator {
 		STO ptr = sto.getPointer();
 		
 		//1. get address of this pointer 
-		getAddressHelper(ptr, true);
+		getAddressHelper(ptr, false);
 		//check byRef
 		if(ptr.isVar() && ((VarSTO)ptr).isRef())
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
@@ -1008,8 +1008,20 @@ public class AssemblyCodeGenerator {
 		//load a, if equals to 0, branch to endAND
 		if(debug) writeDebug("--------in writeAnd, &&, check first operand--------");
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
-		getAddressHelper(a, false);
-		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+		
+		if(a.getName().equals("true"))
+		{
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L1);
+		}
+		else if((a.getName().equals("false")))
+		{
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L1);
+		}
+		else
+		{
+			getAddressHelper(a, false);
+			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
+		}
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
 		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, "endAND" + num_of_and);
 		addToBuffer(text_buffer, Sparc.NOP);
@@ -1033,6 +1045,7 @@ public class AssemblyCodeGenerator {
     		if(debug) writeDebug("=======in writeBinaryExpr: Const folding=======");
     		if(rType instanceof IntType)
     		{
+    			if(debug) writeDebug("=======in writeBinaryExpr: result is int=======");
     			int value = ((ConstSTO) result).getIntValue ();
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET,
                     Integer.toString(value), Sparc.L1);
@@ -1041,6 +1054,7 @@ public class AssemblyCodeGenerator {
     		}
     		else if (rType instanceof FloatType)
 			{
+    			if(debug) writeDebug("=======in writeBinaryExpr: result is float=======");
 				float value = ((ConstSTO) result).getFloatValue();
 				has_rodata = true;
 				decreaseIndent();

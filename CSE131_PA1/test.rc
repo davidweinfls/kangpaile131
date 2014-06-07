@@ -1,29 +1,5 @@
-structdef B{
-float * y;
-};
-structdef A{
-B* b;
-};
+bool a = true && false && true;
+function : void main(){
 
-A a;
-B b;
-
-function: void main(){
-
-A * ap = &a;
-B * bp = &b;
-
-ap->b = bp;
-new bp->y;
-*(bp->y) = 8.6;
-
-cout << *(bp->y) << endl;
-
-//cout << ap->b->y << endl;	//address 588
-//cout << bp->y << endl;	 //address 984
-//cout << a.b->y << endl;	 //address 588
-
-cout << *(ap->b->y) << endl;
-
-delete bp->y;
+	cout << a << endl;
 }

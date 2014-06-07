@@ -1655,7 +1655,7 @@ class MyParser extends parser
         result.setOffset(m_currOffset);
         result.setBase("%%fp");
 
-        if (m_symtab.getLevel() != 1)
+        //if (m_symtab.getLevel() != 1)
             myAsWriter.writeBinaryExpr(a, o, b, result);
         
 		return result ;
