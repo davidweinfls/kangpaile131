@@ -1,5 +1,5 @@
 ! 
-! Generated Fri Jun 06 01:58:46 PDT 2014
+! Generated Fri Jun 06 19:36:29 PDT 2014
 ! 
 
 	.section ".rodata"
@@ -15,13 +15,27 @@
 .doubleDeleteError:	.asciz "Double delete detected. Memory region has already been released in heap space.\n"
 	.align 4
 
+temp0:	.single 0r8.6
 	.section ".data"
 .allocatedMemory:	.word	0
 	.align 4
 
+	.section ".bss"
+	.align 4
+
+	.global a
+a:	.skip 4
+	
+	.global b
+b:	.skip 4
+	
 	.section ".text"
 	.align 4
 
+
+! --------in writeGlobalStruct--------
+
+! --------in writeGlobalStruct--------
 
 ! in writeFuncDec
 ! <<<<<<<<<<<<<<<<<<<main>>>>>>>>>>>>>>>>>
@@ -32,17 +46,23 @@ main:
 	save	%sp, %g1, %sp
 
 
-! ------in writeConstantLiteral: 3
-	set	3, %l1
+! ------in writeAddressOf: a
+
+! --------in getAddressHelper: a
+	set	a, %l0
+	add	%g0, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l1
 	set	-4, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
-! ------end of writeConstantLiteral-------
+! -------end of writeAddressOf-------
 
-! -------in getValue: 3: 3.0
+! -------in getValue: a: null
 
-! --------in getAddressHelper: 3
+! --------in getAddressHelper: a
 	set	-4, %l0
 	add	%fp, %l0, %l0
 
@@ -51,23 +71,29 @@ main:
 
 ! -------end of getValue------------
 
-! ---------in writeLocalVariableWInit:a
+! ---------in writeLocalVariableWInit:ap
 	set	-8, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
 
-! ------in writeConstantLiteral: 2
-	set	2, %l1
+! ------in writeAddressOf: b
+
+! --------in getAddressHelper: b
+	set	b, %l0
+	add	%g0, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	mov	%l0, %l1
 	set	-12, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
-! ------end of writeConstantLiteral-------
+! -------end of writeAddressOf-------
 
-! -------in getValue: 2: 2.0
+! -------in getValue: b: null
 
-! --------in getAddressHelper: 2
+! --------in getAddressHelper: b
 	set	-12, %l0
 	add	%fp, %l0, %l0
 
@@ -76,44 +102,326 @@ main:
 
 ! -------end of getValue------------
 
-! ---------in writeLocalVariableWInit:c
+! ---------in writeLocalVariableWInit:bp
 	set	-16, %l0
 	add	%fp, %l0, %l0
 	st	%l1, [%l0]
 
 
-! -------in getValue: a: null
+! ----------in writeAssignExpr: b  =  bp
 
-! --------in getAddressHelper: a
+! -------in getValue: bp: null
+
+! --------in getAddressHelper: bp
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! -------end of getValue------------
+
+! --------in getAddressHelper: b
+
+! -------in writeStructAddress: b
+
+! =======in writeStructAddress: ap is a ptr or byRef========
+
+! --------in getAddressHelper: ap
 	set	-8, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
-	ld	[%l0], %l1
+	ld	[%l0], %l0
+	add	%l0, 0, %l0
 
-! -------end of getValue------------
+! -------------end of writeStructAddress: b
 
-! ---------in writeLocalVariableWInit:b
-	set	-20, %l0
-	add	%fp, %l0, %l0
+! --------end of getAddressHelper------------ 
 	st	%l1, [%l0]
 
+! ----------end of writeAssignExpr--------
 
-! ------------in writePrint---------------
+! ---------in writeNewStmt------
+	set	1, %o0
+	set	4, %o1
+	call	calloc
+	nop
 
-! -------in getValue: b: null
 
-! --------in getAddressHelper: b
-	set	-20, %l0
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! =======in writeStructAddress: bp is a ptr or byRef========
+
+! --------in getAddressHelper: bp
+	set	-16, %l0
 	add	%fp, %l0, %l0
 
 ! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: y
+
+! --------end of getAddressHelper------------ 
+	st	%o0, [%l0]
+	set	.allocatedMemory, %l0
 	ld	[%l0], %l1
+	inc	%l1
+	st	%l1, [%l0]
+
+! ---------end 0f writeNewStmt------
+
+! -------in writeDeallocatedStack--------
+
+! -------in writeDerefAddress: y
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! =======in writeStructAddress: bp is a ptr or byRef========
+
+! --------in getAddressHelper: bp
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: y
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel0
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel0:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
+	add	%sp, 0, %l4
+	cmp	%l0, %l4
+	blu	deallocatedStack0
+	nop
+
+	add	%sp, 92, %l4
+	cmp	%l0, %l4
+	bgu	deallocatedStack0
+	nop
+
+	set	.deallocatedStack, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+deallocatedStack0:
+
+! ------in writeConstantLiteral: 8.6
+	set	temp0, %l0
+	ld	[%l0], %f0
+	set	-24, %l0
+	add	%fp, %l0, %l0
+	st	%f0, [%l0]
+
+! ------end of writeConstantLiteral-------
+
+! ----------in writeAssignExpr: y  =  8.6
+
+! =======in writeAssignExpr, varType is float=======
+
+! -------in getValue: 8.6: 8.6
+
+! --------in getAddressHelper: 8.6
+	set	-24, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %f0
 
 ! -------end of getValue------------
-	set	.intFmt, %o0
-	mov	%l1, %o1
+
+! --------in getAddressHelper: y
+
+! -------in writeDerefAddress: y
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! =======in writeStructAddress: bp is a ptr or byRef========
+
+! --------in getAddressHelper: bp
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: y
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel1
+	nop
+
+	set	.NullPtrException, %o0
 	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel1:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
+
+! --------end of getAddressHelper------------ 
+	st	%f0, [%l0]
+
+! ----------end of writeAssignExpr--------
+
+! -------in writeDeallocatedStack--------
+
+! -------in writeDerefAddress: y
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! =======in writeStructAddress: bp is a ptr or byRef========
+
+! --------in getAddressHelper: bp
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: y
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel2
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel2:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
+	add	%sp, 0, %l4
+	cmp	%l0, %l4
+	blu	deallocatedStack1
+	nop
+
+	add	%sp, 92, %l4
+	cmp	%l0, %l4
+	bgu	deallocatedStack1
+	nop
+
+	set	.deallocatedStack, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+deallocatedStack1:
+
+! ------------in writePrint---------------
+
+! -------in getValue: y: null
+
+! --------in getAddressHelper: y
+
+! -------in writeDerefAddress: y
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! =======in writeStructAddress: bp is a ptr or byRef========
+
+! --------in getAddressHelper: bp
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: y
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel3
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel3:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %f0
+
+! -------end of getValue------------
+	call	printFloat
 	nop
 
 
@@ -122,6 +430,208 @@ main:
 	call	printf
 	nop
 
+
+! -------in writeDeallocatedStack--------
+
+! -------in writeDerefAddress: y
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! -------in writeStructAddress: b
+
+! =======in writeStructAddress: ap is a ptr or byRef========
+
+! --------in getAddressHelper: ap
+	set	-8, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: b
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: y
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel4
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel4:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
+	add	%sp, 0, %l4
+	cmp	%l0, %l4
+	blu	deallocatedStack2
+	nop
+
+	add	%sp, 92, %l4
+	cmp	%l0, %l4
+	bgu	deallocatedStack2
+	nop
+
+	set	.deallocatedStack, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+deallocatedStack2:
+
+! ------------in writePrint---------------
+
+! -------in getValue: y: null
+
+! --------in getAddressHelper: y
+
+! -------in writeDerefAddress: y
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! -------in writeStructAddress: b
+
+! =======in writeStructAddress: ap is a ptr or byRef========
+
+! --------in getAddressHelper: ap
+	set	-8, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: b
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: y
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+
+! ======in writeDerefAddress, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l0, %l4
+	bne	ptrLabel5
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel5:
+
+! ======end of check nullPtrExcep=======
+
+! -------end of writeDerefAddress-------
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %f0
+
+! -------end of getValue------------
+	call	printFloat
+	nop
+
+
+! ------------in writePrint---------------
+	set	.endl, %o0
+	call	printf
+	nop
+
+
+! ---------in writeDeleteStmt------
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! =======in writeStructAddress: bp is a ptr or byRef========
+
+! --------in getAddressHelper: bp
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: y
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l1
+
+! ======in writeDeleteStmt, check nullPtrExcep=======
+	set	0, %l4
+	cmp	%l1, %l4
+	bne	ptrLabel6
+	nop
+
+	set	.NullPtrException, %o0
+	call	printf
+	nop
+
+	set	1, %o0
+	call	exit
+	nop
+
+ptrLabel6:
+
+! ======end of check nullPtrExcep=======
+	mov	%l1, %o0
+	call	free
+	nop
+
+
+! --------in getAddressHelper: y
+
+! -------in writeStructAddress: y
+
+! =======in writeStructAddress: bp is a ptr or byRef========
+
+! --------in getAddressHelper: bp
+	set	-16, %l0
+	add	%fp, %l0, %l0
+
+! --------end of getAddressHelper------------ 
+	ld	[%l0], %l0
+	add	%l0, 0, %l0
+
+! -------------end of writeStructAddress: y
+
+! --------end of getAddressHelper------------ 
+	set	0, %l1
+	st	%l1, [%l0]
+	set	.allocatedMemory, %l0
+	ld	[%l0], %l1
+	dec	%l1
+	st	%l1, [%l0]
+
+! ---------end 0f writeDeleteStmt------
 
 ! -------in writeMemoryLeak-------
 	set	.doubleDeleteError, %o0
@@ -153,5 +663,5 @@ main:
 	ret
 	restore
 
-	SAVE.main = -(92 + 20) & -8
+	SAVE.main = -(92 + 32) & -8
 

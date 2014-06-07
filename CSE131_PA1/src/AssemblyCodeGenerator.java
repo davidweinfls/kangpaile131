@@ -309,12 +309,12 @@ public class AssemblyCodeGenerator {
     		
     		//1. get var address, store in out0
     		if(debug) writeDebug("=======in writeLocalVariableWInit, get var address, store in out0=======");
-    		getAddressHelper(var);
+    		getAddressHelper(var, false);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.O0);
     		
     		//2. get expr address, store in out1
     		if(debug) writeDebug("=======in writeLocalVariableWInit, get expr address, store in out1=======");
-    		getAddressHelper(expr);
+    		getAddressHelper(expr, false);
     		//if expr is pass-by-ref
     		if(expr.isVar() && ((VarSTO)expr).isRef())
     		{
@@ -472,7 +472,7 @@ public class AssemblyCodeGenerator {
     	String arrayUpperBoundLabel = "arrayUpperBoundCheck" + num_of_array;
     	
     	//A: do upper bound check
-    	getAddressHelper(index);
+    	getAddressHelper(index, false);
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, Integer.toString(arraySize), Sparc.L1);
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L0, Sparc.L1);
@@ -499,7 +499,7 @@ public class AssemblyCodeGenerator {
     	//B: do lower bound check
         String arrayLowerBoundLabel = "arrayLowerBoundCheck" + num_of_array++;
         
-        getAddressHelper(index);
+        getAddressHelper(index, false);
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L1);
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L0, Sparc.L1);
@@ -545,7 +545,7 @@ public class AssemblyCodeGenerator {
 		//2. get value of expr, %l5
 		if(debug) writeDebug("=======in writeArrayAddress, get value of index: " + expr.getName());
 		// optionA:
-		getAddressHelper(expr);
+		getAddressHelper(expr, false);
 		if(arrayReg%3 == 1)
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
 		else if(arrayReg%3 == 2)
@@ -560,7 +560,7 @@ public class AssemblyCodeGenerator {
 		//so use getAddressHelper()
 		if(debug) writeDebug("=======in writeArrayAddress, get address of var :" + var.getName() + 
 				" and store in l4");
-		getAddressHelper(var);
+		getAddressHelper(var, false);
 		if (var.getType().isPointerType() || (var.isVar() && ((VarSTO) var).isRef()))
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.L4);
@@ -621,7 +621,7 @@ public class AssemblyCodeGenerator {
 	}
 	
 	// used to get struct address
-	void writeStructAddress(STO sto)
+	void writeStructAddress(STO sto, boolean AssignOp)
     {
     	if(debug) writeDebug("-------in writeStructAddress: " + sto.getName());
     	//need to do recursive check. since a struct field can be of type struct, array, pointer...
@@ -631,7 +631,7 @@ public class AssemblyCodeGenerator {
     	}
     	else if(sto.getStruct().getIsStructField())
     	{
-    		writeStructAddress(sto.getStruct());
+    		writeStructAddress(sto.getStruct(), AssignOp);
     	}
     	else if(sto.getStruct().getIsDeref())
     	{
@@ -642,9 +642,9 @@ public class AssemblyCodeGenerator {
     		if(debug) writeDebug("=======in writeStructAddress: " + sto.getStruct().getName() + " is a ptr or byRef========");
 
             if (sto.getStruct().getIsStructField())
-            	writeStructAddress (sto.getStruct());
+            	writeStructAddress (sto.getStruct(), AssignOp);
             else
-    		  getAddressHelper(sto.getStruct());
+    		  getAddressHelper(sto.getStruct(), false);
             //if the param passed in is both a pointer and and by ref
             //TODO: fuck!!!!!!!!
             if(sto.getStruct().getType().isPointerType() && (sto.getStruct().isVar() && ((VarSTO)sto.getStruct()).isRef())) 
@@ -659,12 +659,14 @@ public class AssemblyCodeGenerator {
     	else
     	{
     		//get struct's base offset
-    		getAddressHelper(sto.getStruct());
+    		getAddressHelper(sto.getStruct(), false);
     	}
     	
     	//add offset to base offset
     	addToBuffer(text_buffer, Sparc.THREE_PARAM, Sparc.ADD_OP, Sparc.L0, Integer.toString(sto.getFieldOffset()), Sparc.L0 );
     	// if the struct field is ptr, need to do a load 
+    	if( sto.getType().isPointerType() && !AssignOp )
+    		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     	
     	if(debug) writeDebug("-------------end of writeStructAddress: " + sto.getName());
     }
@@ -678,7 +680,7 @@ public class AssemblyCodeGenerator {
 		STO ptr = sto.getPointer();
 		
 		//1. get address of this pointer 
-		getAddressHelper(ptr);
+		getAddressHelper(ptr, true);
 		//check byRef
 		if(ptr.isVar() && ((VarSTO)ptr).isRef())
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
@@ -820,7 +822,7 @@ public class AssemblyCodeGenerator {
 			// set	-4, %l0
 			// add	%fp, %l0, %l0
 			// not sure the type of sto, use getAddressHelper to get address of sto
-			getAddressHelper(sto);
+			getAddressHelper(sto, false);
 
 			//if passed by ref, load value in address
 			if(sto.isVar() && ((VarSTO)sto).isRef())
@@ -844,7 +846,7 @@ public class AssemblyCodeGenerator {
 		else if(t instanceof IntType || t instanceof BoolType)
 		{
 			// not sure the type of sto, use getAddressHelper to get address of sto
-			getAddressHelper(sto);
+			getAddressHelper(sto, false);
 			
 			//if passed by ref, load value in address
 			if(sto.isVar() && ((VarSTO)sto).isRef())
@@ -866,13 +868,13 @@ public class AssemblyCodeGenerator {
 		// TODO: for array type, only get the address
 		else if(t.isArrayType())
 		{
-			getAddressHelper(sto);
+			getAddressHelper(sto, false);
 			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.L1);
 		}
 		// for pointer
 		else
 		{
-			getAddressHelper(sto);
+			getAddressHelper(sto, false);
 			//if passed by ref, load value in address
 			if(sto.isVar() && ((VarSTO)sto).isRef())
 			{
@@ -896,7 +898,7 @@ public class AssemblyCodeGenerator {
     //helper method. used in various methods.
     //get address of stos, when the sto is not only a basicType. 
     //needs to check the type of sto to call different write**Address method
-    void getAddressHelper(STO sto)
+    void getAddressHelper(STO sto, boolean AssignOp)
     {
     	if(debug) writeDebug("--------in getAddressHelper: " + sto.getName());
     	//if array type, allocate space in stack for it
@@ -910,7 +912,7 @@ public class AssemblyCodeGenerator {
 		}
 		else if(sto.getIsStructField())
 		{
-			writeStructAddress(sto);
+			writeStructAddress(sto, AssignOp);
 		}
 		else
 		{
@@ -927,7 +929,7 @@ public class AssemblyCodeGenerator {
     	
     	//1. get address
     	if(debug) writeDebug("=======in intToFloat: getAddress of " + sto.getName());
-    	getAddressHelper(sto);
+    	getAddressHelper(sto, false);
     	
     	//2. load value to float register
     	if(debug) writeDebug("=======in intToFloat: load value of " + sto.getName());
@@ -959,7 +961,7 @@ public class AssemblyCodeGenerator {
     	
     	//1. get address
     	if(debug) writeDebug("=======in FloatToInt: getAddress of " + sto.getName());
-    	getAddressHelper(sto);
+    	getAddressHelper(sto, false);
     	
     	//2. load value to float register
     	if(debug) writeDebug("=======in FloatToInt: load value of " + sto.getName());
@@ -990,7 +992,7 @@ public class AssemblyCodeGenerator {
 		//load a, if equals to 0, branch to endAND
 		if(debug) writeDebug("--------in writeOr, ||, check first operand--------");
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "1", Sparc.L3);
-		getAddressHelper(a);
+		getAddressHelper(a, false);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
 		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BNE_OP, "endOR" + num_of_or);
@@ -1006,7 +1008,7 @@ public class AssemblyCodeGenerator {
 		//load a, if equals to 0, branch to endAND
 		if(debug) writeDebug("--------in writeAnd, &&, check first operand--------");
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L3);
-		getAddressHelper(a);
+		getAddressHelper(a, false);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
 		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.CMP, Sparc.L1, Sparc.G0);
 		addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.BE_OP, "endAND" + num_of_and);
@@ -1452,7 +1454,7 @@ public class AssemblyCodeGenerator {
     		//load expr value
     		getValue(expr);
     		//get var address
-    		getAddressHelper(var);
+    		getAddressHelper(var, true);
     		
     		//check if var is pass-by-reference
     		if (var instanceof VarSTO && ((VarSTO)var).isRef())
@@ -1470,7 +1472,7 @@ public class AssemblyCodeGenerator {
     		
     		//1. get var address, store in out0
     		if(debug) writeDebug("=======in writeAssignExpr, get var address, store in out0=======");
-    		getAddressHelper(var);
+    		getAddressHelper(var, true);
     		//if var is pass-by-ref
     		if(var.isVar() && ((VarSTO)var).isRef())
     		{
@@ -1481,7 +1483,7 @@ public class AssemblyCodeGenerator {
     		
     		//2. get expr address, store in out1
     		if(debug) writeDebug("=======in writeAssignExpr, get expr address, store in out1=======");
-    		getAddressHelper(expr);
+    		getAddressHelper(expr, true);
     		//if expr is pass-by-ref
     		if(expr.isVar() && ((VarSTO)expr).isRef())
     		{
@@ -1509,7 +1511,7 @@ public class AssemblyCodeGenerator {
     		
     		//2. get var address
     		//if array type, allocate space in stack for it
-    		getAddressHelper(var);
+    		getAddressHelper(var, true);
     		
     		//check if var is pass-by-reference
     		if (var instanceof VarSTO && ((VarSTO)var).isRef())
@@ -1535,7 +1537,7 @@ public class AssemblyCodeGenerator {
     	}
     	else
     	{
-    		getAddressHelper(sto);
+    		getAddressHelper(sto, false);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
     	}
     	//compare %l1 with 0
@@ -1594,7 +1596,7 @@ public class AssemblyCodeGenerator {
     	}
     	else
     	{
-    		getAddressHelper(sto);
+    		getAddressHelper(sto, false);
     		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
     	}
     	//compare %l1 with 0
@@ -1674,7 +1676,7 @@ public class AssemblyCodeGenerator {
     		}
     		//3. store value in its address
     		if(debug) writeDebug("=======in writePre, step 3: store value ");
-    		getAddressHelper(sto);
+    		getAddressHelper(sto, false);
     		if(sto.isVar() && ((VarSTO)sto).isRef())
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
@@ -1717,7 +1719,7 @@ public class AssemblyCodeGenerator {
     			}
     		}
     		//3. store value in its address
-    		getAddressHelper(sto);
+    		getAddressHelper(sto, false);
     		if(sto.isVar() && ((VarSTO)sto).isRef())
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
@@ -1759,7 +1761,7 @@ public class AssemblyCodeGenerator {
     		}
     		//3. store value in its address
     		if(debug) writeDebug("=======in writePre, step 3: store value ");
-    		getAddressHelper(sto);
+    		getAddressHelper(sto, false);
     		if(sto.isVar() && ((VarSTO)sto).isRef())
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
@@ -1825,7 +1827,7 @@ public class AssemblyCodeGenerator {
     		}
     		//3. store value in its address
     		if(debug) writeDebug("=======in writePost, step 3: store value ");
-    		getAddressHelper(sto);
+    		getAddressHelper(sto, false);
     		if(sto.isVar() && ((VarSTO)sto).isRef())
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
@@ -1871,7 +1873,7 @@ public class AssemblyCodeGenerator {
     		}
     		//3. store value in its address
     		if(debug) writeDebug("=======in writePost, step 3: store value ");
-    		getAddressHelper(sto);
+    		getAddressHelper(sto, false);
     		if(sto.isVar() && ((VarSTO)sto).isRef())
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
@@ -1920,7 +1922,7 @@ public class AssemblyCodeGenerator {
     		}
     		//3. store value in its address
     		if(debug) writeDebug("=======in writePost, step 3: store value ");
-    		getAddressHelper(sto);
+    		getAddressHelper(sto, false);
     		if(sto.isVar() && ((VarSTO)sto).isRef())
     		{
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
@@ -1981,7 +1983,7 @@ public class AssemblyCodeGenerator {
     	{
     		if(debug) writeDebug("=====in writePassParameter, param " + arg.getName() + " is byRef=======");
     		//get sto address
-    		getAddressHelper(arg);
+    		getAddressHelper(arg, false);
     		if (arg.isVar() && ((VarSTO) arg).isRef() )// || arg.getType().isPointerType())
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     		//store it to %o0
@@ -2030,12 +2032,12 @@ public class AssemblyCodeGenerator {
             }
     		else if(arg.getType().isArrayType())
     		{
-    			getAddressHelper(arg);
+    			getAddressHelper(arg, false);
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, "%o" + index);
     		}
     		else
     		{
-    			getAddressHelper(arg);
+    			getAddressHelper(arg, false);
     			if (arg.isVar() && ((VarSTO) arg).isRef())
         			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
@@ -2159,7 +2161,7 @@ public class AssemblyCodeGenerator {
 			else
 			{
 				if(funcReturnType instanceof FloatType) {
-	                getAddressHelper(returnExpr);
+	                getAddressHelper(returnExpr, false);
 	                //probably don't need this. if pass by ref, then just
                     if (returnExpr.isVar() && ((VarSTO) returnExpr).isRef())
                         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
@@ -2177,7 +2179,7 @@ public class AssemblyCodeGenerator {
 	                	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.FITOS_OP, Sparc.F0, Sparc.F0);
 	                }
 	            } else {
-	            	getAddressHelper(returnExpr);
+	            	getAddressHelper(returnExpr, false);
 	            	//get valued stored in returnExpr
 	            	if(returnExpr.isVar() && ((VarSTO)returnExpr).isRef())
 	            		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
@@ -2337,7 +2339,7 @@ public class AssemblyCodeGenerator {
     {
     	if(debug) writeDebug("------in writeAddressOf: " + sto.getName());
     	//get original sto address
-    	getAddressHelper(sto);
+    	getAddressHelper(sto, false);
         if (sto.isVar() && ((VarSTO) sto).isRef())
         	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L0);
         //mov address to %l1
@@ -2359,7 +2361,7 @@ public class AssemblyCodeGenerator {
     	addToBuffer(text_buffer, Sparc.ONE_PARAM, Sparc.CALL, "calloc");
     	addToBuffer(text_buffer, Sparc.NOP);
 
-        getAddressHelper(sto);
+        getAddressHelper(sto, true);
         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.O0, "[" + Sparc.L0 + "]");
         
         //increment allocatedMemory value
@@ -2379,7 +2381,8 @@ public class AssemblyCodeGenerator {
     	resetReg();
     	
     	//get value of this var
-    	getValue(sto);
+    	getAddressHelper(sto, true);
+    	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
     	
     	//check nullPtr
     	if(debug) writeDebug("======in writeDeleteStmt, check nullPtrExcep=======");
@@ -2408,7 +2411,7 @@ public class AssemblyCodeGenerator {
         addToBuffer(text_buffer, Sparc.NOP);
 
         //set 0 to sto
-        getAddressHelper(sto);
+        getAddressHelper(sto, true);
         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.SET, "0", Sparc.L1);
         addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L1, "[" + Sparc.L0 + "]");
         
@@ -2463,7 +2466,7 @@ public class AssemblyCodeGenerator {
     	if(debug) writeDebug("-------in writeFuncPtr-------");
     	
     	//get func address
-    	getAddressHelper(sto);
+    	getAddressHelper(sto, false);
     	//load value from this address to %l5
     	addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L5);
     	
@@ -2510,14 +2513,14 @@ public class AssemblyCodeGenerator {
     		{
     			//value is stored in F1
     			//get newSTO address
-        		getAddressHelper(newSTO);
+        		getAddressHelper(newSTO, false);
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
     		}
     		else
     		{
     			//value is stored in F1
     			//get newSTO address
-        		getAddressHelper(newSTO);
+        		getAddressHelper(newSTO, false);
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
     		}
     	}
@@ -2530,13 +2533,13 @@ public class AssemblyCodeGenerator {
     		if(floatReg == 0)
     		{
     			//value is in F1
-    			getAddressHelper(newSTO);
+    			getAddressHelper(newSTO, false);
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F1, "[" + Sparc.L0 + "]");
     		}
     		else
     		{
     			//value is in F0
-    			getAddressHelper(newSTO);
+    			getAddressHelper(newSTO, false);
     			addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
     		}
     	}
@@ -2547,10 +2550,10 @@ public class AssemblyCodeGenerator {
     		{
     			if(debug) writeDebug("========in writeTypeCast, float to bool=========");
         		//get oldSTO value
-        		getAddressHelper(oldSTO);
+        		getAddressHelper(oldSTO, false);
         		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
         		
-        		getAddressHelper(newSTO);
+        		getAddressHelper(newSTO, false);
         		
         		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.F0, "[" + Sparc.L0 + "]");
         		//addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.LD, "[" + Sparc.L0 + "]", Sparc.L1);
@@ -2594,7 +2597,7 @@ public class AssemblyCodeGenerator {
                 increaseIndent();
                 num_of_typecast++;
                 
-                getAddressHelper(newSTO);
+                getAddressHelper(newSTO, false);
                 addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.ST, Sparc.L3, "[" + Sparc.L0 + "]");
     		}
     	}
@@ -2605,7 +2608,7 @@ public class AssemblyCodeGenerator {
     		if(debug) writeDebug("========in writeTypeCast, get oldSTO value=========");
     		getValue(oldSTO);
     		if(debug) writeDebug("========in writeTypeCast, get newSTO address=========");
-    		getAddressHelper(newSTO);
+    		getAddressHelper(newSTO, false);
     		if(debug) writeDebug("========in writeTypeCast, store old value to new sto=========");
     		if(newType.isFloatType())
     		{
@@ -2698,7 +2701,7 @@ public class AssemblyCodeGenerator {
         	//get param's value or address
         	if(param.isRef())
         	{
-        		getAddressHelper(arg);
+        		getAddressHelper(arg, false);
         		addToBuffer(text_buffer, Sparc.TWO_PARAM, Sparc.MOV, Sparc.L0, Sparc.L1);
         	}
         	else

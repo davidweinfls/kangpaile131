@@ -17,13 +17,13 @@ ap->b = bp;
 new bp->y;
 *(bp->y) = 8.6;
 
-//cout << *(bp->y) << endl;
+cout << *(bp->y) << endl;
 
-cout << ap->b->y << endl;	//address 588
-cout << bp->y << endl;	 //address 984
-cout << a.b->y << endl;	 //address 588
+//cout << ap->b->y << endl;	//address 588
+//cout << bp->y << endl;	 //address 984
+//cout << a.b->y << endl;	 //address 588
 
-//cout << *(ap->b->y) << endl;
+cout << *(ap->b->y) << endl;
 
 delete bp->y;
 }
@@ -69,4 +69,34 @@ function : void main()
     cout << "b = true = " << strarr[i].next->b << endl << endl;
     i++;
   }
+}
+
+/////////////////////////////////////////////////////////////
+structdef INTSTRUCT {
+bool b; 
+int x; 
+INTSTRUCT* y;
+};
+structdef INTSTRUCTSTRUCT {
+bool b; 
+INTSTRUCT x;
+};
+typedef INTSTRUCTSTRUCT* INTSTRUCTSTRUCTPTR;
+typedef INTSTRUCTSTRUCT STRUCT;
+INTSTRUCTSTRUCTPTR[5] arr;
+INTSTRUCTSTRUCT x;
+function : void main () {
+  STRUCT b;
+  STRUCT d;
+  INTSTRUCT theOnlyIntStruct;
+  arr[1] = &b;
+
+  arr[3] = &d;
+  (*arr[1]).x.x = 3;
+  (*arr[3]).x = theOnlyIntStruct;
+
+  (*arr[3]).x.y = &((*arr[1]).x);
+  x.x.x = 5;
+  cout << ((arr[3])->x.y)->x << endl;
+
 }
